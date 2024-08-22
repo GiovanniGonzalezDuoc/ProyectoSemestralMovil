@@ -94,16 +94,26 @@
     </ion-card-content>
   </ion-card>
 
-
-  <ion-card *ngFor="let datos of Perfiles">
+  <ion-card *ngFor="let datos of comentarios" >
     <ion-card>
+      <ion-card-header>
+        <ion-item lines="none">
+          <ion-avatar slot="start">
+            <img [src]="datos.foto" alt="Perfil">
+          </ion-avatar>
+          <ion-label>
+            <h2>{{datos.nombreperfil}}</h2>
+            <p>hace {{datos.horas}} horas</p>
+          </ion-label>
+        </ion-item>
+      </ion-card-header>
       <ion-card-content>
         <p>
-          <span *ngIf="datos.mensajescomentarios.length > 70">
-            {{ datos.mensajescomentarios | slice:0:70 }}...
+          <span *ngIf="datos.mensajecomentario.length > 70">
+            {{ datos.mensajecomentario | slice:0:70 }}...
           </span>
-          <span *ngIf="datos.mensajescomentarios.length <= 70">
-            {{ datos.mensajescomentarios }}
+          <span *ngIf="datos.mensajecomentario.length <= 70">
+            {{ datos.mensajecomentario }}
           </span>
         </p>
       </ion-card-content>
