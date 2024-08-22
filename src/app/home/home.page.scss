@@ -17,11 +17,60 @@
   font-size: 16px;
   line-height: 22px;
 
-  color: #8c8c8c;
+  color: #ffffff;
 
   margin: 0;
 }
 
 #container a {
   text-decoration: none;
+}
+
+.dimension{
+  font-size: 20px;
+}
+
+ion-card {
+  margin: 10px;
+}
+
+ion-avatar img {
+  width: 40px;
+  height: 40px;
+}
+
+ion-card-content h1 {
+  font-size: 25px;
+  color: #e5e4e4;
+}
+
+ion-card-content p {
+  font-size: 16px;
+  color: #b0b0b0;
+}
+
+ion-card-footer ion-button {
+  font-size: 14px;
+}
+
+ion-card-footer ion-button[slot="end"] {
+  margin-left: auto;
+}
+ion-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+ion-icon {
+  margin-right: 5px;
+}
+
+ion-button p {
+  margin: 0;
+  padding-left: 0;
+  text-align: center;
+}
+.icon-dimension{
+  font-size: 18px;
 }

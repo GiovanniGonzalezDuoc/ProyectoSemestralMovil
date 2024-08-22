@@ -1,20 +1,85 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-buttons slot="start">
+      <ion-button class="dimension">
+        <ion-icon name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="start" [routerLink]="['/home']">
+      <ion-button class="dimension" >
+        <ion-icon name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    
+    <ion-searchbar placeholder="Buscar" slot="start" class="dimension"></ion-searchbar>
+
+    
+    <ion-buttons slot="end">
+      <ion-button class="dimension" [routerLink]="['/publicar']">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    
+    <ion-buttons slot="end" [routerLink]="['/perfil']">
+      <ion-button class="dimension">
+        <ion-icon name="person-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
   </ion-toolbar>
+
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-card  *ngFor="let dato of Perfiles" [routerLink]="['/descripcion']">
+  <ion-card-header>
+    <ion-item lines="none">
+      <ion-avatar slot="start">
+        <img [src]="dato.foto" alt="Perfil">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{dato.nombreperfil}}</h2>
+        <p>hace {{dato.horas}} horas</p>
+      </ion-label>
+    </ion-item>
+  </ion-card-header>
+  <ion-card-content>
+    <h1>
+      {{dato.titulo}}
+    </h1>
+  </ion-card-content>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-card-content>
+    <p>
+      <span *ngIf="dato.mensaje.length > 70">
+        {{ dato.mensaje | slice:0:70 }}...
+      </span>
+      <span *ngIf="dato.mensaje.length <= 70">
+        {{ dato.mensaje }}
+      </span>
+    </p>
+  </ion-card-content>
+
+  <ion-item lines="none">
+    <ion-buttons>
+      <ion-button class="icon-dimension">
+        <ion-icon name="thumbs-up-outline"></ion-icon>
+        <p>{{dato.like}}</p>
+      </ion-button>
+      <ion-button class="icon-dimension">
+        <ion-icon name="chatbubble-outline"></ion-icon>
+        <p>{{dato.comentarios}}</p>
+      </ion-button>
+      <ion-button class="icon-dimension">
+        <ion-icon name="share-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-button fill="clear" slot="end" class="icon-dimension">
+      <ion-icon name="bookmark-outline"></ion-icon>
+    </ion-button>
+  </ion-item>
+</ion-card>  
 </ion-content>
