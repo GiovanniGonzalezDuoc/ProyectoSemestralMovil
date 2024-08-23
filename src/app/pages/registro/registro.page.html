@@ -1,13 +1,39 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>registro</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">registro</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-card class="registro-card">
+    <ion-card-header>
+      <ion-card-title>Registrarse</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <form>
+        <ion-item>
+          <ion-input label="Nombre" labelPlacement="floating" placeholder="Ingrese su Nombre"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Apellido" labelPlacement="floating" placeholder="Ingrese su Apellido"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Carrera" labelPlacement="floating" placeholder="Ingrese a que carrera pertenece"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Numero de Telefono" labelPlacement="floating" placeholder="Ingrese su Numero de Telefono"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Email" labelPlacement="floating" placeholder="Ingrese su Correo"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Contraseña" labelPlacement="floating" placeholder="Ingrese su Contraseña"></ion-input>
+        </ion-item>
+        <ion-button [routerLink]="['/login']">Registrarse</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
