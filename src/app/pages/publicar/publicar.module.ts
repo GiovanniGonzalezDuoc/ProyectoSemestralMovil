@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { PublicarPageRoutingModule } from './publicar-routing.module';
 
 import { PublicarPage } from './publicar.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PublicarPageRoutingModule
+    PublicarPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [PublicarPage]
 })

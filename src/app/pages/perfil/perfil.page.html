@@ -1,16 +1,41 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title>perfil</ion-title>
-  </ion-toolbar>
+  <app-header></app-header>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Perfil</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- Tarjeta de Perfil -->
+  <ion-card class="perfil-card">
+    <ion-card-content>
+      <ion-avatar class="perfil-avatar">
+        <img [src]="Perfiles[0].foto" alt="Perfil">
+      </ion-avatar>
+      <ion-label class="perfil-info">
+        <h2>{{Perfiles[0].nombreperfil}}</h2>
+        <div class="followers-info">
+          <p>{{Perfiles[0].seguidores}} seguidores</p>
+          <p>{{Perfiles[0].seguidos}} siguiendo</p>
+        </div>
+      </ion-label>      
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Lista de Publicaciones -->
+  <ion-list>
+    <ion-card-header>
+      <h1 class="publicaciones-header">Mis Publicaciones</h1>
+    </ion-card-header>
+    <ion-card *ngFor="let dato of Publicaciones" class="publicacion-card">
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <img [src]="dato.foto" alt="Perfil">
+        </ion-avatar>
+        <ion-label>
+          <h2 class="nombre-usuario">{{dato.nombreperfil}}</h2>
+          <h3 class="titulo-publicacion" [routerLink]="['/descripcion']">{{dato.titulo}}</h3>
+          <p class="contenido-publicacion">{{dato.contenido}}</p>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  </ion-list>  
+
 </ion-content>

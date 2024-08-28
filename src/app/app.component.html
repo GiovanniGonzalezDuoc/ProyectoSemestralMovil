@@ -1,3 +1,34 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu-toggle>
+  <!-- Menu de la Aplicación -->
+  <ion-menu side="start" menuId="first" contentId="main-content">
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-list>
+        <!-- Gente que sigues -->
+        <ion-list-header>
+          <ion-label>Gente que sigues</ion-label>
+        </ion-list-header>
+        <ion-item *ngFor="let persona of personasSiguiendo" [routerLink]="['/profile', persona.id]">
+          {{ persona.nombre }}
+        </ion-item>
+
+        <!-- Categorías de Posts -->
+        <ion-list-header>
+          <ion-label>Categorías</ion-label>
+        </ion-list-header>
+        <ion-item *ngFor="let categoria of categorias" [routerLink]="['/category', categoria.id]">
+          {{ categoria.nombre }}
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  </ion-menu-toggle>
+
+  <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-app>

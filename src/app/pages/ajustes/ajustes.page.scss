@@ -1,0 +1,34 @@
+ion-item {
+    --highlight-color-focused: var(--ion-color-primary);
+  }
+  
+  ion-label {
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+  }
+  
+  ion-input {
+    --padding-start: 0;
+  }
+  
+  ion-input::part(native) {
+    padding-top: 15px;
+  }
+  
+  ion-item.ion-focused .ion-label {
+    top: -12px;
+    left: 0;
+    font-size: 0.75em;
+    color: var(--ion-color-primary);
+  }
+  
+  ion-item .ion-label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transition: all 0.2s ease-out;
+    color: var(--ion-color-medium);
+  }
+  

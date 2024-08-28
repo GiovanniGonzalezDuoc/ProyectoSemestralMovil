@@ -1,10 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title>publicar</ion-title>
-  </ion-toolbar>
+  <app-header></app-header>
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -15,13 +10,43 @@
 
     <ion-card-content>
       <form>
-        <ion-item>
-          <ion-input label="Titulo" labelPlacement="floating" placeholder="Escriba un Titulo para su post"></ion-input>
+        <ion-item class="input-item">
+          <ion-input 
+            label="Título" 
+            labelPlacement="floating" 
+            placeholder="Escriba un Título para su post">
+          </ion-input>
         </ion-item>
-        <ion-item>
-          <ion-input label="Contenido" labelPlacement="floating" placeholder="Escriba lo que quiere compartir"></ion-input>
+
+        <ion-item class="input-item">
+          <ion-input 
+            label="Categoría" 
+            labelPlacement="floating" 
+            placeholder="Escriba una Categoría para su post">
+          </ion-input>
         </ion-item>
-        <ion-button [routerLink]="['/home']">Publicar</ion-button>
+
+        <ion-item class="input-item">
+          <ion-textarea 
+            label="Contenido" 
+            labelPlacement="floating" 
+            placeholder="Escriba lo que quiere compartir">
+          </ion-textarea>
+        </ion-item>
+
+        <ion-item class="input-item">
+          <ion-label>Adjuntar Archivo</ion-label>
+          <ion-button fill="outline" slot="end">
+            <ion-icon slot="start" name="attach-outline"></ion-icon>
+            Adjuntar
+          </ion-button>
+        </ion-item>
+
+        <div class="button-group">
+          <ion-button color="primary" [routerLink]="['/home']">
+            Publicar
+          </ion-button>
+        </div>
       </form>
     </ion-card-content>
   </ion-card>
