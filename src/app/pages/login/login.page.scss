@@ -33,23 +33,21 @@ ion-title{
 }
 
 .centrar-card{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height:100%;
-  margin:  auto; 
-  padding: 20px;
+margin-top: 150px;
+
 }
 
 ion-content {
   --background: url('/assets/icon/Fondologin.jpeg') no-repeat center center / cover; 
-
+  display: flex;
+  justify-content: start;
   
   form{
     margin-top:10px;
   }
 
   .input{
+    
     display: block;
     width:100%;
     background: transparent;
@@ -63,6 +61,7 @@ ion-content {
   }
 
   .bordes-texto{
+    
     background-color:gray;
     border-radius: 20px;
     margin-bottom: 26px;
@@ -71,6 +70,7 @@ ion-content {
     
   }
   .container-boton{
+    
     display: flex;
     justify-content: center;
     gap: 10px;
