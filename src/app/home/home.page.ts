@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 
 @Component({
@@ -53,8 +54,5 @@ export class HomePage {
 
 
   constructor() {}
-
-  
-
 
 }

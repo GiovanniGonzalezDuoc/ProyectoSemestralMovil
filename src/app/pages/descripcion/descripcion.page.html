@@ -4,22 +4,25 @@
 
 <ion-content [fullscreen]="true">
   <ion-card *ngFor="let datos of Perfiles">
-    <ion-card *ngIf="datos.id==1">
+    <ion-card *ngIf="datos.id == 1">
       <ion-card-header>
         <ion-item lines="none">
-          <ion-avatar slot="start">
+          <ion-avatar slot="start" class="avatar-container">
             <img [src]="datos.foto" alt="Perfil">
           </ion-avatar>
           <ion-label>
             <h2>{{datos.nombreperfil}}</h2>
             <p>hace {{datos.horas}} horas</p>
           </ion-label>
+          <div class="card-menu">
+            <ion-button fill="clear">
+              <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+            </ion-button>
+          </div>
         </ion-item>
       </ion-card-header>
       <ion-card-content>
-        <h1>
-          {{datos.titulo}}
-        </h1>
+        <h1>{{datos.titulo}}</h1>
       </ion-card-content>
 
       <ion-card-content>
@@ -53,6 +56,7 @@
       </ion-item>
     </ion-card>
   </ion-card>
+
   <!-- Sección de Comentarios -->
   <ion-card>
     <ion-card-content>
@@ -63,17 +67,22 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngFor="let datos of comentarios" >
+  <ion-card *ngFor="let datos of comentarios">
     <ion-card>
       <ion-card-header>
         <ion-item lines="none">
-          <ion-avatar slot="start">
+          <ion-avatar slot="start" class="avatar-container">
             <img [src]="datos.foto" alt="Perfil">
           </ion-avatar>
           <ion-label>
             <h2>{{datos.nombreperfil}}</h2>
             <p>hace {{datos.horas}} horas</p>
           </ion-label>
+          <div class="card-menu">
+            <ion-button fill="clear">
+              <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+            </ion-button>
+          </div>
         </ion-item>
       </ion-card-header>
       <ion-card-content>

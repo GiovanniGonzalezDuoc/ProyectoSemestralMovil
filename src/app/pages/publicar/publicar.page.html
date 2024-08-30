@@ -9,7 +9,6 @@
     </ion-card-header>
 
     <ion-card-content>
-      <form>
         <ion-item class="input-item">
           <ion-input 
             label="Título" 
@@ -43,11 +42,10 @@
         </ion-item>
 
         <div class="button-group">
-          <ion-button color="primary" [routerLink]="['/home']">
+          <ion-button class="color-button" (click)="publicar()">
             Publicar
           </ion-button>
         </div>
-      </form>
     </ion-card-content>
   </ion-card>
 </ion-content>

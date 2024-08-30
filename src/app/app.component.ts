@@ -6,6 +6,18 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
+  Perfiles:any = [
+    {
+      id:1,
+      foto:"assets/icon/favicon.png",
+      nombreperfil:"Juan El Ganador",
+      horas:25,
+      titulo:"Aguante Brasil",
+      mensaje:"Cristiano Ronaldo Mejor Campeon Do Fochibole",
+      like:25,
+      comentarios:10,
+   }
+  ];
   personasSiguiendo = [
     { id: 1, nombre: 'Juan Pérez' },
     { id: 2, nombre: 'María García' },
@@ -14,9 +26,9 @@ export class AppComponent {
   ];
 
   categorias = [
-    { id: 1, nombre: 'Tecnología' },
-    { id: 2, nombre: 'Ciencia' },
-    { id: 3, nombre: 'Arte' }
+    { id: 1, nombre: 'Tecnología', foto:"https://i.postimg.cc/VNxfr1Jm/desktop-computer-icon-vector.jpg" },
+    { id: 2, nombre: 'Ciencia', foto:"https://i.postimg.cc/hjVSVwmx/dynamic-atom-molecule-science-symbol-vector-icon.jpg"},
+    { id: 3, nombre: 'Arte' , foto:"https://i.postimg.cc/jjwqSCdM/1987925.png"}
     // Agrega más categorías según sea necesario
   ];
   constructor() {}

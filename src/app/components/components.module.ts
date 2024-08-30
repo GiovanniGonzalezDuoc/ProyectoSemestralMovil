@@ -8,15 +8,15 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
-    HeaderComponent
+    HeaderComponent,
   ],
   exports:[
-    HeaderComponent
+    HeaderComponent,
   ],
   imports: [
     CommonModule,
     IonicModule,
-    RouterModule
+    RouterModule,
   ]
 })
 export class ComponentsModule { }

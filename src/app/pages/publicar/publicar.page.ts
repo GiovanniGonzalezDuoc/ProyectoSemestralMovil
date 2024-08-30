@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-publicar',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PublicarPage implements OnInit {
 
-  constructor() { }
+  constructor(private modalController:ModalController) { }
 
   ngOnInit() {
   }
 
+  publicar() {
+  }
 }
