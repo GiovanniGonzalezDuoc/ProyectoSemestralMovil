@@ -10,11 +10,11 @@ import { HeaderAdminComponent } from './header-admin/header-admin.component';
 @NgModule({
   declarations: [
     HeaderComponent,
-    HeaderAdminComponent
+    HeaderAdminComponent,
   ],
   exports:[
     HeaderComponent,
-    HeaderAdminComponent
+    HeaderAdminComponent,
   ],
   imports: [
     CommonModule,

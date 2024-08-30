@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <app-header></app-header>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="centrar-card">
+    <div class="ion-padding">
+      <ion-card>
+        <ion-card-content>
+          <span class="texto-label">Email</span>
+          <div class="bordes-texto">
+            <ion-input class="input" [(ngModel)]="emailsolicitado" name="email" placeholder="Ingrese su Correo" required></ion-input>
+          </div>
+          <span class="texto-label">Mensaje</span>
+          <div class="text-area">
+            <ion-textarea class="input" [(ngModel)]="mensaje" name="mensaje" placeholder="Ingrese su Mensaje" required></ion-textarea>
+          </div>
+          <div class="container-boton">
+            <ion-button class="boton-form" (click)="Contacto()">Enviar Mensaje Al Administrador</ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

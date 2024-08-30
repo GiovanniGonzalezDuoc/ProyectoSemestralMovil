@@ -71,4 +71,7 @@ export class PerfilPage implements OnInit {
   openSettings(){
     this.router.navigate(['/ajustes']);
   }
+  openContact(){
+    this.router.navigate(['/contacto'])
+  }
 }

@@ -13,11 +13,21 @@
       <ion-label class="perfil-info">
         <h2>{{Perfiles[0].nombreperfil}}</h2>
       </ion-label>
+      <!-- Botón de contacto-->
+      <ion-button 
+      fill="clear" 
+      color="light" 
+      class="ajuste-btn" 
+      slot="end"
+      (click)="openContact()">
+      <ion-icon name="chatbox-outline"></ion-icon>
+      </ion-button>
       <!-- Botón de ajuste -->
       <ion-button 
         fill="clear" 
         color="light" 
         class="ajuste-btn" 
+        slot="start"
         (click)="openSettings()">
         <ion-icon name="settings-outline"></ion-icon>
       </ion-button>

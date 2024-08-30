@@ -9,7 +9,6 @@
     <div class="ion-padding">
       <ion-card>
         <ion-card-content>
-          <form class="ion-padding">
             <span class="texto-label">Email</span>
             <div class="bordes-texto">
               <ion-input class="input" [(ngModel)]="emailsolicitado" name="email" placeholder="Ingrese su Correo" required></ion-input>
@@ -24,11 +23,10 @@
             <ion-button class="boton-form" (click)="login()">Iniciar Sesión</ion-button>
             <ion-button class="boton-form" [routerLink]="['/registro']">Registrarse</ion-button>
           </div>
-          </form>
           </ion-card-content>
       </ion-card>
     </div>
   </div>
-  <p class="ion-text-center">Olvidaste tu contraseña?</p><p class="ion-text-center" style="color: blue;" [routerLink]="['/olvidar']">Pincha aqui </p>
+  <p class="ion-text-center">Olvidaste tu contraseña?</p><p class="ion-text-center" style="color: blue;" [routerLink]="['/verificacion-email']">Pincha aqui </p>
 </ion-content>
 

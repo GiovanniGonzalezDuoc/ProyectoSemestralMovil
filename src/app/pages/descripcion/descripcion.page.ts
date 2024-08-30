@@ -118,6 +118,9 @@ export class DescripcionPage implements OnInit {
       if (option === 'option1') {
         this.presentToast('bottom', 'El Post Se Elimino Correctamente.');
         this.router.navigate(['/home']);
+      }else if (option ==='option2'){
+        this.presentToast('bottom', 'Se Ha Seguido Correctamente Al Usuario.');
+        this.router.navigate(['/home']);
       }
     }, 0); // Aquí el tiempo de espera es 0 para que se ejecute lo antes posible
   }

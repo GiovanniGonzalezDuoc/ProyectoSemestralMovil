@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ListaUsuariosPageRoutingModule } from './lista-usuarios-routing.module';
+import { NuevaContrasenaPageRoutingModule } from './nueva-contrasena-routing.module';
 
-import { ListaUsuariosPage } from './lista-usuarios.page';
+import { NuevaContrasenaPage } from './nueva-contrasena.page';
 import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { ComponentsModule } from 'src/app/components/components.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    ListaUsuariosPageRoutingModule,
+    NuevaContrasenaPageRoutingModule,
     ComponentsModule
   ],
-  declarations: [ListaUsuariosPage]
+  declarations: [NuevaContrasenaPage]
 })
-export class ListaUsuariosPageModule {}
+export class NuevaContrasenaPageModule {}

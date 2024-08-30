@@ -9,8 +9,6 @@
     </ion-card-header>
 
     <ion-card-content>
-      
-      <form class="ion-padding">
         <span class="texto-label">Nombre</span>
         <div class="bordes-texto">
           <ion-input class="input" [(ngModel)]="usuario.nombre" name="nombre" placeholder="Ingrese su Nombre" required></ion-input>
@@ -21,7 +19,7 @@
           <ion-input class="input" [(ngModel)]="usuario.apellido" name="apellido" placeholder="Ingrese su Apellido" required></ion-input>
         </div>
 
-        <span class="texto-label">Contraseña</span>
+        <span class="texto-label">Carrera</span>
         <div class="bordes-texto">
           <ion-input class="input" [(ngModel)]="usuario.carrera" name="carrera" placeholder="Ingrese a qué carrera pertenece" required></ion-input>
         </div>
@@ -42,8 +40,6 @@
         </div>
 
           <ion-button class="custom-button" (click)="registro()">Registrarse</ion-button>
-
-      </form>
     </ion-card-content>
   </ion-card>
 </div>

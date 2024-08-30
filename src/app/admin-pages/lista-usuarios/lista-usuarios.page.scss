@@ -1,0 +1,117 @@
+ion-header {
+    --background: var(--ion-color-primary);
+}
+
+ion-content {
+    --background: white;
+}
+
+ion-list {
+    margin: 0;
+    padding: 0;
+}
+
+ion-item {
+    --background: var(--ion-color-light);
+    --border-color: transparent;
+    padding: 0;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.user-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: transparent;
+}
+
+.avatar-name-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Asegura que los tres puntos estén al lado del nombre */
+    background-color: #00796b;
+    /* Color de fondo verde */
+    padding: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    width: 100%;
+    /* Usa todo el ancho disponible */
+}
+
+.name-label h2 {
+    font-weight: bold;
+    color: white;
+    margin: 0;
+    margin-left: 10px;
+    flex-grow: 1;
+    /* Hace que el nombre ocupe todo el espacio restante */
+    font-size: 16px;
+    /* Ajuste del tamaño del texto */
+}
+
+.email-label {
+    background-color: #f0f0f0;
+    /* Fondo gris claro para el contenedor de correo */
+    color: #666;
+    /* Texto en gris */
+    padding: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.email-label p {
+    margin: 0;
+}
+
+ion-avatar {
+    --border-radius: 50%;
+    border: 2px solid #004d40;
+    width: 50px;
+    height: 50px;
+}
+
+ion-button {
+    --background: transparent;
+    --color: #00796b;
+    --padding-start: 4px;
+    --padding-end: 4px;
+    --border-radius: 50%;
+}
+
+ion-button.icon-dimension:hover {
+    --color: #004d40;
+}
+
+ion-icon {
+    font-size: 20px;
+    color: #000000;
+}
+
+.card-menu {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    /* Asegura separación entre nombre y botón */
+}
+
+.avatar-container {
+    margin-right: 16px;
+}
+
+ion-list {
+    background: transparent;
+}
+.item-native {
+    background: transparent;
+    border: none; /* Elimina cualquier borde */
+    box-shadow: none; /* Elimina cualquier sombra que pueda parecer un borde */
+}
+ion-item {
+    --background: transparent;
+    --border-color: transparent;
+    padding: 0;
+    margin-bottom: 15px;
+    box-shadow: none; /* Elimina cualquier sombra */
+}

@@ -157,9 +157,9 @@ ion-list {
 
 /* Botón de ajuste */
 .ajuste-btn {
-  position: absolute;
   top: 10px; /* Ajusta la posición vertical según sea necesario */
-  right: 10px; /* Ajusta la posición horizontal según sea necesario */
+  right: 10px;
+  margin-left: 10px; /* Ajusta la posición horizontal según sea necesario */
   --padding-start: 0; /* Elimina el padding inicial del botón */
   --padding-end: 0; /* Elimina el padding final del botón */
 }

@@ -1,35 +1,37 @@
-ion-toolbar{
+ion-toolbar {
   --background: transparent;
-  ion-title{
-    color:black;
+
+  ion-title {
+    color: black;
     padding-bottom: 10px;
     font-weight: 900;
   }
-
 }
 
-ion-card{
+ion-card {
   background: #F0F0F0;
-}
-.ion-text-center{
-  color: black;
+  width: 100%;
+  max-width: 400px; /* Limitar el ancho máximo de la tarjeta */
+  box-shadow: 0 10px 30px 0px rgba(24, 136, 193, 0.12);
 }
 
-.centrar-card{
-margin-top: 150px;
-
+.centrar-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Usamos toda la altura disponible */
 }
 
 ion-content {
   --background: #F0F0F0;
   display: flex;
-  justify-content: start;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
 
-
-  .input{
-    
+  .input {
     display: block;
-    width:100%;
+    width: 100%;
     background: transparent;
     font-size: 16px;
     color: black;
@@ -37,27 +39,23 @@ ion-content {
     border-radius: 20px;
     outline: none;
     height: 50px;
-    
   }
 
-  .bordes-texto{
-    
-    background-color:white;
+  .bordes-texto {
+    background-color: white;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     margin-bottom: 26px;
-    box-shadow: 0 10px 30px 0px rgba(24, 136, 193, 0.12);
     padding-left: 10px;
-    
   }
-  .container-boton{
-    
+
+  .container-boton {
     display: flex;
     justify-content: center;
     gap: 10px;
-
   }
-  .boton-form{
+
+  .boton-form {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -65,25 +63,22 @@ ion-content {
     min-width: 160px;
     height: 30px;
     border-radius: 20px;
-
     color: white;
     font-weight: bold;
-    --background: #00796b; 
+    --background: #00796b;
     --border-radius: 20px;
-
-
   }
 }
 
 .texto-label {
   display: inline-block;
   padding: 8px 12px;
-  background-color: #00796b; /* Cambia este color según tus necesidades */
+  background-color: #00796b;
   color: white;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   font-weight: bold;
-  width:100%;
+  width: 100%;
   line-height: 1.2;
   outline: none;
   height: 30px;
