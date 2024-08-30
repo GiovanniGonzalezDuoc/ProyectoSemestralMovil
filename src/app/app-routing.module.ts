@@ -34,7 +34,11 @@ const routes: Routes = [
   {
     path: 'ajustes',
     loadChildren: () => import('./pages/ajustes/ajustes.module').then( m => m.AjustesPageModule)
+  },  {
+    path: 'olvidar',
+    loadChildren: () => import('./pages/olvidar/olvidar.module').then( m => m.OlvidarPageModule)
   },
+
 ];
 
 @NgModule({
