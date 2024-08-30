@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <app-header-admin></app-header-admin>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Tarjeta de Perfil -->
+  <ion-card class="perfil-card">
+    <!-- Parte en verde -->
+    <ion-card-content class="perfil-content-verde">
+      <ion-avatar class="perfil-avatar">
+        <img [src]="Perfiles[0].foto" alt="Perfil">
+      </ion-avatar>
+      <ion-label class="perfil-info">
+        <h2>{{Perfiles[0].nombreperfil}}</h2>
+      </ion-label>
+      <!-- Botón de ajuste -->
+      <ion-button 
+        fill="clear" 
+        color="light" 
+        class="ajuste-btn" 
+        (click)="openSettings()">
+        <ion-icon name="settings-outline"></ion-icon>
+      </ion-button>
+    </ion-card-content>
+    <!-- Parte en blanco -->
+    <ion-card-content class="perfil-content-blanco">
+      <div class="followers-info">
+        <p>{{Perfiles[0].seguidores}} seguidores</p>
+        <p>{{Perfiles[0].seguidos}} siguiendo</p>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Mis Publicaciones -->
+  <ion-card-header>
+    <h1 class="publicaciones-header">Mis Publicaciones</h1>
+  </ion-card-header>
+
+  <!-- Lista de Publicaciones -->
+  <ion-card-content>
+    <ion-list>
+      <ion-card *ngFor="let dato of Publicaciones" class="publicacion-card">
+        <!-- Parte verde: avatar y nombre -->
+        <ion-item lines="none" class="publicacion-info-verde">
+          <ion-avatar slot="start" class="publicacion-avatar">
+            <img [src]="dato.foto" alt="Perfil">
+          </ion-avatar>
+          <ion-label>
+            <h2 class="nombre-usuario">{{dato.nombreperfil}}</h2>
+            <p class="hora-publicacion">{{dato.horas}} horas</p>
+          </ion-label>
+        </ion-item>
+        <!-- Parte blanca: título y contenido -->
+        <ion-item lines="none" class="publicacion-content-blanco">
+          <ion-label>
+            <h3 class="titulo-publicacion" [routerLink]="['/descripcion']">{{dato.titulo}}</h3>
+            <p class="contenido-publicacion">{{dato.contenido}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-card>
+    </ion-list>
+  </ion-card-content>
+</ion-content>
