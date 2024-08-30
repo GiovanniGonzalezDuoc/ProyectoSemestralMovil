@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
@@ -7,7 +7,6 @@ import { Router} from '@angular/router';
   styleUrls: ['./perfil.page.scss'],
 })
 export class PerfilPage implements OnInit {
-
   Perfiles: any = [
     {
       id: 1,
@@ -60,7 +59,6 @@ export class PerfilPage implements OnInit {
       titulo: "asdasda",
       contenido: "asdasdasd",
     },
-
   ]
 
   constructor(private router:Router) { }
@@ -71,4 +69,5 @@ export class PerfilPage implements OnInit {
   openSettings(){
     this.router.navigate(['/ajustes']);
   }
+
 }

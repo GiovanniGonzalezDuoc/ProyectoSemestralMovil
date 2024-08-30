@@ -24,7 +24,7 @@
         <ion-list-header>
           <ion-label>Gente que sigues</ion-label>
         </ion-list-header>
-        <ion-item *ngFor="let persona of personasSiguiendo" [routerLink]="['/profile', persona.id]">
+        <ion-item *ngFor="let persona of personasSiguiendo" [routerLink]="['/perfil', persona.id]">
           <ion-avatar slot="start">
             <img [src]="dato.foto" alt="User Avatar">
           </ion-avatar>
@@ -32,16 +32,20 @@
         </ion-item>
 
         <!-- Categorías de Posts -->
-        <ion-list-header>
+        <ion-list-header [routerLink]="['/busqueda']">
           <ion-label>Categorías</ion-label>
         </ion-list-header>
-        <ion-item *ngFor="let categoria of categorias" [routerLink]="['/category', categoria.id]">
+        <ion-item *ngFor="let categoria of categorias" [routerLink]="['/busqueda', categoria.id]">
           <ion-avatar slot="start">
             <img [src]="categoria.foto" alt="User Avatar">
           </ion-avatar>
           {{ categoria.nombre }}
         </ion-item>
       </ion-list>
+
+      <ion-list-header [routerLink]="['/admin/home']">
+        <ion-label>Admin Views</ion-label>
+      </ion-list-header>
     </ion-content>
   </ion-menu>
 

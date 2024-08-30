@@ -8,7 +8,6 @@ import { AlertController, PopoverController, ToastController } from '@ionic/angu
   styleUrls: ['./descripcion.page.scss'],
 })
 export class DescripcionPage implements OnInit {
-
   Perfiles:any = [
     {
       id:1,
@@ -81,26 +80,23 @@ export class DescripcionPage implements OnInit {
       mensajecomentario:"Cristiano Mejor Domundo"
     },
   ]
-  likes:number = 25;
-  coment:number = 10;
+
 
   nuevoComentario: string = '';
   isPopoverOpen = false;
   selectedOption!: string;
-  
-  constructor(private router:Router,private popoverController:PopoverController, private alertController:AlertController,private toastcontroller:ToastController) {
-  }
-  
+
+  constructor(private router:Router,private popoverController:PopoverController, private alertController:AlertController,private toastcontroller:ToastController) { }
+
   ngOnInit() {
   }
-  
+
   agregarComentario() {
     if (this.nuevoComentario.trim()) {
       this.Perfiles.mensajescomentarios.push(this.nuevoComentario);
       this.nuevoComentario = '';
     }
   }
-
   openPopover(ev: any) {
     this.isPopoverOpen = true;
   }
@@ -109,6 +105,7 @@ export class DescripcionPage implements OnInit {
     this.isPopoverOpen = false;
   }
 
+
   handleOption(option: string) {
     // Cerrar el popover
     this.closePopover();
@@ -116,20 +113,19 @@ export class DescripcionPage implements OnInit {
     // Realizar la acción después de cerrar el popover
     setTimeout(() => {
       if (option === 'option1') {
-        this.presentToast('bottom', 'El Post Se Elimino Correctamente.');
-        this.router.navigate(['/home']);
+        this.presentToast('bottom', 'El Usuario ha sido baneado permanentemente.');
+        this.router.navigate(['/admin/home']);
+      } else if (option === 'option2') {
+        this.presentToast('bottom', 'El Post ha sido eliminado correctamente.');
+        this.router.navigate(['/admin/home']);
+      } else if (option === 'option3') {
+        this.presentToast('bottom', 'El Usuario ha sido suspendido por 7 días.');
+        this.router.navigate(['/admin/home']);
       }
     }, 0); // Aquí el tiempo de espera es 0 para que se ejecute lo antes posible
   }
-  like(){
-    this.presentToast('bottom', 'Se Dio Like Correctamente.');
-  }
-  comentario(){
-    this.router.navigate(['/descripcion'])
-  }
-  guardar(){
-    this.presentToast('bottom', 'El Post Se Guardo Correctamente.');
-  }
+
+
   async presentAlert(titulo: string, msj: string) {
     const alert = await this.alertController.create({
       header: titulo,
@@ -149,4 +145,5 @@ export class DescripcionPage implements OnInit {
 
     await toast.present();
   }
+  
 }

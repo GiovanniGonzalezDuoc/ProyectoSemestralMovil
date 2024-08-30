@@ -38,16 +38,21 @@
 
       <ion-item>
         <ion-input [(ngModel)]="usuario.contrasenaActual" label="Contraseña Actual" labelPlacement="floating"
-          placeholder="Ingrese su Contraseña Actual"></ion-input>
+          placeholder="Ingrese su Contraseña Actual" type="password"></ion-input>
       </ion-item>
-
+      
       <ion-item>
         <ion-input [(ngModel)]="usuario.nuevaContrasena" label="Nueva Contraseña" labelPlacement="floating"
-          placeholder="Ingrese su Nueva Contraseña"></ion-input>
+          placeholder="Ingrese su Nueva Contraseña" type="password"></ion-input>
       </ion-item>
+      
+      <ion-item>
+        <ion-input [(ngModel)]="usuario.renuevaContrasena" label="Reingrese Nueva Contraseña" labelPlacement="floating"
+          placeholder="Reingrese su Nueva Contraseña" type="password"></ion-input>
+      </ion-item>      
 
 
-      <ion-button expand="full" (click)="guardarCambios()">Guardar Cambios</ion-button>
+      <ion-button expand="full" (click)="guardarContrasena()">Guardar Cambios</ion-button>
 
     </ion-card-content>
   </ion-card>

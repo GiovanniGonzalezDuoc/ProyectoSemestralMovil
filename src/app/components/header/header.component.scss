@@ -1,8 +1,8 @@
 ion-toolbar {
-  --background: #00796b; /* Color verde oscuro para el fondo, basado en el tono del logo */
-  --border-color: #004d40; /* Bordes en un verde más oscuro para una sutil separación */
+  --background: #00796b; /* Color verde oscuro para el fondo */
+  --border-color: #004d40; /* Bordes en un verde más oscuro */
   --border-width: 1px;
-  padding: 0 16px; /* Espaciado interno para que los elementos no queden pegados a los bordes */
+  padding: 0 16px; /* Espaciado interno */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
 }
 
@@ -11,39 +11,39 @@ ion-toolbar {
 }
 
 .logo {
-  width: 120px;               /* Tamaño del logo, ajustable según tus necesidades */
-  height: 40px;              /* Mantén la altura igual a la anchura para un círculo perfecto */
-  border-radius: 50%;        /* Hace que el logo sea circular */
-  object-fit: cover;         /* Asegura que el logo cubra completamente su contenedor */
+  width: 120px; /* Tamaño del logo */
+  height: 40px;
+  border-radius: 50%; /* Logo circular */
+  object-fit: cover;
   border: 2px solid #ffffff; /* Borde blanco alrededor del logo */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Añade sombra al logo para destacarlo */
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efecto suave en hover */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efecto en hover */
 }
 
 .logo:hover {
-  transform: scale(1.1);     /* Aumenta ligeramente el tamaño al pasar el ratón */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Intensifica la sombra en hover */
+  transform: scale(1.1); /* Aumenta el tamaño al pasar el ratón */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Intensifica la sombra */
 }
 
 ion-searchbar {
-  flex: 1;                   /* Permite que la barra de búsqueda ocupe el espacio disponible */
-  max-width: 300px;          /* Limita el ancho máximo para mantener la estructura */
-  margin: 0 16px;            /* Espaciado a ambos lados para no estar pegado a los botones */
-  --background: #f9f9f9;     /* Fondo ligeramente gris para la barra de búsqueda */
-  --color: #333;             /* Color del texto */
+  flex: 1; /* Ocupa el espacio disponible */
+  max-width: 300px; /* Ancho máximo */
+  margin: 0 16px; /* Espaciado */
+  --background: #f9f9f9; /* Fondo ligeramente gris */
+  --color: #333; /* Color del texto */
   --placeholder-color: #888; /* Color del placeholder */
-  --icon-color: #666;        /* Color del icono de búsqueda */
-  border-radius: 20px;       /* Bordes redondeados para un look moderno */
+  --icon-color: #666; /* Color del icono de búsqueda */
+  border-radius: 20px; /* Bordes redondeados */
 }
 
 ion-button.dimension {
-  --padding-start: 8px;      /* Ajusta el padding para un mejor tamaño de botón */
+  --padding-start: 8px; /* Ajusta el padding */
   --padding-end: 8px;
-  --border-radius: 50%;      /* Hace que los botones sean redondeados */
-  --color: #333;             /* Color del texto y de los iconos */
+  --border-radius: 50%; /* Botones redondeados */
+  --color: #333; /* Color del texto y de los iconos */
 }
 
 ion-icon {
-  font-size: 24px;           /* Tamaño de los iconos */
-  color: #333;               /* Color de los iconos */
+  font-size: 24px; /* Tamaño de los iconos */
+  color: #333; /* Color de los iconos */
 }

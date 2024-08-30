@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController, ToastController } from '@ionic/angular';
-
+import { ToastController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  selector: 'app-busqueda',
+  templateUrl: './busqueda.page.html',
+  styleUrls: ['./busqueda.page.scss'],
 })
-export class HomePage {
+export class BusquedaPage implements OnInit {
+
+  searchQuery:string = 'Tecnologia';
 
   Perfiles:any = [
     {
@@ -53,9 +54,11 @@ export class HomePage {
     },
   ]
 
-
   constructor(private router:Router,private toastcontroller:ToastController) {}
 
+  ngOnInit() {
+  }
+  
   comentario(){
     this.router.navigate(['/descripcion'])
   }

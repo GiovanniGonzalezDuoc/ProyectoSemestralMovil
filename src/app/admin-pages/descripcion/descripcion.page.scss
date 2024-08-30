@@ -1,0 +1,136 @@
+ion-content {
+    --background: white;
+  }
+  
+  ion-card {
+    --background: #f9f9f9; /* Fondo suave */
+    --border-radius: 15px; /* Bordes redondeados */
+    --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Sombra más sutil */
+    margin: 12px; /* Espacio mayor alrededor de las tarjetas */
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animación suave */
+  }
+  
+  ion-card:hover {
+    transform: translateY(-5px); /* Levanta ligeramente la tarjeta */
+    --box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada en hover */
+  }
+  
+  ion-card-header {
+    --background: #00796b; /* Fondo del encabezado en verde oscuro */
+    --color: #ffffff; /* Color del texto en el encabezado */
+    padding: 16px 16px; /* Espaciado más generoso */
+    border-bottom: none; /* Sin borde inferior */
+  }
+  
+  ion-avatar {
+    --border-radius: 50%; /* Avatar circular */
+    border: 3px solid #ffffff; /* Borde blanco alrededor del avatar */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15); /* Sombra sutil en el avatar */
+    width: 60px; /* Ajuste del tamaño del avatar */
+    height: 60px;
+    overflow: hidden; /* Asegura que la imagen dentro del avatar se mantenga dentro del borde */
+  }
+  
+  .info-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    padding: 8px 0; /* Espacio interno entre el avatar y el texto */
+  }
+  
+  ion-label {
+    display: flex;
+    flex-direction: column; /* Alineación vertical del texto */
+    justify-content: center;
+    align-items: flex-start; /* Alinea el texto a la izquierda */
+  }
+  
+  ion-card-header h2, ion-card-header p {
+    margin: 0;
+    line-height: 1.2;
+    color: #ffffff;
+  }
+  
+  ion-card-header h2 {
+    font-size: 20px; /* Ajuste del tamaño del nombre */
+    font-weight: 600; /* Negrita para el nombre */
+  }
+  
+  ion-card-header p {
+    font-size: 14px;
+    color: #c8e6c9; /* Color más claro para el tiempo */
+  }
+  
+  ion-card-content {
+    padding: 16px 20px; /* Espaciado interno más generoso */
+  }
+  
+  ion-card-content h1 {
+    color: #004d40; /* Color del título en verde oscuro */
+    font-size: 18px;
+    margin: 0 0 8px 0; /* Espacio debajo del título */
+  }
+  
+  ion-card-content p {
+    color: #555; /* Color del texto en gris oscuro */
+    font-size: 15px; /* Tamaño del texto ajustado */
+    line-height: 1.5; /* Espaciado entre líneas */
+    margin: 0;
+  }
+  
+  ion-item {
+    --background: transparent;
+    padding: 10px 0; /* Espaciado ajustado */
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #e0e0e0; /* Línea sutil en la parte superior */
+  }
+  
+  ion-button {
+    --background: transparent;
+    --color: #00796b;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --border-radius: 50%;
+    font-size: 16px;
+  }
+  
+  ion-button.icon-dimension {
+    --color: #00796b;
+  }
+  
+  ion-button.icon-dimension:hover {
+    --color: #004d40; /* Cambio de color al hover */
+  }
+  
+  ion-icon {
+    font-size: 22px; /* Tamaño de los íconos ajustado */
+    margin-right: 4px;
+  }
+  
+  .card-menu {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+  
+  .avatar-container {
+    margin-right: 16px;
+  }
+  
+  /* Aplica color negro a todo el texto dentro de ion-card */
+  ion-card {
+    --color: #000000; /* Texto en negro */
+  }
+  
+  /* Específicamente para el placeholder y texto dentro de ion-textarea */
+  ion-textarea {
+    --placeholder-color: #000000; /* Color del placeholder en negro */
+    --color: #000000; /* Color del texto en negro */
+  }
+  
+  ion-button {
+    --color: #000000; /* Color del texto del botón en negro */
+  }

@@ -1,9 +1,15 @@
+ion-content {
+  --background: white;
+}
+
 ion-card {
   --background: #ffffff; /* Fondo blanco para una apariencia limpia */
   --border-radius: 12px; /* Bordes redondeados para un diseño moderno */
   --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra más prominente para profundidad */
   margin: 8px; /* Menor margen alrededor de las tarjetas */
   overflow: hidden; /* Asegura que los bordes redondeados se mantengan */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  border: 1px solid #dddddd; /* Borde gris claro alrededor de la tarjeta */
 }
 
 ion-card-header {

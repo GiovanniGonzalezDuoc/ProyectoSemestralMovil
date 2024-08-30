@@ -1,15 +1,12 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { ModalController, ToastController } from '@ionic/angular';
-
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
 })
-export class HomePage {
-
+export class HomePage implements OnInit {
+  
   Perfiles:any = [
     {
       id:1,
@@ -53,25 +50,9 @@ export class HomePage {
     },
   ]
 
+  constructor() { }
 
-  constructor(private router:Router,private toastcontroller:ToastController) {}
+  ngOnInit() {
+  }
 
-  comentario(){
-    this.router.navigate(['/descripcion'])
-  }
-  guardar(){
-    this.presentToast('bottom', 'El Post Se Guardo Correctamente.');
-  }
-  like(){
-    this.presentToast('bottom', 'Se Dio Like Correctamente.');
-  }
-  async presentToast(position: 'top' | 'middle' | 'bottom',text:string) { //posición
-    const toast = await this.toastcontroller.create({
-      message: text,
-      duration: 1500,
-      position: position,
-    });
-
-    await toast.present();
-  }
 }
