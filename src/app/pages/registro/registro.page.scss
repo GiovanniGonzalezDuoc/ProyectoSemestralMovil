@@ -6,8 +6,19 @@
     border-radius: 10px;
   }
 
+  ion-card{
+    background: #F0F0F0
+  }
+  
+  ion-title{
+    color:black;
+    padding-bottom: 10px;
+    font-weight: 900;
+    
+  }
+
   ion-content {
-    --background: url('/assets/icon/Fondologin.jpeg') no-repeat center center / cover; 
+    --background: #F0F0F0; 
     display: flex;
     justify-content: start;
     
@@ -21,7 +32,7 @@
       width:100%;
       background: transparent;
       font-size: 16px;
-      color: white;
+      color: black;
       line-height: 1.2;
       border-radius: 20px;
       outline: none;
@@ -30,8 +41,9 @@
     }
   
     .bordes-texto{
-      background-color:gray;
-      border-radius: 20px;
+      background-color:white;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
       margin-bottom: 26px;
       box-shadow: 0 10px 30px 0px rgba(24, 136, 193, 0.12);
       padding-left: 10px;
@@ -48,12 +60,27 @@
     
   }
   .custom-button {
-
-    --background: #f29e0c; 
+    display: flex;
+    justify-content: center;
+    --background: #00796b; 
     --border-radius: 20px;
     font-weight: bold;
     margin-top: 10px;
     min-width: 160px;
     height: 30px;
+
+  }
+  .texto-label {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #00796b; /* Cambia este color según tus necesidades */
+    color: white;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    font-weight: bold;
+    width:100%;
+    line-height: 1.2;
+    outline: none;
+    height: 35px;
 
   }

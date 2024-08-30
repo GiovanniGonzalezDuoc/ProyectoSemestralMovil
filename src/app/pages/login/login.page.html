@@ -1,6 +1,5 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <div class="semi-circulo"></div>
     <ion-title class="ion-text-center">Iniciar Sesión</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -11,12 +10,12 @@
       <ion-card>
         <ion-card-content>
           <form class="ion-padding">
-            <p>Email</p>
+            <span class="texto-label">Email</span>
             <div class="bordes-texto">
               <ion-input class="input" [(ngModel)]="emailsolicitado" name="email" placeholder="Ingrese su Correo" required></ion-input>
             </div>
 
-            <p>Contraseña</p>
+            <span class="texto-label">Contraseña</span>
             <div class="bordes-texto">
               <ion-input class="input" [(ngModel)]="contrasenasolicitada" name="contrasena" placeholder="Ingrese su Contraseña" type="password" required></ion-input>
             </div>
@@ -30,4 +29,6 @@
       </ion-card>
     </div>
   </div>
+  <p class="ion-text-center">Olvidaste tu contraseña?</p><p class="ion-text-center" style="color: blue;" [routerLink]="['/olvidar']">Pincha aqui </p>
 </ion-content>
+

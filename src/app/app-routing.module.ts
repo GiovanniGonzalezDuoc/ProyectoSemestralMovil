@@ -36,6 +36,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/ajustes/ajustes.module').then( m => m.AjustesPageModule)
   },
   {
+    path: 'olvidar',
+    loadChildren: () => import('./pages/olvidar/olvidar.module').then( m => m.OlvidarPageModule)
+  },
+   {
     path: 'admin/home',
     loadChildren: () => import('./admin-pages/home/home.module').then( m => m.HomePageModule)
   },
@@ -55,6 +59,8 @@ const routes: Routes = [
     path: 'busqueda',
     loadChildren: () => import('./pages/busqueda/busqueda.module').then( m => m.BusquedaPageModule)
   },
+];
+
 ];
 
 @NgModule({
