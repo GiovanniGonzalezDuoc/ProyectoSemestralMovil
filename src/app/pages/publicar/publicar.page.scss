@@ -1,3 +1,6 @@
+ion-content {
+    --background: white;
+}
 /* Card para publicación */
 .publicar-card {
     max-width: 400px;
@@ -15,6 +18,8 @@ ion-card {
     margin: 8px; /* Menor margen alrededor */
     overflow: hidden; /* Mantener los bordes redondeados */
     position: relative; /* Posición relativa para el uso de sombras */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    border: 1px solid #dddddd; /* Borde gris claro alrededor de la tarjeta */
 }
 
 /* Estilo del header del ion-card */
@@ -81,4 +86,7 @@ ion-button[color="primary"] {
 ion-item ion-label {
     color: black; /* Color negro para las etiquetas */
     padding-left: 8px; /* Espaciado adicional a la izquierda */
+}
+.color-button{
+    --background: #00796b;
 }

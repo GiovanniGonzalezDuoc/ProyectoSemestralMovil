@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
@@ -23,6 +24,7 @@ export class PerfilPage implements OnInit {
       id: 1,
       foto: "assets/icon/favicon.png",
       nombreperfil: "Juan El Ganador",
+      horas:25,
       titulo: "asdasda",
       contenido: "asdasdasd",
     },
@@ -30,6 +32,7 @@ export class PerfilPage implements OnInit {
       id: 2,
       foto: "assets/icon/favicon.png",
       nombreperfil: "Juan El Ganador",
+      horas:25,
       titulo: "asdasda",
       contenido: "asdasdasd",
     },
@@ -37,6 +40,7 @@ export class PerfilPage implements OnInit {
       id: 3,
       foto: "assets/icon/favicon.png",
       nombreperfil: "Juan El Ganador",
+      horas:25,
       titulo: "asdasda",
       contenido: "asdasdasd",
     },
@@ -44,6 +48,7 @@ export class PerfilPage implements OnInit {
       id: 4,
       foto: "assets/icon/favicon.png",
       nombreperfil: "Juan El Ganador",
+      horas:25,
       titulo: "asdasda",
       contenido: "asdasdasd",
     },
@@ -51,15 +56,19 @@ export class PerfilPage implements OnInit {
       id: 5,
       foto: "assets/icon/favicon.png",
       nombreperfil: "Juan El Ganador",
+      horas:25,
       titulo: "asdasda",
       contenido: "asdasdasd",
     },
 
   ]
 
-  constructor() { }
+  constructor(private router:Router) { }
 
   ngOnInit() {
   }
 
+  openSettings(){
+    this.router.navigate(['/ajustes']);
+  }
 }

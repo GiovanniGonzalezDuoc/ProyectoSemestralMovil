@@ -1,92 +1,170 @@
 ion-content {
-  --background: url('/assets/icon/Fondologin.jpeg') no-repeat center center / cover; 
+  --background: white;
 }
 
-.perfil-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin: 20px auto;
-  max-width: 90%;
+/* Fondo verde para el perfil */
+.perfil-content-verde {
+  background-color: #00796b; /* Color verde */
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  text-align: center;
+  color: #ffffff;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+ion-card{
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  border: 1px solid #dddddd; /* Borde gris claro alrededor de la tarjeta */
 }
 
-.perfil-card ion-card-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+
+/* Fondo blanco para seguidores/seguidos */
+.perfil-content-blanco {
+  background-color: #ffffff;
+  padding: 20px;
+  text-align: center;
 }
+
 
 .perfil-avatar {
-  width: 120px;
-  height: 120px;
-  margin-bottom: 10px;
+  width: 100px;
+  height: 100px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  justify-content: center;  /* Centrar horizontalmente */
+  align-items: center;      /* Centrar verticalmente */
+  margin: 0 auto;           /* Asegurar que esté centrado en su contenedor */
+  border-radius: 50%;       /* Si quieres un borde redondo en la imagen */
+  overflow: hidden;         /* Para que la imagen se ajuste al borde redondo */
 }
 
-.perfil-info {
-  text-align: center;
-  color: black;
+
+.perfil-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ajusta la imagen dentro del contenedor */
+  border-radius: 50%; /* Asegura que la imagen también sea redonda */
 }
 
-.followers-info {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
+
+.perfil-info h2 {
+  font-size: 1.4em;
+  color: #ffffff; /* Nombre en blanco */
 }
+
 
 .followers-info p {
-  margin: 0;
-  font-size: 1em;
-  color: black;
+  color: #000000; /* Texto en negro */
 }
+
 
 ion-list {
-  padding: 0;
+  background-color: transparent;
 }
 
+
+/* Mis Publicaciones en verde */
 .publicaciones-header {
   text-align: center;
   font-size: 1.5em;
-  margin: 20px 0;
-}
-
-.publicacion-card {
-  margin: 15px 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.publicacion-card ion-item {
-  --ion-item-background: transparent;
-  padding: 10px;
-}
-
-.publicacion-card ion-avatar {
-  width: 50px;
-  height: 50px;
-}
-
-.nombre-usuario {
-  font-size: 1.3em;
   font-weight: bold;
-  margin: 0;
+  color: #00796b; /* El verde que venimos utilizando */
+  border-bottom: 3px solid #00796b; /* Línea inferior para simular la barra divisoria */
+  width: 80%; /* Puedes ajustar el ancho de la barra */
+  margin-left: auto;
+  margin-right: auto;
 }
+
+
+.publicaciones-divider {
+  background-color: #00796b; /* Verde para la barra */
+  height: 5px;
+  width: 80%; /* Puedes ajustar el ancho de la barra divisoria */
+  margin: 20px auto;
+  border-radius: 8px; /* Bordes redondeados */
+}
+
+
+/* Quitar márgenes y paddings para evitar la separación */
+.publicacion-card {
+  margin: 40px 0;
+  padding: 0;
+  box-shadow: none; /* Elimina cualquier sombra entre los bloques */
+  border-radius: 8px; /* Para bordes redondeados */
+  overflow: hidden; /* Para asegurar que el fondo se vea continuo */
+}
+
+
+/* Parte verde */
+.publicacion-info-verde {
+  background-color: #00796b; /* Color verde */
+  padding: 10px;
+  border-top-left-radius: 8px; /* Bordes redondeados solo en la parte superior */
+  border-top-right-radius: 8px;
+  color: #ffffff;
+}
+
+.publicacion-info-label {
+  display: flex;
+  flex-direction: column; /* Organiza los elementos en columna */
+  justify-content: center; /* Alinea verticalmente en el centro */
+  margin-left: 10px; /* Espacio entre el avatar y el texto */
+}
+
+/* Parte blanca */
+.publicacion-content-blanco {
+  background-color: #ffffff;
+  padding: 10px;
+  margin: 0; /* Elimina márgenes */
+  border-bottom-left-radius: 8px; /* Bordes redondeados solo en la parte inferior */
+  border-bottom-right-radius: 8px;
+  color: #000000;
+}
+
+
+/* Para asegurar que no hay espacios entre las dos partes */
+.publicacion-card ion-item {
+  --ion-item-background: transparent; /* Elimina cualquier fondo en ion-item */
+  padding: 0; /* Quitar padding interno */
+  margin: 0; /* Quitar márgenes internos */
+}
+
+
+/* Ajuste para el nombre de usuario */
+.nombre-usuario {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #ffffff; /* Texto en blanco para la parte verde */
+  margin: 0; /* Elimina márgenes predeterminados */
+}
+
+
+/* Ajuste para la hora de publicación */
+.hora-publicacion {
+  font-size: 0.9em;
+}
+
 
 .titulo-publicacion {
   font-size: 1.1em;
   font-weight: bold;
-  margin: 5px 0;
+  color: #000000; /* Texto en negro para la parte blanca */
 }
 
+
 .contenido-publicacion {
-  font-size: 0.9em;
-  color: #444;
+  font-size: 1em;
+  color: #000000; /* Texto en negro */
+}
+
+/* Botón de ajuste */
+.ajuste-btn {
+  position: absolute;
+  top: 10px; /* Ajusta la posición vertical según sea necesario */
+  right: 10px; /* Ajusta la posición horizontal según sea necesario */
+  --padding-start: 0; /* Elimina el padding inicial del botón */
+  --padding-end: 0; /* Elimina el padding final del botón */
+}
+
+.ajuste-btn ion-icon {
+  font-size: 1.2em; /* Ajusta el tamaño del ícono si es necesario */
+  color: #ffffff; /* Cambia el color del ícono si es necesario */
 }
