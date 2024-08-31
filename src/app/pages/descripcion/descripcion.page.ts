@@ -110,10 +110,10 @@ export class DescripcionPage implements OnInit {
   }
 
   handleOption(option: string) {
-    // Cerrar el popover
+    
     this.closePopover();
   
-    // Realizar la acción después de cerrar el popover
+    
     setTimeout(() => {
       if (option === 'option1') {
         this.presentToast('bottom', 'El Post Se Elimino Correctamente.');
@@ -122,7 +122,7 @@ export class DescripcionPage implements OnInit {
         this.presentToast('bottom', 'Se Ha Seguido Correctamente Al Usuario.');
         this.router.navigate(['/home']);
       }
-    }, 0); // Aquí el tiempo de espera es 0 para que se ejecute lo antes posible
+    }, 0); 
   }
   like(){
     this.presentToast('bottom', 'Se Dio Like Correctamente.');

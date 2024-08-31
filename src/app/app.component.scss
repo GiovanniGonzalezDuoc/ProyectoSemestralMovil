@@ -1,7 +1,7 @@
 ion-app {
   --background: white;
 }
-/* Estilo para el avatar del usuario y la cabecera del menú */
+
 .menu-header {
     display: flex;
     align-items: center;
@@ -26,7 +26,7 @@ ion-app {
     font-size: 14px;
   }
   
-  /* Estilo para los ítems de la lista */
+  
   ion-item {
     --background: #ffffff;
     --border-color: #e0e0e0;
@@ -37,42 +37,53 @@ ion-app {
     --background: #e0f7fa;
   }
   
-  /* Estilo para los headers de la lista */
+  
   ion-list-header {
-    background-color: #00796b; /* Color de fondo verde oscuro */
-    color: #ffffff; /* Color del texto blanco */
-    padding: 8px 16px; /* Espaciado interno */
+    background-color: #00796b; 
+    color: #ffffff; 
+    padding: 8px 16px; 
   }
   
-  /* Ajustar el color del texto del item en hover */
+  
   ion-item.activated {
-    --background: #00796b; /* Fondo verde oscuro */
-    --color: #ffffff; /* Texto blanco */
+    --background: #00796b; 
+    --color: #ffffff; 
   }
   
-  /* Estilo general del contenido del menú */
+  
   ion-content {
-    --background: #f4f4f4; /* Fondo claro */
+    --background: #f4f4f4; 
   }
 .color-menu{
     --background: #00796b; 
 }  
-/* Estilo para los encabezados de la lista */
+
 ion-list-header {
-    background-color: #00796b; /* Fondo verde oscuro */
-    color: #ffffff; /* Color del texto blanco */
-    padding: 12px 16px; /* Espaciado interno */
-    font-size: 16px; /* Tamaño del texto */
-    font-weight: bold; /* Negrita */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra sutil */
-    margin: 8px 0; /* Margen superior e inferior */
+    background-color: #00796b; 
+    color: #ffffff; 
+    padding: 12px 16px; 
+    font-size: 16px; 
+    font-weight: bold; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+    margin: 8px 0; 
     text-align: center;
   }
   
-  /* Efecto de transición para mejorar la interacción visual */
+  
   ion-list-header:hover {
-    background-color: #004d40; /* Fondo verde más oscuro en hover */
-    cursor: pointer; /* Cambia el cursor para indicar que es interactivo */
-    transition: background-color 0.3s ease; /* Transición suave */
+    background-color: #004d40; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+  }
+
+  .logo {
+    width: 40px;               
+    height: 40px;              
+    border-radius: 50%;        
+    object-fit: cover;         
+    border: 2px solid #ffffff; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    
+    margin-left: 130px;
   }

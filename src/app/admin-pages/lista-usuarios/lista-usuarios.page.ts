@@ -30,11 +30,11 @@ export class ListaUsuariosPage implements OnInit {
   }
 
   handleOption(option: string) {
-    // Cerrar el popover
+    
     this.closePopover();
 
     
-    // Realizar la acción después de cerrar el popover
+    
     setTimeout(() => {
       if (option === 'option1') {
         this.presentToast('bottom', 'Se Le Ha Eliminado Al Usuario El Baneo.');
@@ -43,13 +43,13 @@ export class ListaUsuariosPage implements OnInit {
         this.presentToast('bottom', 'Se Ha Baneado Correctamente Al Usuario.');
         this.router.navigate(['/admin/home']);
       } else if (option === 'option3') {
-        // Navegar a la página de cambiar contraseña
+        
         this.router.navigate(['/nueva-contrasena']);
       } else if (option === 'option4') {
         this.presentToast('bottom', 'Se Ha Eliminado La Cuenta Del Usuario Correctamente.');
         this.router.navigate(['/admin/home']);
       }
-    }, 0); // Aquí el tiempo de espera es 0 para que se ejecute lo antes posible
+    }, 0); 
   }
 
   async presentAlert(titulo: string, msj: string) {

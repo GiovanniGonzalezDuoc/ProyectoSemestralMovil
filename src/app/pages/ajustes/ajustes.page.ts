@@ -24,10 +24,9 @@ export class AjustesPage implements OnInit {
   }
 
   guardarCambios() {
-    // Parsear teléfono a número
+    
     const telefono = parseInt(this.usuario.telefono, 10);
-    // Lógica para guardar los cambios del usuario
-    // Validar número de teléfono (solo números, máximo 8 caracteres)
+    
     if (!/^\d{8}$/.test(telefono.toString())) {
       this.presentAlert('El Teléfono No Cumple Con Las Reglas', 'El número de teléfono debe tener exactamente 8 dígitos.');
       this.usuario.telefono='';
@@ -49,7 +48,7 @@ export class AjustesPage implements OnInit {
 
   }
   guardarContrasena(){
-    // Limpiar contraseña de caracteres innecesarios (en este caso, solo quitar espacios)
+    
     const contrasena = this.usuario.contrasenaActual.trim();
     const nuevacontrasena = this.usuario.nuevaContrasena.trim();
     const renuevacontrasena = this.usuario.renuevaContrasena.trim();
@@ -77,7 +76,7 @@ export class AjustesPage implements OnInit {
   }
 
   cerrarSesion() {
-    // Lógica para cerrar sesión
+    
     this.presentToast('bottom','Sesión Cerrada.');
     this.router.navigate(['/login']);
   }
