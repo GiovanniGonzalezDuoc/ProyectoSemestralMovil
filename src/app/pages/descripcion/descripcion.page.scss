@@ -3,33 +3,33 @@ ion-content {
 }
 
 ion-card {
-  --background: #f9f9f9; /* Fondo suave */
-  --border-radius: 15px; /* Bordes redondeados */
-  --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Sombra más sutil */
-  margin: 12px; /* Espacio mayor alrededor de las tarjetas */
+  --background: #f9f9f9; 
+  --border-radius: 15px; 
+  --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); 
+  margin: 12px; 
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animación suave */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; 
 }
 
 ion-card:hover {
-  transform: translateY(-5px); /* Levanta ligeramente la tarjeta */
-  --box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada en hover */
+  transform: translateY(-5px); 
+  --box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); 
 }
 
 ion-card-header {
-  --background: #00796b; /* Fondo del encabezado en verde oscuro */
-  --color: #ffffff; /* Color del texto en el encabezado */
-  padding: 16px 16px; /* Espaciado más generoso */
-  border-bottom: none; /* Sin borde inferior */
+  --background: #00796b; 
+  --color: #ffffff; 
+  padding: 16px 16px;
+  border-bottom: none; 
 }
 
 ion-avatar {
-  --border-radius: 50%; /* Avatar circular */
-  border: 3px solid #ffffff; /* Borde blanco alrededor del avatar */
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15); /* Sombra sutil en el avatar */
-  width: 60px; /* Ajuste del tamaño del avatar */
+  --border-radius: 50%;
+  border: 3px solid #ffffff; 
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15); 
+  width: 60px; 
   height: 60px;
-  overflow: hidden; /* Asegura que la imagen dentro del avatar se mantenga dentro del borde */
+  overflow: hidden; 
 }
 
 .info-container {
@@ -37,14 +37,14 @@ ion-avatar {
   align-items: center;
   justify-content: space-between;
   flex: 1;
-  padding: 8px 0; /* Espacio interno entre el avatar y el texto */
+  padding: 8px 0; 
 }
 
 ion-label {
   display: flex;
-  flex-direction: column; /* Alineación vertical del texto */
+  flex-direction: column; 
   justify-content: center;
-  align-items: flex-start; /* Alinea el texto a la izquierda */
+  align-items: flex-start; 
 }
 
 ion-card-header h2, ion-card-header p {
@@ -54,38 +54,38 @@ ion-card-header h2, ion-card-header p {
 }
 
 ion-card-header h2 {
-  font-size: 20px; /* Ajuste del tamaño del nombre */
-  font-weight: 600; /* Negrita para el nombre */
+  font-size: 20px; 
+  font-weight: 600; 
 }
 
 ion-card-header p {
   font-size: 14px;
-  color: #c8e6c9; /* Color más claro para el tiempo */
+  color: #c8e6c9;
 }
 
 ion-card-content {
-  padding: 16px 20px; /* Espaciado interno más generoso */
+  padding: 16px 20px; 
 }
 
 ion-card-content h1 {
-  color: #004d40; /* Color del título en verde oscuro */
+  color: #004d40; 
   font-size: 18px;
-  margin: 0 0 8px 0; /* Espacio debajo del título */
+  margin: 0 0 8px 0; 
 }
 
 ion-card-content p {
-  color: #555; /* Color del texto en gris oscuro */
-  font-size: 15px; /* Tamaño del texto ajustado */
-  line-height: 1.5; /* Espaciado entre líneas */
+  color: #555; 
+  font-size: 15px; 
+  line-height: 1.5; 
   margin: 0;
 }
 
 ion-item {
   --background: transparent;
-  padding: 10px 0; /* Espaciado ajustado */
+  padding: 10px 0; 
   display: flex;
   align-items: center;
-  border-top: 1px solid #e0e0e0; /* Línea sutil en la parte superior */
+  border-top: 1px solid #e0e0e0; 
 }
 
 ion-button {
@@ -102,11 +102,11 @@ ion-button.icon-dimension {
 }
 
 ion-button.icon-dimension:hover {
-  --color: #004d40; /* Cambio de color al hover */
+  --color: #004d40; 
 }
 
 ion-icon {
-  font-size: 22px; /* Tamaño de los íconos ajustado */
+  font-size: 22px; 
   margin-right: 4px;
 }
 
@@ -120,17 +120,17 @@ ion-icon {
   margin-right: 16px;
 }
 
-/* Aplica color negro a todo el texto dentro de ion-card */
+
 ion-card {
-  --color: #000000; /* Texto en negro */
+  --color: #000000; 
 }
 
-/* Específicamente para el placeholder y texto dentro de ion-textarea */
+
 ion-textarea {
-  --placeholder-color: #000000; /* Color del placeholder en negro */
-  --color: #000000; /* Color del texto en negro */
+  --placeholder-color: #000000; 
+  --color: #000000; 
 }
 
 ion-button {
-  --color: #000000; /* Color del texto del botón en negro */
+  --color: #000000; 
 }

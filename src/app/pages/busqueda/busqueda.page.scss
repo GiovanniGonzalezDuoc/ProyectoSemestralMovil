@@ -3,34 +3,34 @@ ion-content {
   }
   
   ion-card {
-    --background: #ffffff; /* Fondo blanco para una apariencia limpia */
-    --border-radius: 12px; /* Bordes redondeados para un diseño moderno */
-    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra más prominente para profundidad */
-    margin: 8px; /* Menor margen alrededor de las tarjetas */
-    overflow: hidden; /* Asegura que los bordes redondeados se mantengan */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-    border: 1px solid #dddddd; /* Borde gris claro alrededor de la tarjeta */
+    --background: #ffffff;
+    --border-radius: 12px; 
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    margin: 8px; 
+    overflow: hidden; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+    border: 1px solid #dddddd; 
   }
   
   ion-card-header {
-    --background: #00796b; /* Fondo del encabezado en verde oscuro */
-    --color: #ffffff; /* Color del texto en el encabezado */
-    border-bottom: 1px solid #004d40; /* Borde inferior para separación */
-    padding: 8px 12px; /* Espaciado interno */
+    --background: #00796b; 
+    --color: #ffffff; 
+    border-bottom: 1px solid #004d40; 
+    padding: 8px 12px; 
   }
   
   ion-avatar {
-    --border-radius: 50%; /* Avatar circular */
-    border: 2px solid #004d40; /* Borde del avatar */
-    width: 70px; /* Tamaño del avatar */
-    height: 70px; /* Tamaño del avatar */
+    --border-radius: 50%; 
+    border: 2px solid #004d40; 
+    width: 70px; 
+    height: 70px; 
   }
   
   .info-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex: 1; /* Ocupa el espacio restante */
+    flex: 1; 
   }
   
   ion-label {
@@ -38,83 +38,83 @@ ion-content {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 100%; /* Asegura que el contenido ocupe todo el ancho disponible */
+    width: 100%; 
   }
   
   ion-card-header h2, ion-card-header p {
-    margin: 0; /* Sin margen adicional */
-    line-height: 1.2; /* Ajusta el espaciado entre líneas */
-    color: #ffffff; /* Color del texto */
-    text-align: left; /* Alineación del texto a la izquierda */
+    margin: 0; 
+    line-height: 1.2; 
+    color: #ffffff; 
+    text-align: left; 
   }
   
   ion-card-header h2 {
-    margin-right: 10px; /* Espaciado entre nombre y horas */
-    font-size: 18px; /* Ajuste del tamaño del nombre */
+    margin-right: 10px; 
+    font-size: 18px; 
   }
   
   ion-card-header p {
-    font-size: 14px; /* Ajuste del tamaño de las horas */
+    font-size: 14px; 
   }
   
   ion-card-content {
-    padding: 8px 12px; /* Menor espaciado interno en el contenido */
+    padding: 8px 12px; 
   }
   
   ion-card-content h1 {
-    color: #004d40; /* Color del título en verde oscuro */
-    font-size: 18px; /* Tamaño del título reducido */
-    margin: 0 0 4px 0; /* Espaciado debajo del título */
+    color: #004d40; 
+    font-size: 18px; 
+    margin: 0 0 4px 0; 
   }
   
   ion-card-content p {
-    color: #333; /* Color del texto */
-    font-size: 14px; /* Tamaño del texto reducido */
-    line-height: 1.4; /* Espaciado entre líneas */
-    margin: 0; /* Sin margen adicional */
+    color: #333; 
+    font-size: 14px; 
+    line-height: 1.4; 
+    margin: 0; 
   }
   
   ion-item {
-    --background: transparent; /* Fondo transparente */
-    --border-color: transparent; /* Sin borde */
-    padding: 4px 8px; /* Menor espaciado interno */
-    display: flex; /* Flexbox para alinear elementos */
-    align-items: center; /* Alinea verticalmente los elementos */
+    --background: transparent; 
+    --border-color: transparent; 
+    padding: 4px 8px; 
+    display: flex; 
+    align-items: center; 
   }
   
   ion-button {
-    --background: transparent; /* Fondo transparente */
-    --color: #00796b; /* Color del texto y de los iconos */
+    --background: transparent; 
+    --color: #00796b; 
     --padding-start: 4px;
     --padding-end: 4px;
-    --border-radius: 50%; /* Botones redondeados */
+    --border-radius: 50%; 
   }
   
   ion-button.icon-dimension {
-    --color: #00796b; /* Color del texto e íconos */
+    --color: #00796b; 
   }
   
   ion-button.icon-dimension:hover {
-    --color: #004d40; /* Color del texto e íconos al pasar el ratón */
+    --color: #004d40; 
   }
   
   ion-icon {
-    font-size: 20px; /* Tamaño de los íconos reducido */
-    color: #00796b; /* Color de los íconos */
+    font-size: 20px; 
+    color: #00796b; 
   }
   
   .card-menu {
     display: flex;
-    align-items: center; /* Alineación vertical de los íconos */
-    margin-left: auto; /* Empuja el botón de menú a la derecha */
+    align-items: center; 
+    margin-left: auto; 
   }
   
   .card-menu ion-button {
-    --background: transparent; /* Fondo transparente */
-    --color: #00796b; /* Color del ícono de los tres puntos */
+    --background: transparent; 
+    --color: #00796b; 
   }
   
   .avatar-container {
-    margin-right: 16px; /* Espaciado entre avatar y el texto */
+    margin-right: 16px; 
   }
   

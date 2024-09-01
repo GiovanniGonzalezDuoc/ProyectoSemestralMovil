@@ -1,124 +1,124 @@
 ion-content {
   --background: white;
 }
-/* Estilo general para la tarjeta de ajustes */
+
 .ajustes-card {
-  margin: 20px; /* Espacio alrededor de las tarjetas */
-  border-radius: 12px; /* Bordes redondeados */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-  border: 1px solid #dddddd; /* Borde gris claro alrededor de la tarjeta */
+  margin: 20px; 
+  border-radius: 12px; 
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+  border: 1px solid #dddddd; 
 }
 
-/* Encabezado de cada tarjeta */
+
 .ajustes-card ion-card-header {
-  background-color: #00796b; /* Fondo verde */
-  color: #ffffff; /* Texto en blanco */
+  background-color: #00796b; 
+  color: #ffffff; 
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  border-bottom: 1px solid #dddddd; /* Borde inferior para separar el contenido */
+  border-bottom: 1px solid #dddddd; 
 }
 
-/* Título de cada tarjeta */
+
 .ajustes-card ion-card-title {
   font-size: 1.2em;
   font-weight: bold;
 }
 
-/* Contenido de cada tarjeta */
+
 .ajustes-card ion-card-content {
-  padding: 20px; /* Espacio interno */
-  background-color: #ffffff; /* Fondo blanco */
-  border-bottom-left-radius: 12px; /* Redondea las esquinas inferiores */
-  border-bottom-right-radius: 12px; /* Redondea las esquinas inferiores */
+  padding: 20px; 
+  background-color: #ffffff; 
+  border-bottom-left-radius: 12px; 
+  border-bottom-right-radius: 12px; 
 }
 
-/* Estilo para los campos de entrada */
+
 ion-input {
-  --padding-start: 0; /* Elimina el padding inicial */
-  --padding-end: 0; /* Elimina el padding final */
-  margin-bottom: 15px; /* Espacio entre los campos */
+  --padding-start: 0; 
+  --padding-end: 0; 
+  margin-bottom: 15px; 
 }
 
-/* Botón de guardar cambios */
+
 ion-button {
-  margin-top: 15px; /* Espacio arriba del botón */
+  margin-top: 15px; 
 }
 
-/* Botón de cerrar sesión */
+
 ion-button[color="danger"] {
-  background-color: #d32f2f; /* Color rojo para cerrar sesión */
-  color: #ffffff; /* Texto en blanco */
+  background-color: #d32f2f; 
+  color: #ffffff; 
 }
 
 ion-button[color="danger"]:hover {
-  background-color: #b71c1c; /* Color más oscuro al pasar el ratón */
+  background-color: #b71c1c; 
 }
 
-/* Eliminar el borde negro y cualquier sombra en los ion-item y ion-input */
+
 ion-item {
-  --border-width: 0; /* Elimina el borde por completo */
-  --border-style: none; /* Sin estilo de borde */
-  --background: transparent; /* Fondo transparente */
-  --inner-border-width: 0; /* Asegura que no haya borde interior */
-  box-shadow: none; /* Elimina cualquier sombra */
+  --border-width: 0; 
+  --border-style: none; 
+  --background: transparent; 
+  --inner-border-width: 0; 
+  box-shadow: none; 
 }
 
-/* Ajuste de ion-input para que no tenga bordes ni sombras adicionales */
+
 ion-input {
-  --padding-start: 16px; /* Espacio interno a la izquierda */
-  --padding-end: 16px; /* Espacio interno a la derecha */
-  --inner-padding-top: 12px; /* Espacio interno en la parte superior */
-  --inner-padding-bottom: 12px; /* Espacio interno en la parte inferior */
-  --border-radius: 8px; /* Bordes redondeados */
-  --background: #ffffff; /* Fondo blanco */
-  --placeholder-color: #999999; /* Color del texto del placeholder */
-  --color: #333333; /* Color del texto del campo de entrada */
-  --box-shadow: none; /* Elimina cualquier sombra del campo de entrada */
-  border: 1px solid #dddddd; /* Borde gris claro */
-  margin-bottom: 15px; /* Espacio debajo de cada campo de entrada */
-  outline: none; /* Elimina cualquier borde de enfoque */
+  --padding-start: 16px; 
+  --padding-end: 16px; 
+  --inner-padding-top: 12px; 
+  --inner-padding-bottom: 12px; 
+  --border-radius: 8px; 
+  --background: #ffffff; 
+  --placeholder-color: #999999; 
+  --color: #333333; 
+  --box-shadow: none; 
+  border: 1px solid #dddddd; 
+  margin-bottom: 15px; 
+  outline: none; 
 }
 
-/* Contenedor del input, eliminando bordes y sombras */
+
 .item-inner {
-  border: none !important; /* Elimina cualquier borde adicional */
-  box-shadow: none !important; /* Elimina cualquier sombra adicional */
-  background: transparent !important; /* Fondo transparente para asegurar que no haya color de fondo */
-  outline: none !important; /* Elimina cualquier borde de enfoque */
+  border: none !important; 
+  box-shadow: none !important; 
+  background: transparent !important; 
+  outline: none !important; 
 }
 
-/* Para asegurar que ion-input no reciba borde al enfocarse */
+
 ion-input:focus,
 ion-input.ion-focused {
-  outline: none; /* Sin borde de enfoque */
-  border-color: #00796b; /* Opcional: color de borde personalizado al enfocar */
-  box-shadow: none !important; /* Elimina cualquier sombra */
+  outline: none; 
+  border-color: #00796b; 
+  box-shadow: none !important; 
 }
 
-/* Opcional: Si hay sombras, se eliminan */
+
 ion-card {
-  box-shadow: none !important; /* Elimina cualquier sombra de las tarjetas */
+  box-shadow: none !important; 
 }
 
-/* Estilo del label flotante */
+
 ion-item {
-  --padding-start: 0; /* Elimina el padding a la izquierda para ajustar el diseño */
-  --padding-end: 0; /* Elimina el padding a la derecha */
-  --inner-border-width: 0px !important; /* Asegura que no haya borde interior */
+  --padding-start: 0; 
+  --padding-end: 0; 
+  --inner-border-width: 0px !important; 
 }
 
-/* Label flotante cuando el campo está enfocado */
+
 ion-input.ion-focused {
-  border-color: #00796b; /* Color del borde al enfocar el campo */
-  box-shadow: 0 0 4px rgba(0, 121, 107, 0.5); /* Sombra sutil para destacar el campo */
+  border-color: #00796b; 
+  box-shadow: 0 0 4px rgba(0, 121, 107, 0.5); 
 }
 
-/* Placeholder en el estado normal */
+
 ion-input::placeholder {
-  color: #999999; /* Color del texto del placeholder */
+  color: #999999; 
 }
 
-/* Estilo del label flotante cuando el campo tiene valor */
+
 ion-input.ion-focused .input-placeholder {
-  color: #00796b; /* Color del texto del label flotante */
+  color: #00796b; 
 }

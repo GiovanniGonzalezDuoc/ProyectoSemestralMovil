@@ -78,7 +78,7 @@ ion-toolbar{
   .texto-label {
     display: inline-block;
     padding: 8px 12px;
-    background-color: #00796b; /* Cambia este color según tus necesidades */
+    background-color: #00796b;
     color: white;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
@@ -104,9 +104,9 @@ ion-toolbar{
     margin-bottom: 50px;
   }
   ion-textarea {
-    --highlight-color-focused: transparent; /* Elimina la barra verde */
-    --highlight-color-valid: transparent; /* Elimina la barra verde cuando es válido */
-    --highlight-color-invalid: transparent; /* Elimina la barra verde cuando es inválido */
-    --border-color: transparent; /* Elimina cualquier borde visible */
-    --box-shadow: none; /* Elimina la sombra de la línea */
+    --highlight-color-focused: transparent; 
+    --highlight-color-valid: transparent; 
+    --highlight-color-invalid: transparent; 
+    --border-color: transparent; 
+    --box-shadow: none; 
   }

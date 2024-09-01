@@ -39,12 +39,12 @@ export class LoginPage implements OnInit {
   login(){
     const contrasena = this.contrasenasolicitada.trim();
 
-    // Validar email (debe contener @ y no debe tener espacios)
+    
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.emailsolicitado)) {
       this.presentAlert('El Correo No Cumple Con Las Reglas', 'El correo electrónico no es válido.');
       return;
     }
-    // Validar contraseña (mínimo 8 caracteres, al menos una mayúscula y un carácter especial)
+    
     if (!/(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/.test(contrasena)) {
       this.presentAlert('La Contraseña No Cumple Con Las Reglas', 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un carácter especial.');
       return;

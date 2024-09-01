@@ -22,14 +22,12 @@ export class AppComponent {
     { id: 1, nombre: 'Juan Pérez' },
     { id: 2, nombre: 'María García' },
     { id: 3, nombre: 'Carlos Sánchez' }
-    // Agrega más personas según sea necesario
   ];
 
   categorias = [
     { id: 1, nombre: 'Tecnología', foto:"https://i.postimg.cc/VNxfr1Jm/desktop-computer-icon-vector.jpg" },
     { id: 2, nombre: 'Ciencia', foto:"https://i.postimg.cc/hjVSVwmx/dynamic-atom-molecule-science-symbol-vector-icon.jpg"},
     { id: 3, nombre: 'Arte' , foto:"https://i.postimg.cc/jjwqSCdM/1987925.png"}
-    // Agrega más categorías según sea necesario
   ];
   constructor() {}
 }

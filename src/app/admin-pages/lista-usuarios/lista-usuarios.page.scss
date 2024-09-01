@@ -30,14 +30,14 @@ ion-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* Asegura que los tres puntos estén al lado del nombre */
+    
     background-color: #00796b;
-    /* Color de fondo verde */
+    
     padding: 8px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     width: 100%;
-    /* Usa todo el ancho disponible */
+    
 }
 
 .name-label h2 {
@@ -46,16 +46,16 @@ ion-item {
     margin: 0;
     margin-left: 10px;
     flex-grow: 1;
-    /* Hace que el nombre ocupe todo el espacio restante */
+    
     font-size: 16px;
-    /* Ajuste del tamaño del texto */
+    
 }
 
 .email-label {
     background-color: #f0f0f0;
-    /* Fondo gris claro para el contenedor de correo */
+    
     color: #666;
-    /* Texto en gris */
+    
     padding: 8px;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -93,7 +93,7 @@ ion-icon {
     display: flex;
     align-items: center;
     margin-left: 10px;
-    /* Asegura separación entre nombre y botón */
+    
 }
 
 .avatar-container {
@@ -105,13 +105,13 @@ ion-list {
 }
 .item-native {
     background: transparent;
-    border: none; /* Elimina cualquier borde */
-    box-shadow: none; /* Elimina cualquier sombra que pueda parecer un borde */
+    border: none; 
+    box-shadow: none; 
 }
 ion-item {
     --background: transparent;
     --border-color: transparent;
     padding: 0;
     margin-bottom: 15px;
-    box-shadow: none; /* Elimina cualquier sombra */
+    box-shadow: none; 
 }

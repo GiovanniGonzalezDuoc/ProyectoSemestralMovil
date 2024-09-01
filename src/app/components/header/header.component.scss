@@ -1,49 +1,49 @@
 ion-toolbar {
-  --background: #00796b; /* Color verde oscuro para el fondo */
-  --border-color: #004d40; /* Bordes en un verde más oscuro */
+  --background: #00796b; 
+  --border-color: #004d40; 
   --border-width: 1px;
-  padding: 0 16px; /* Espaciado interno */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
+  padding: 0 16px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
 
 .dimension {
-  font-size: 20px; /* Ajusta el tamaño del icono dentro de los botones */
+  font-size: 20px; 
 }
 
 .logo {
-  width: 120px; /* Tamaño del logo */
+  width: 120px; 
   height: 40px;
-  border-radius: 50%; /* Logo circular */
+  border-radius: 50%; 
   object-fit: cover;
-  border: 2px solid #ffffff; /* Borde blanco alrededor del logo */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efecto en hover */
+  border: 2px solid #ffffff; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  transition: transform 0.3s ease, box-shadow 0.3s ease; 
 }
 
 .logo:hover {
-  transform: scale(1.1); /* Aumenta el tamaño al pasar el ratón */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Intensifica la sombra */
+  transform: scale(1.1); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
 ion-searchbar {
-  flex: 1; /* Ocupa el espacio disponible */
-  max-width: 300px; /* Ancho máximo */
-  margin: 0 16px; /* Espaciado */
-  --background: #f9f9f9; /* Fondo ligeramente gris */
-  --color: #333; /* Color del texto */
-  --placeholder-color: #888; /* Color del placeholder */
-  --icon-color: #666; /* Color del icono de búsqueda */
-  border-radius: 20px; /* Bordes redondeados */
+  flex: 1; 
+  max-width: 300px; 
+  margin: 0 16px; 
+  --background: #f9f9f9; 
+  --color: #333; 
+  --placeholder-color: #888; 
+  --icon-color: #666; 
+  border-radius: 20px; 
 }
 
 ion-button.dimension {
-  --padding-start: 8px; /* Ajusta el padding */
+  --padding-start: 8px; 
   --padding-end: 8px;
-  --border-radius: 50%; /* Botones redondeados */
-  --color: #333; /* Color del texto y de los iconos */
+  --border-radius: 50%; 
+  --color: #333; 
 }
 
 ion-icon {
-  font-size: 24px; /* Tamaño de los iconos */
-  color: #333; /* Color de los iconos */
+  font-size: 24px; 
+  color: #333; 
 }

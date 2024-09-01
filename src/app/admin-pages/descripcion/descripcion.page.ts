@@ -107,10 +107,10 @@ export class DescripcionPage implements OnInit {
 
 
   handleOption(option: string) {
-    // Cerrar el popover
+    
     this.closePopover();
   
-    // Realizar la acción después de cerrar el popover
+    
     setTimeout(() => {
       if (option === 'option1') {
         this.presentToast('bottom', 'El Usuario ha sido baneado permanentemente.');
@@ -122,7 +122,7 @@ export class DescripcionPage implements OnInit {
         this.presentToast('bottom', 'El Usuario ha sido suspendido por 7 días.');
         this.router.navigate(['/admin/home']);
       }
-    }, 0); // Aquí el tiempo de espera es 0 para que se ejecute lo antes posible
+    }, 0); 
   }
 
 
