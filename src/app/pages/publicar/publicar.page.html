@@ -11,6 +11,7 @@
     <ion-card-content>
         <ion-item class="input-item">
           <ion-input 
+            [(ngModel)]="Titulo"
             label="Título" 
             labelPlacement="floating" 
             placeholder="Escriba un Título para su post">
@@ -19,6 +20,7 @@
 
         <ion-item class="input-item">
           <ion-input 
+            [(ngModel)]="Categoria"
             label="Categoría" 
             labelPlacement="floating" 
             placeholder="Escriba una Categoría para su post">
@@ -27,6 +29,7 @@
 
         <ion-item class="input-item">
           <ion-textarea 
+            [(ngModel)]="Contenido"
             label="Contenido" 
             labelPlacement="floating" 
             placeholder="Escriba lo que quiere compartir">

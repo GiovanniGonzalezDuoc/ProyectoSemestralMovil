@@ -23,7 +23,7 @@
 
        
         <ion-list-header>
-          <ion-label>Gente que sigues</ion-label>
+          <ion-label [routerLink]="['/perfil']">Gente que sigues</ion-label>
         </ion-list-header>
         <ion-item *ngFor="let persona of personasSiguiendo" >
           <ion-avatar slot="start">

@@ -11,7 +11,7 @@ export class PerfilPage implements OnInit {
     {
       id: 1,
       foto: "assets/icon/favicon.png",
-      nombreperfil: "Juan El Ganador",
+      nombreperfil: "Pedro",
       seguidores: 25,
       seguidos: 300,
       like: 25,
@@ -22,45 +22,45 @@ export class PerfilPage implements OnInit {
     {
       id: 1,
       foto: "assets/icon/favicon.png",
-      nombreperfil: "Juan El Ganador",
+      nombreperfil: "Pedro",
       horas:25,
-      titulo: "asdasda",
-      contenido: "asdasdasd",
+      titulo: "Base De Datos",
+      contenido: "Necesito ayuda con este problema.",
     },
     {
       id: 2,
       foto: "assets/icon/favicon.png",
-      nombreperfil: "Juan El Ganador",
+      nombreperfil: "Pedro",
       horas:25,
-      titulo: "asdasda",
-      contenido: "asdasdasd",
+      titulo: "Ingenieria de software",
+      contenido: "Necesito ayuda con este problema.",
     },
     {
       id: 3,
       foto: "assets/icon/favicon.png",
-      nombreperfil: "Juan El Ganador",
+      nombreperfil: "Pedro",
       horas:25,
-      titulo: "asdasda",
-      contenido: "asdasdasd",
+      titulo: "Arquitectura",
+      contenido: "Necesito ayuda con este problema.",
     },
     {
       id: 4,
       foto: "assets/icon/favicon.png",
-      nombreperfil: "Juan El Ganador",
+      nombreperfil: "Pedro",
       horas:25,
-      titulo: "asdasda",
-      contenido: "asdasdasd",
+      titulo: "Religion",
+      contenido: "Necesito ayuda con este problema.",
     },
     {
       id: 5,
       foto: "assets/icon/favicon.png",
-      nombreperfil: "Juan El Ganador",
+      nombreperfil: "Pedro",
       horas:25,
-      titulo: "asdasda",
-      contenido: "asdasdasd",
+      titulo: "Estadistica",
+      contenido: "Necesito ayuda con este problema.",
     },
-  ]
 
+  ]
   constructor(private router:Router) { }
 
   ngOnInit() {
