@@ -10,7 +10,7 @@ export class AppComponent {
     {
       id:1,
       foto:"assets/icon/favicon.png",
-      nombreperfil:"Juan El Ganador",
+      nombreperfil:"Pedro",
       horas:25,
       titulo:"Aguante Brasil",
       mensaje:"Cristiano Ronaldo Mejor Campeon Do Fochibole",
