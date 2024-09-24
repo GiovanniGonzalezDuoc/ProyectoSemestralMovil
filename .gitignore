@@ -73,3 +73,5 @@ Thumbs.db
 .android/*
 /android
 android/*
+!/android
+!/android/*
