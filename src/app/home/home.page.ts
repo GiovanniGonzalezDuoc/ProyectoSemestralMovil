@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController, ToastController } from '@ionic/angular';
+import { ServicebdService } from '../services/servicebd.service';
 
 
 @Component({
@@ -54,7 +55,7 @@ export class HomePage {
   ]
 
 
-  constructor(private router:Router,private toastcontroller:ToastController) {}
+  constructor(private router:Router,private toastcontroller:ToastController,private bd:ServicebdService) {}
 
   comentario(){
     this.router.navigate(['/descripcion'])

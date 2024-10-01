@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
   selector: 'app-registro',
@@ -18,7 +19,7 @@ export class RegistroPage implements OnInit {
     contrasena: '',
   };
 
-  constructor(private router: Router, private alertcontroller: AlertController, private toastcontroller: ToastController) {}
+  constructor(private router: Router, private alertcontroller: AlertController, private toastcontroller: ToastController,private bd:ServicebdService) {}
 
   ngOnInit() {}
 
