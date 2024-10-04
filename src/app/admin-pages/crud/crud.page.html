@@ -1,0 +1,11 @@
+<ion-header [translucent]="true">
+  <app-header-admin></app-header-admin>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-button color="primary" [routerLink]="['/crud/rol']">Rol</ion-button>
+  <ion-button color="secondary" [routerLink]="['/crud/publicacion']">Publicacion</ion-button>
+  <ion-button color="tertiary" [routerLink]="['/crud/control-usuario']">Control Usuarios</ion-button>
+  <ion-button color="success" [routerLink]="['/crud/usuarios']">Usuarios</ion-button>
+  <ion-button color="warning" (click)="irCategoria()">Categorias</ion-button>
+</ion-content>

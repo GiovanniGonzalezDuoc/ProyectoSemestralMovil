@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'admin/home',
     pathMatch: 'full'
   },
   {
@@ -48,16 +48,16 @@ const routes: Routes = [
     loadChildren: () => import('./admin-pages/descripcion/descripcion.module').then(m => m.DescripcionPageModule)
   },
   {
-    path: 'admin/lista-usuarios',
-    loadChildren: () => import('./admin-pages/lista-usuarios/lista-usuarios.module').then(m => m.ListaUsuariosPageModule)
-  },
-  {
     path: 'busqueda',
     loadChildren: () => import('./pages/busqueda/busqueda.module').then(m => m.BusquedaPageModule)
   },
   {
     path: 'admin/nueva-contrasena',
     loadChildren: () => import('./admin-pages/nueva-contrasena/nueva-contrasena.module').then(m => m.NuevaContrasenaPageModule)
+  },
+  {
+    path: 'admin/crud',
+    loadChildren: () => import('./admin-pages/crud/crud.module').then( m => m.CRUDPageModule)
   },
   {
     path: 'nueva-contrasena',
@@ -72,11 +72,57 @@ const routes: Routes = [
     loadChildren: () => import('./pages/contacto/contacto.module').then( m => m.ContactoPageModule)
   },
   {
-    path: '**',
-    loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
+    path: 'crud/rol',
+    loadChildren: () => import('./crud/rol/rol.module').then( m => m.RolPageModule)
+  },
+  {
+    path: 'crud/agregar-rol',
+    loadChildren: () => import('./crud/agregar-rol/agregar-rol.module').then( m => m.AgregarRolPageModule)
+  },
+  {
+    path: 'crud/modificar-rol',
+    loadChildren: () => import('./crud/modificar-rol/modificar-rol.module').then( m => m.ModificarRolPageModule)
+  },
+  {
+    path: 'crud/publicacion',
+    loadChildren: () => import('./crud/publicacion/publicacion.module').then( m => m.PublicacionPageModule)
+  },
+  {
+    path: 'crud/agregar-publicacion',
+    loadChildren: () => import('./crud/agregar-publicacion/agregar-publicacion.module').then( m => m.AgregarPublicacionPageModule)
+  },
+  {
+    path: 'crud/modificar-publicacion',
+    loadChildren: () => import('./crud/modificar-publicacion/modificar-publicacion.module').then( m => m.ModificarPublicacionPageModule)
+  },
+  {
+    path: 'crud/usuarios',
+    loadChildren: () => import('./crud/usuarios/usuarios.module').then( m => m.UsuariosPageModule)
+  },
+  {
+    path: 'crud/agregar-usuarios',
+    loadChildren: () => import('./crud/agregar-usuarios/agregar-usuarios.module').then( m => m.AgregarUsuariosPageModule)
+  },
+  {
+    path: 'crud/modificar-usuarios',
+    loadChildren: () => import('./crud/modificar-usuarios/modificar-usuarios.module').then( m => m.ModificarUsuariosPageModule)
+  },
+  {
+    path: 'crud/control-usuario',
+    loadChildren: () => import('./crud/control-usuario/control-usuario.module').then( m => m.ControlUsuarioPageModule)
+  },
+  {
+    path: 'crud/agregar-control-usuario',
+    loadChildren: () => import('./crud/agregar-control-usuario/agregar-control-usuario.module').then( m => m.AgregarControlUsuarioPageModule)
+  },
+  {
+    path: 'crud/modificar-control-usuario',
+    loadChildren: () => import('./crud/modificar-control-usuario/modificar-control-usuario.module').then( m => m.ModificarControlUsuarioPageModule)
   },
 
 
+
+  
 ];
 
 
@@ -87,3 +133,7 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+  // {
+  //   path: '**',
+  //   loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
+  // },

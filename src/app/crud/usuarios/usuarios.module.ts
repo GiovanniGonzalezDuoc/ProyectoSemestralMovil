@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ListaUsuariosPageRoutingModule } from './lista-usuarios-routing.module';
+import { UsuariosPageRoutingModule } from './usuarios-routing.module';
 
-import { ListaUsuariosPage } from './lista-usuarios.page';
+import { UsuariosPage } from './usuarios.page';
 import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { ComponentsModule } from 'src/app/components/components.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    ListaUsuariosPageRoutingModule,
+    UsuariosPageRoutingModule,
     ComponentsModule
   ],
-  declarations: [ListaUsuariosPage]
+  declarations: [UsuariosPage]
 })
-export class ListaUsuariosPageModule {}
+export class UsuariosPageModule {}

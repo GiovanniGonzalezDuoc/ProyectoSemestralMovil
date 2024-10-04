@@ -1,0 +1,20 @@
+<ion-header [translucent]="true">
+  <app-header-admin></app-header-admin>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item>
+    <ion-input label="Nombre Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="nombre_usuario"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input label="Titulo Publicacion" labelPlacement="floating" placeholder="Ingrese Titulo" [(ngModel)]="titulo_publicacion"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input label="Categoria Publicacion" labelPlacement="floating" placeholder="Ingrese Categoria" [(ngModel)]="categoria_publicacion_id_categoria"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input label="Descripcion Publicacion" labelPlacement="floating" placeholder="Ingrese Descripcion" [(ngModel)]="descripcion_publicacion"></ion-input>
+  </ion-item>
+  <ion-button color="success" (click)="insertar()">Agregar Publicacion</ion-button>
+  <ion-button color="warning" [routerLink]="['/crud/publicacion']">Ir a Lista Publicacion</ion-button>
+</ion-content>

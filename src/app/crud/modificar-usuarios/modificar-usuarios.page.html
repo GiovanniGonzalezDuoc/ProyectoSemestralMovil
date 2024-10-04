@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <app-header-admin></app-header-admin>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item>
+    <ion-input label="Nombre Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="usuario.nombre_usuario"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input label="Apellido Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="usuario.apellido_usuario"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input label="Carrera Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="usuario.carrera_usuario"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input label="Telefono Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="usuario.telefono"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input label="Correo Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="usuario.correo_usuario"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input label="Contrasena Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="usuario.contrasena"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input label="Rol Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="usuario.rol_id_rol"></ion-input>
+  </ion-item>
+  <ion-button color="success" (click)="modificar()">Modificar Rol</ion-button>
+  <ion-button color="warning" [routerLink]="['/crud/usuarios']">Ir a Lista Usuarios</ion-button>
+</ion-content>

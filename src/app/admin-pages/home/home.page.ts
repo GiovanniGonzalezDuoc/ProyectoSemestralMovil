@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
   selector: 'app-home',
@@ -50,7 +51,7 @@ export class HomePage implements OnInit {
     },
   ]
 
-  constructor() { }
+  constructor(private bd:ServicebdService) { }
 
   ngOnInit() {
   }
