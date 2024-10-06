@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationExtras } from '@angular/router';
-import { AlertController, ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
@@ -9,98 +8,100 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
   styleUrls: ['./registro.page.scss'],
 })
 export class RegistroPage implements OnInit {
-
-  usuario: any = {
-    nombre: '',
-    apellido: '',
-    carrera: '',
+  arregloUsuario: any = {
+    nombre_usuario: "",
+    apellido_usuario: "",
+    carrera_usuario: "",
     telefono: '',
-    email: '',
+    correo_usuario: "",
     contrasena: '',
+    rol_id_rol: 1,
   };
 
-  constructor(private router: Router, private alertcontroller: AlertController, private toastcontroller: ToastController,private bd:ServicebdService) {}
+  // Variables para almacenar mensajes de error
+  errorNombre: string = '';
+  errorApellido: string = '';
+  errorCarrera: string = '';
+  errorTelefono: string = '';
+  errorCorreo: string = '';
+  errorContrasena: string = '';
+  errorMessage: string = '';
 
-  ngOnInit() {}
+  constructor(private router: Router, private bd: ServicebdService) { }
+
+  ngOnInit() { }
 
   registro() {
-    
-    const telefono = parseInt(this.usuario.telefono, 10);
+    const telefono = parseInt(this.arregloUsuario.telefono, 10);
+    const contrasena = this.arregloUsuario.contrasena.trim();
 
-    
-    const contrasena = this.usuario.contrasena.trim();
+    // Limpiar mensajes de error antes de validar
+    this.errorNombre = '';
+    this.errorApellido = '';
+    this.errorCarrera = '';
+    this.errorTelefono = '';
+    this.errorCorreo = '';
+    this.errorContrasena = '';
+    this.errorMessage = '';
 
-    
-    if (/\d/.test(this.usuario.nombre)) {
-      this.presentAlert('El Nombre No Cumple Con Las Reglas', 'El nombre no puede contener números.');
-      return;
+    let formValid = true;
+
+    // Validar que no hayan campos vacíos
+    if (!this.arregloUsuario.nombre_usuario || !this.arregloUsuario.apellido_usuario || !this.arregloUsuario.carrera_usuario || !this.arregloUsuario.telefono || !this.arregloUsuario.correo_usuario || !this.arregloUsuario.contrasena) {
+      this.errorMessage = 'Por favor, rellene todos los campos.';
+      formValid = false;
     }
 
-    
-    if (/\d/.test(this.usuario.apellido)) {
-      this.presentAlert('El Apellido No Cumple Con Las Reglas', 'El apellido no puede contener números.');
-      return;
+    // Validar que el nombre no contenga números
+    if (/\d/.test(this.arregloUsuario.nombre_usuario)) {
+      this.errorNombre = 'El nombre no puede contener números.';
+      formValid = false;
     }
 
-    
-    if (/[^a-zA-Z\s]/.test(this.usuario.carrera)) {
-      this.presentAlert('La Carrera No Cumple Con Las Reglas', 'La carrera no puede contener números, guiones o signos.');
-      return;
+    // Validar que el apellido no contenga números
+    if (/\d/.test(this.arregloUsuario.apellido_usuario)) {
+      this.errorApellido = 'El apellido no puede contener números.';
+      formValid = false;
     }
 
-    
+    // Validar que la carrera no contenga números ni signos
+    if (/[^a-zA-Z\s]/.test(this.arregloUsuario.carrera_usuario)) {
+      this.errorCarrera = 'La carrera no puede contener números, guiones o signos.';
+      formValid = false;
+    }
+
+    // Validar que el teléfono tenga exactamente 8 dígitos
     if (!/^\d{8}$/.test(telefono.toString())) {
-      this.presentAlert('El Teléfono No Cumple Con Las Reglas', 'El número de teléfono debe tener exactamente 8 dígitos.');
-      return;
+      this.errorTelefono = 'El número de teléfono debe tener exactamente 8 dígitos.';
+      formValid = false;
     }
 
-    
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.usuario.email)) {
-      this.presentAlert('El Correo No Cumple Con Las Reglas', 'El correo electrónico no es válido.');
-      return;
+    // Validar que el correo sea válido
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.arregloUsuario.correo_usuario)) {
+      this.errorCorreo = 'El correo electrónico no es válido.';
+      formValid = false;
     }
 
-    
+    // Validar que la contraseña cumpla con las reglas
     if (!/(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/.test(contrasena)) {
-      this.presentAlert('La Contraseña No Cumple Con Las Reglas', 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un carácter especial.');
-      return;
+      this.errorContrasena = 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un carácter especial.';
+      formValid = false;
     }
 
-    
-    let navigationExtras: NavigationExtras = {
-      state: {
-        nom: this.usuario.nombre,
-        apell: this.usuario.apellido,
-        carr: this.usuario.carrera,
-        tel: this.usuario.telefono,
-        ema: this.usuario.email,
-        contra: this.usuario.contrasena,
-      }
-    };
+    // Si el formulario es válido, insertar usuario
+    if (formValid) {
+      this.bd.insertarUsuario(
+        this.arregloUsuario.nombre_usuario,
+        this.arregloUsuario.apellido_usuario,
+        this.arregloUsuario.carrera_usuario,
+        this.arregloUsuario.telefono,
+        this.arregloUsuario.correo_usuario,
+        this.arregloUsuario.contrasena,
+        this.arregloUsuario.rol_id_rol
+      );
 
-    this.router.navigate(['/login'], navigationExtras);
-
-    
-    this.presentToast('bottom');
-  }
-
-  async presentAlert(titulo: string, msj: string) {
-    const alert = await this.alertcontroller.create({
-      header: titulo,
-      message: msj,
-      buttons: ['ok'],
-    });
-
-    await alert.present();
-  }
-
-  async presentToast(position: 'top' | 'middle' | 'bottom') { //posición
-    const toast = await this.toastcontroller.create({
-      message: 'Usuario Registrado Correctamente',
-      duration: 1500,
-      position: position,
-    });
-
-    await toast.present();
+      // Redirigir al login después del registro
+      this.router.navigate(['/login']);
+    }
   }
 }

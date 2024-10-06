@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'admin/home',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
@@ -119,6 +119,19 @@ const routes: Routes = [
     path: 'crud/modificar-control-usuario',
     loadChildren: () => import('./crud/modificar-control-usuario/modificar-control-usuario.module').then( m => m.ModificarControlUsuarioPageModule)
   },
+  {
+    path: 'crud/categorias',
+    loadChildren: () => import('./crud/categorias/categorias.module').then( m => m.CategoriasPageModule)
+  },
+  {
+    path: 'crud/agregar-categorias',
+    loadChildren: () => import('./crud/agregar-categorias/agregar-categorias.module').then( m => m.AgregarCategoriasPageModule)
+  },
+  {
+    path: 'crud/modificar-categorias',
+    loadChildren: () => import('./crud/modificar-categorias/modificar-categorias.module').then( m => m.ModificarCategoriasPageModule)
+  },
+
 
 
 

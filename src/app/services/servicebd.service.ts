@@ -6,6 +6,7 @@ import { Rol } from '../models/rol';
 import { Publicacion } from '../models/publicacion';
 import { Usuarios } from '../models/usuarios';
 import { Control } from '../models/control';
+import { Categoria } from '../models/categoria';
 
 
 @Injectable({
@@ -28,6 +29,7 @@ export class ServicebdService {
 
   //variables para los insert por defecto en nuestras tablas
   registroRol: string = "INSERT or IGNORE INTO rol(id_rol,nombre_rol) VALUES (1,'usuario'), (2,'admin');";
+  registroControl_Usuario: string ="INSERT or IGNORE INTO control_usuario(id_veto,tiempo_veto,fecha_veto,usuario_id_usuario) VALUES(1,7,'06/10/2024','1')"
   registroUsuario: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena) Values (2,'Giovanni','Gonzalez','Ingeniero En Informatica','37742574','juan.cristian@duocuc.cl','Tumama132$');";
   registroPublicacion: string = "INSERT or IGNORE INTO publicacion(id_publicacion,nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,like_publicacion,fecha_publicacion,usuario_id_usuario)values(1,'Giovanni Gonzalez','Seba WEKO','SOY MUITO GAY',15,'3/10/2024',1);"
   //variables para guardar los datos de las consultas en las tablas
@@ -35,6 +37,7 @@ export class ServicebdService {
   listadoPublicacion = new BehaviorSubject([]);
   listadoUsuarios = new BehaviorSubject([]);
   listadoControlUsuario = new BehaviorSubject([]);
+  listadoCategorias = new BehaviorSubject([]);
 
   private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject (false);
 
@@ -70,7 +73,7 @@ export class ServicebdService {
     this.platform.ready().then(()=>{
       //Crear la base de datos
       this.sqlite.create({
-        name: 'StudentRevolution.db',
+        name: 'StudentRevolutionBD.db',
         location: 'default'
       }).then((db: SQLiteObject)=>{
         //Capturar la conexion a la BD
@@ -89,6 +92,7 @@ export class ServicebdService {
       this.listarPublicaciones();
       this.listarRoles();
       this.listarUsuario();
+      this.listarCategorias();
 
       //ejecuto la creación de Tablas
       await this.database.executeSql(this.tablaRol, []);
@@ -106,6 +110,7 @@ export class ServicebdService {
       await this.database.executeSql(this.registroRol,[]);
       await this.database.executeSql(this.registroUsuario,[]);
       await this.database.executeSql(this.registroPublicacion,[]);
+      await this.database.executeSql(this.registroControl_Usuario,[]);
 
       //modifica el estado de la Base De Datos
       await this.isDBReady.next(true);
@@ -285,7 +290,7 @@ export class ServicebdService {
             id_usuario: res.rows.item(i).id_usuario,
             nombre_usuario: res.rows.item(i).nombre_usuario,
             apellido_usuario: res.rows.item(i).apellido_usuario,
-            carerra_usuario: res.rows.item(i).carerra_usuario,
+            carrera_usuario: res.rows.item(i).carrera_usuario,
             telefono: res.rows.item(i).telefono,
             correo_usuario: res.rows.item(i).correo_usuario,
             contrasena: res.rows.item(i).contrasena,
@@ -295,6 +300,22 @@ export class ServicebdService {
       }
       this.listadoUsuarios.next(items as any);
     })
+  }
+  verificarUsuario(email: string, contrasena: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const query = 'SELECT * FROM usuario WHERE correo_usuario = ? AND contrasena = ?';
+      this.database.executeSql(query, [email, contrasena])
+        .then((res) => {
+          if (res.rows.length > 0) {
+            resolve(true); // Usuario encontrado
+          } else {
+            resolve(false); // Usuario no encontrado
+          }
+        })
+        .catch(e=>{
+          this.presentAlert('Encontrar Usuario','Error:'+ JSON.stringify(e));
+        })
+    });
   }
 
   eliminarUsuario(id:number){
@@ -317,8 +338,56 @@ export class ServicebdService {
 
   insertarUsuario(nombre_usuario:string,apellido_usuario:string,carrera_usuario:string,telefono:number,correo_usuario:string,contrasena:string,rol_id_rol:number){
     return this.database.executeSql('INSERT INTO usuario(nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena,rol_id_rol,control_usuario_id_veto) VALUES (?,?,?,?,?,?,?,1)',[nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena,rol_id_rol]).then(res =>{
-      this.presentAlert("Insertar","Usuario Insertado");
+      this.presentToast('bottom','Usuario Registrado Correctamente.')
       this.listarUsuario();
+    }).catch(e=>{
+      this.presentAlert('Insertar','Error:'+ JSON.stringify(e));
+    })
+  }
+  //APARTADO DE Categorias
+  fetchCategorias(): Observable<Categoria[]>{
+    return this.listadoCategorias.asObservable();
+  }
+  listarCategorias(){
+    return this.database.executeSql('SELECT * FROM categoria_publicacion', []).then(res=>{
+      //variable para almacenar el rsultado de la consulta
+      let items: Categoria[] = [];
+      //valido si trae al menos un registro
+      if(res.rows.length > 0){
+        //recorro mi resultado
+        for(var i=0; i < res.rows.length; i++)
+        //agrego los registros a mi lista
+        items.push({
+            id_categoria: res.rows.item(i).id_categoria,
+            nombre_categoria: res.rows.item(i).nombre_categoria,
+        })
+      }
+      this.listadoCategorias.next(items as any);
+    })
+  }
+
+  elimarCategoria(id:number){
+    return this.database.executeSql('DELETE FROM categoria_publicacion WHERE id_categoria = ?', [id] ).then(res =>{
+      this.presentAlert("Eliminar","Categoria Eliminada");
+      this.listarCategorias();
+    }).catch(e=>{
+      this.presentAlert('Eliminar','Error:'+ JSON.stringify(e));
+    })
+  }
+
+  modificarCategoria(id:number,nombre_categoria:string){
+    return this.database.executeSql('UPDATE categoria_publicacion SET nombre_categoria = ? WHERE id_categoria = ?',[nombre_categoria,id]).then(res =>{
+      this.presentAlert("Modificar","Categoria Modificada");
+      this.listarCategorias();
+    }).catch(e=>{
+      this.presentAlert('Modificar','Error:'+ JSON.stringify(e));
+    })
+  }
+
+  insertarCategoria(nombre_categoria:string){
+    return this.database.executeSql('INSERT INTO categoria_publicacion(nombre_categoria) VALUES (?)',[nombre_categoria]).then(res =>{
+      this.presentAlert("Insertar","Categoria Insertada");
+      this.listarCategorias();
     }).catch(e=>{
       this.presentAlert('Insertar','Error:'+ JSON.stringify(e));
     })
