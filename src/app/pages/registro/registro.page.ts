@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Usuarios } from 'src/app/models/usuarios';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
@@ -32,6 +33,7 @@ export class RegistroPage implements OnInit {
   ngOnInit() { }
 
   registro() {
+    const email = this.arregloUsuario.correo_usuario.trim();
     const telefono = parseInt(this.arregloUsuario.telefono, 10);
     const contrasena = this.arregloUsuario.contrasena.trim();
 
@@ -77,9 +79,16 @@ export class RegistroPage implements OnInit {
     }
 
     // Validar que el correo sea válido
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.arregloUsuario.correo_usuario)) {
+    
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       this.errorCorreo = 'El correo electrónico no es válido.';
       formValid = false;
+    }else if (email){
+      this.bd.verificarEmail(email).then((usuarioEncontrado) => {
+        if (usuarioEncontrado){
+          this.errorCorreo = 'El Correo electrónico ya esta registrado en la base de datos'
+        }
+      });
     }
 
     // Validar que la contraseña cumpla con las reglas

@@ -317,7 +317,22 @@ export class ServicebdService {
         })
     });
   }
-
+  verificarEmail(email: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const query = 'SELECT * FROM usuario WHERE correo_usuario = ?';
+      this.database.executeSql(query, [email])
+        .then((res) => {
+          if (res.rows.length > 0) {
+            resolve(true); // Usuario encontrado
+          } else {
+            resolve(false); // Usuario no encontrado
+          }
+        })
+        .catch(e=>{
+          this.presentAlert('Encontrar Usuario','Error:'+ JSON.stringify(e));
+        })
+    });
+  }
   eliminarUsuario(id:number){
     return this.database.executeSql('DELETE FROM usuario WHERE id_usuario = ?', [id] ).then(res =>{
       this.presentAlert("Eliminar","Usuario Eliminado");
