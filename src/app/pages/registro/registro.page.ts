@@ -86,7 +86,8 @@ export class RegistroPage implements OnInit {
     }else if (email){
       this.bd.verificarEmail(email).then((usuarioEncontrado) => {
         if (usuarioEncontrado){
-          this.errorCorreo = 'El Correo electrónico ya esta registrado en la base de datos'
+          this.errorCorreo = 'El Correo electrónico ya esta registrado en la base de datos';
+          formValid = false;
         }
       });
     }
