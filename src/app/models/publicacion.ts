@@ -5,6 +5,6 @@ export class Publicacion {
     descripcion_publicacion!:string;
     like_publicacion!:number;
     fecha_publicacion!:Date;
-    usuario_id_publicacion!:number;
+    usuario_id_usuario!:number;
     categoria_publicacion_id_categoria!:number;
 }

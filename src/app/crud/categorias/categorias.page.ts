@@ -38,7 +38,7 @@ export class CategoriasPage implements OnInit {
     this.router.navigate(['/crud/modificar-categorias'],navigationsExtras);
   }
   eliminar(x:any){
-    this.bd.eliminarRol(x.id_categoria);
+    this.bd.elimarCategoria(x.id_categoria);
   }
 
   agregar(){

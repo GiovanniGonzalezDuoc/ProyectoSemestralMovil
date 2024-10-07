@@ -13,7 +13,7 @@ import { Categoria } from '../models/categoria';
   providedIn: 'root'
 })
 export class ServicebdService {
-//variable de conexión a Base de Datos
+  //variable de conexión a Base de Datos
   public database!: SQLiteObject;
 
   //variables de creación de Tablas
@@ -25,11 +25,11 @@ export class ServicebdService {
   tablaComentario: string = "CREATE TABLE IF NOT EXISTS comentario (id_comentario INTEGER PRIMARY KEY NOT NULL, nombre_usuario_comentario TEXT NOT NULL, comentario_publicacion TEXT NOT NULL, publicacion_id_publicacion INTEGER NOT NULL, FOREIGN KEY (publicacion_id_publicacion) REFERENCES publicacion(id_publicacion));";
   tablaCategoria_Publicacion: string = "CREATE TABLE IF NOT EXISTS categoria_publicacion (id_categoria INTEGER PRIMARY KEY NOT NULL, nombre_categoria TEXT NOT NULL);";
   tablaGuardado_Publicacion: string = "CREATE TABLE IF NOT EXISTS guardado_publicacion (publicacion_id_publicacion INTEGER NOT NULL, usuario_id_usuario INTEGER NOT NULL, PRIMARY KEY (publicacion_id_publicacion, usuario_id_usuario), FOREIGN KEY (publicacion_id_publicacion) REFERENCES publicacion(id_publicacion), FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario));";
-  tablaSeguimiento_Usuario: string = "CREATE TABLE IF NOT EXISTS seguimiento_usuario (usuario_id_usuario INTEGER NOT NULL, seguimiento_id_seguimiento INTEGER NOT NULL, PRIMARY KEY (usuario_id_usuario, seguimiento_id_seguimiento), FOREIGN KEY (seguimiento_id_seguimiento) REFERENCES seguimiento(id_seguimiento), FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario));";  
+  tablaSeguimiento_Usuario: string = "CREATE TABLE IF NOT EXISTS seguimiento_usuario (usuario_id_usuario INTEGER NOT NULL, seguimiento_id_seguimiento INTEGER NOT NULL, PRIMARY KEY (usuario_id_usuario, seguimiento_id_seguimiento), FOREIGN KEY (seguimiento_id_seguimiento) REFERENCES seguimiento(id_seguimiento), FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario));";
 
   //variables para los insert por defecto en nuestras tablas
   registroRol: string = "INSERT or IGNORE INTO rol(id_rol,nombre_rol) VALUES (1,'usuario'), (2,'admin');";
-  registroControl_Usuario: string ="INSERT or IGNORE INTO control_usuario(id_veto,tiempo_veto,fecha_veto,usuario_id_usuario) VALUES(1,7,'06/10/2024','1')"
+  registroControl_Usuario: string = "INSERT or IGNORE INTO control_usuario(id_veto,tiempo_veto,fecha_veto,usuario_id_usuario) VALUES(1,7,'06/10/2024','1')"
   registroUsuario: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena) Values (2,'Giovanni','Gonzalez','Ingeniero En Informatica','37742574','juan.cristian@duocuc.cl','Tumama132$');";
   registroPublicacion: string = "INSERT or IGNORE INTO publicacion(id_publicacion,nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,like_publicacion,fecha_publicacion,usuario_id_usuario)values(1,'Giovanni Gonzalez','Seba WEKO','SOY MUITO GAY',15,'3/10/2024',1);"
   //variables para guardar los datos de las consultas en las tablas
@@ -39,13 +39,13 @@ export class ServicebdService {
   listadoControlUsuario = new BehaviorSubject([]);
   listadoCategorias = new BehaviorSubject([]);
 
-  private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject (false);
+  private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  constructor(private sqlite: SQLite, private platform: Platform,private alertController: AlertController, private toastcontroller:ToastController) {
+  constructor(private sqlite: SQLite, private platform: Platform, private alertController: AlertController, private toastcontroller: ToastController) {
     this.createBD();
-   }
+  }
 
-   async presentAlert(titulo: string, msj: string) {
+  async presentAlert(titulo: string, msj: string) {
     const alert = await this.alertController.create({
       header: titulo,
       message: msj,
@@ -55,7 +55,7 @@ export class ServicebdService {
     await alert.present();
   }
 
-  async presentToast(position: 'top' | 'middle' | 'bottom',text:string) { //posición
+  async presentToast(position: 'top' | 'middle' | 'bottom', text: string) { //posición
     const toast = await this.toastcontroller.create({
       message: text,
       duration: 1500,
@@ -64,30 +64,30 @@ export class ServicebdService {
 
     await toast.present();
   }
-  dbState(){
+  dbState() {
     return this.isDBReady.asObservable();
   }
   //función para crear la Base De Datos
-  createBD(){
+  createBD() {
     //verificar si la plataforma esta disponible
-    this.platform.ready().then(()=>{
+    this.platform.ready().then(() => {
       //Crear la base de datos
       this.sqlite.create({
         name: 'StudentRevolutionBD.db',
         location: 'default'
-      }).then((db: SQLiteObject)=>{
+      }).then((db: SQLiteObject) => {
         //Capturar la conexion a la BD
         this.database = db;
         //llamamos a la funcion para crear las tablas
         this.crearTablas();
-      }).catch(e=>{
-        this.presentAlert('Base De Datos','Error en crear la BD: ' + JSON.stringify((e)));
+      }).catch(e => {
+        this.presentAlert('Base De Datos', 'Error en crear la BD: ' + JSON.stringify((e)));
       })
     })
   }
   //Creacionde tablas
-  async crearTablas(){
-    try{
+  async crearTablas() {
+    try {
       //Carga Las Listas
       this.listarPublicaciones();
       this.listarRoles();
@@ -107,186 +107,186 @@ export class ServicebdService {
 
 
       //ejecuto los insert por defecto en el caso que existan
-      await this.database.executeSql(this.registroRol,[]);
-      await this.database.executeSql(this.registroUsuario,[]);
-      await this.database.executeSql(this.registroPublicacion,[]);
-      await this.database.executeSql(this.registroControl_Usuario,[]);
+      await this.database.executeSql(this.registroRol, []);
+      await this.database.executeSql(this.registroUsuario, []);
+      await this.database.executeSql(this.registroPublicacion, []);
+      await this.database.executeSql(this.registroControl_Usuario, []);
 
       //modifica el estado de la Base De Datos
       await this.isDBReady.next(true);
-      
-    }catch(e){
-      this.presentAlert('Creacion De Tablas','Error en crear la Tablas: ' + JSON.stringify(e));
+
+    } catch (e) {
+      this.presentAlert('Creacion De Tablas', 'Error en crear la Tablas: ' + JSON.stringify(e));
     }
   }
   //APARTADO DE ROL
   //metodos para manipular los observables
-  fetchRol(): Observable<Rol[]>{
+  fetchRol(): Observable<Rol[]> {
     return this.listadoRol.asObservable();
   }
-  listarRoles(){
-    return this.database.executeSql('SELECT * FROM rol', []).then(res=>{
+  listarRoles() {
+    return this.database.executeSql('SELECT * FROM rol', []).then(res => {
       //variable para almacenar el rsultado de la consulta
       let items: Rol[] = [];
       //valido si trae al menos un registro
-      if(res.rows.length > 0){
+      if (res.rows.length > 0) {
         //recorro mi resultado
-        for(var i=0; i < res.rows.length; i++)
-        //agrego los registros a mi lista
-        items.push({
-          id_rol: res.rows.item(i).id_rol,
-          nombre_rol: res.rows.item(i).nombre_rol,
-        })
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
+            id_rol: res.rows.item(i).id_rol,
+            nombre_rol: res.rows.item(i).nombre_rol,
+          })
       }
       this.listadoRol.next(items as any);
     })
   }
 
-  eliminarRol(id:number){
-    return this.database.executeSql('DELETE FROM rol WHERE id_rol = ?', [id] ).then(res =>{
-      this.presentAlert("Eliminar","Rol Eliminado");
+  eliminarRol(id: number) {
+    return this.database.executeSql('DELETE FROM rol WHERE id_rol = ?', [id]).then(res => {
+      this.presentAlert("Eliminar", "Rol Eliminado");
       this.listarRoles();
-    }).catch(e=>{
-      this.presentAlert('Eliminar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
     })
   }
 
-  modificarRol(id:number,nombre_rol:string){
-    return this.database.executeSql('UPDATE rol SET nombre_rol = ? WHERE id_rol = ?',[nombre_rol,id]).then(res =>{
-      this.presentAlert("Modificar","Rol Modificado");
+  modificarRol(id: number, nombre_rol: string) {
+    return this.database.executeSql('UPDATE rol SET nombre_rol = ? WHERE id_rol = ?', [nombre_rol, id]).then(res => {
+      this.presentAlert("Modificar", "Rol Modificado");
       this.listarRoles();
-    }).catch(e=>{
-      this.presentAlert('Modificar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
     })
   }
 
-  insertarRol(nombre_rol:string){
-    return this.database.executeSql('INSERT INTO rol(nombre_rol) VALUES (?)',[nombre_rol]).then(res =>{
-      this.presentAlert("Insertar","Rol Insertado");
+  insertarRol(nombre_rol: string) {
+    return this.database.executeSql('INSERT INTO rol(nombre_rol) VALUES (?)', [nombre_rol]).then(res => {
+      this.presentAlert("Insertar", "Rol Insertado");
       this.listarRoles();
-    }).catch(e=>{
-      this.presentAlert('Insertar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })
   }
   //APARTADO DE PUBLICACIONES
-  fetchPublicacion(): Observable<Publicacion[]>{
+  fetchPublicacion(): Observable<Publicacion[]> {
     return this.listadoPublicacion.asObservable();
   }
-  listarPublicaciones(){
-    return this.database.executeSql('SELECT * FROM publicacion', []).then(res=>{
+  listarPublicaciones() {
+    return this.database.executeSql('SELECT * FROM publicacion', []).then(res => {
       //variable para almacenar el rsultado de la consulta
       let items: Publicacion[] = [];
       //valido si trae al menos un registro
-      if(res.rows.length > 0){
+      if (res.rows.length > 0) {
         //recorro mi resultado
-        for(var i=0; i < res.rows.length; i++)
-        //agrego los registros a mi lista
-        items.push({
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
             id_publicacion: res.rows.item(i).id_publicacion,
             nombre_usuario_publicacion: res.rows.item(i).nombre_usuario_publicacion,
             titulo_publicacion: res.rows.item(i).titulo_publicacion,
             descripcion_publicacion: res.rows.item(i).descripcion_publicacion,
             like_publicacion: res.rows.item(i).like_publicacion,
             fecha_publicacion: res.rows.item(i).fecha_publicacion,
-            usuario_id_publicacion: res.rows.item(i).usuario_id_publicacion,
+            usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
             categoria_publicacion_id_categoria: res.rows.item(i).categoria_publicacion_id_categoria,
-        })
+          })
       }
       this.listadoPublicacion.next(items as any);
     })
   }
 
-  eliminarPublicacion(id:number){
-    return this.database.executeSql('DELETE FROM publicacion WHERE id_publicacion = ?', [id] ).then(res =>{
-      this.presentAlert("Eliminar","Publicacion Eliminado");
+  eliminarPublicacion(id: number) {
+    return this.database.executeSql('DELETE FROM publicacion WHERE id_publicacion = ?', [id]).then(res => {
+      this.presentAlert("Eliminar", "Publicacion Eliminado");
       this.listarPublicaciones();
-    }).catch(e=>{
-      this.presentAlert('Eliminar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
     })
   }
 
-  modificarPublicacion(id:number,titulo_publicacion:string,descripcion_publicacion:string){
-    return this.database.executeSql('UPDATE publicacion SET titulo_publicacion = ?, descripcion_publicacion = ? WHERE id_publicacion = ?',[titulo_publicacion,descripcion_publicacion,id]).then(res =>{
-      this.presentAlert("Modificar","Publicacion Modificado");
+  modificarPublicacion(id: number, titulo_publicacion: string, descripcion_publicacion: string) {
+    return this.database.executeSql('UPDATE publicacion SET titulo_publicacion = ?, descripcion_publicacion = ? WHERE id_publicacion = ?', [titulo_publicacion, descripcion_publicacion, id]).then(res => {
+      this.presentAlert("Modificar", "Publicacion Modificado");
       this.listarPublicaciones();
-    }).catch(e=>{
-      this.presentAlert('Modificar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
     })
   }
 
-  insertarPublicacion(nombre_usuario_publicacion:string,titulo_publicacion:string,descripcion_publicacion:string,categoria_publicacion:number){
-    return this.database.executeSql('INSERT INTO publicacion(nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,fecha_publicacion,categoria_publicacion_id_categoria) VALUES (?,?,?,CURRENT_TIMESTAMP,?)',[nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,categoria_publicacion]).then(res =>{
-      this.presentAlert("Insertar","Publicacion Insertado");
+  insertarPublicacion(nombre_usuario_publicacion: string, titulo_publicacion: string, descripcion_publicacion: string, usuario_id_usuario: number,categoria_publicacion: number) {
+    return this.database.executeSql('INSERT INTO publicacion(nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,fecha_publicacion,usuario_id_usuario,categoria_publicacion_id_categoria) VALUES (?,?,?,CURRENT_TIMESTAMP,?,?)', [nombre_usuario_publicacion, titulo_publicacion, descripcion_publicacion, usuario_id_usuario , categoria_publicacion]).then(res => {
+      this.presentAlert("Insertar", "Publicacion Insertado");
       this.listarPublicaciones();
-    }).catch(e=>{
-      this.presentAlert('Insertar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })
   }
   //APARTADO DE Control De USUARIOS
-  fetchControl(): Observable<Control[]>{
+  fetchControl(): Observable<Control[]> {
     return this.listadoControlUsuario.asObservable();
   }
-  listarControl(){
-    return this.database.executeSql('SELECT * FROM control_usuario', []).then(res=>{
+  listarControl() {
+    return this.database.executeSql('SELECT * FROM control_usuario', []).then(res => {
       //variable para almacenar el rsultado de la consulta
       let items: Control[] = [];
       //valido si trae al menos un registro
-      if(res.rows.length > 0){
+      if (res.rows.length > 0) {
         //recorro mi resultado
-        for(var i=0; i < res.rows.length; i++)
-        //agrego los registros a mi lista
-        items.push({
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
             id_veto: res.rows.item(i).id_veto,
             tiempo_veto: res.rows.item(i).tiempo_veto,
             fecha_veto: res.rows.item(i).fecha_veto,
             motivo_veto: res.rows.item(i).motivo_veto,
             usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
-        })
+          })
       }
       this.listadoControlUsuario.next(items as any);
     })
   }
 
-  eliminarControl(id:number){
-    return this.database.executeSql('DELETE FROM control_usuario WHERE id_veto = ?', [id] ).then(res =>{
-      this.presentAlert("Eliminar","Control Veto Eliminado");
+  eliminarControl(id: number) {
+    return this.database.executeSql('DELETE FROM control_usuario WHERE id_veto = ?', [id]).then(res => {
+      this.presentAlert("Eliminar", "Control Veto Eliminado");
       this.listarControl();
-    }).catch(e=>{
-      this.presentAlert('Eliminar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
     })
   }
 
-  modificarControl(id_veto:number,tiempo_veto:number,motivo_veto:number,usuario_id_usuario:number){
-    return this.database.executeSql('UPDATE control_usuario SET tiempo_veto = ?, motivo_veto = ?, usuario_id_usuario = ? WHERE id_veto = ?',[tiempo_veto,motivo_veto,usuario_id_usuario,id_veto]).then(res =>{
-      this.presentAlert("Modificar","Control Veto Modificado");
+  modificarControl(id_veto: number, tiempo_veto: number, motivo_veto: number, usuario_id_usuario: number) {
+    return this.database.executeSql('UPDATE control_usuario SET tiempo_veto = ?, motivo_veto = ?, usuario_id_usuario = ? WHERE id_veto = ?', [tiempo_veto, motivo_veto, usuario_id_usuario, id_veto]).then(res => {
+      this.presentAlert("Modificar", "Control Veto Modificado");
       this.listarControl();
-    }).catch(e=>{
-      this.presentAlert('Modificar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
     })
   }
 
-  insertarControl(tiempo_veto:number,motivo_veto:string,usuario_id_usuario:number){
-    return this.database.executeSql('INSERT INTO control_usuario(tiempo_veto,fecha_veto,motivo_veto,usuario_id_usuario) VALUES (?,CURRENT_TIMESTAMP,?,?)',[tiempo_veto,motivo_veto,usuario_id_usuario]).then(res =>{
-      this.presentAlert("Insertar","Control Veto Insertado");
+  insertarControl(tiempo_veto: number, motivo_veto: string, usuario_id_usuario: number) {
+    return this.database.executeSql('INSERT INTO control_usuario(tiempo_veto,fecha_veto,motivo_veto,usuario_id_usuario) VALUES (?,CURRENT_TIMESTAMP,?,?)', [tiempo_veto, motivo_veto, usuario_id_usuario]).then(res => {
+      this.presentAlert("Insertar", "Control Veto Insertado");
       this.listarControl();
-    }).catch(e=>{
-      this.presentAlert('Insertar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })
   }
   //APARTADO DE USUARIOS
-  fetchUsuario(): Observable<Usuarios[]>{
+  fetchUsuario(): Observable<Usuarios[]> {
     return this.listadoUsuarios.asObservable();
   }
-  listarUsuario(){
-    return this.database.executeSql('SELECT * FROM usuario', []).then(res=>{
+  listarUsuario() {
+    return this.database.executeSql('SELECT * FROM usuario', []).then(res => {
       //variable para almacenar el rsultado de la consulta
       let items: Usuarios[] = [];
       //valido si trae al menos un registro
-      if(res.rows.length > 0){
+      if (res.rows.length > 0) {
         //recorro mi resultado
-        for(var i=0; i < res.rows.length; i++)
-        //agrego los registros a mi lista
-        items.push({
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
             id_usuario: res.rows.item(i).id_usuario,
             nombre_usuario: res.rows.item(i).nombre_usuario,
             apellido_usuario: res.rows.item(i).apellido_usuario,
@@ -296,7 +296,7 @@ export class ServicebdService {
             contrasena: res.rows.item(i).contrasena,
             rol_id_rol: res.rows.item(i).rol_id_rol,
             control_usuario_id_veto: res.rows.item(i).control_usuario_id_veto,
-        })
+          })
       }
       this.listadoUsuarios.next(items as any);
     })
@@ -312,8 +312,8 @@ export class ServicebdService {
             resolve(false); // Usuario no encontrado
           }
         })
-        .catch(e=>{
-          this.presentAlert('Encontrar Usuario','Error:'+ JSON.stringify(e));
+        .catch(e => {
+          this.presentAlert('Encontrar Usuario', 'Error:' + JSON.stringify(e));
         })
     });
   }
@@ -328,83 +328,129 @@ export class ServicebdService {
             resolve(false); // Usuario no encontrado
           }
         })
-        .catch(e=>{
-          this.presentAlert('Encontrar Usuario','Error:'+ JSON.stringify(e));
+        .catch(e => {
+          this.presentAlert('Encontrar Usuario', 'Error:' + JSON.stringify(e));
         })
     });
   }
-  eliminarUsuario(id:number){
-    return this.database.executeSql('DELETE FROM usuario WHERE id_usuario = ?', [id] ).then(res =>{
-      this.presentAlert("Eliminar","Usuario Eliminado");
+  verificarID(email: string): Promise<{ id_usuario: number; nombre_usuario: string; apellido_usuario: string }> {
+    return new Promise((resolve, reject) => {
+      const query = 'SELECT id_usuario, nombre_usuario, apellido_usuario FROM usuario WHERE correo_usuario = ?';
+      this.database.executeSql(query, [email])
+        .then((res) => {
+          if (res.rows.length > 0) {
+            const userData = {
+              id_usuario: res.rows.item(0).id_usuario,
+              nombre_usuario: res.rows.item(0).nombre_usuario,
+              apellido_usuario: res.rows.item(0).apellido_usuario,
+            };
+            resolve(userData);
+          }
+        })
+        .catch(e => {
+          this.presentAlert('Encontrar Usuario', 'Error: ' + JSON.stringify(e));
+          reject(e);
+        });
+    });
+  }
+  verificarInformacionUsuario(email: string): Promise<{ idUsuario: number, nombreUsuario: string, apellidoUsuario: string } | null> {
+    return this.database.executeSql('SELECT id_usuario, nombre_usuario, apellido_usuario FROM usuario WHERE correo_usuario = ?', [email])
+      .then(res => {
+        // Verifica si la consulta trajo resultados
+        if (res.rows.length > 0) {
+          // Almacenar los resultados en variables
+          const idUsuario = res.rows.item(0).id_usuario;
+          const nombreUsuario = res.rows.item(0).nombre_usuario;
+          const apellidoUsuario = res.rows.item(0).apellido_usuario;
+  
+          // Retorna un objeto con los datos almacenados
+          return {
+            idUsuario,
+            nombreUsuario,
+            apellidoUsuario
+          };
+        } else {
+          // Si no se encuentra el usuario, retorna null
+          return null;
+        }
+      })
+      .catch(e => {
+        console.error('Error en la consulta SQL:', e);
+        throw e; // Propaga el error para manejarlo externamente
+      });
+  }  
+  eliminarUsuario(id: number) {
+    return this.database.executeSql('DELETE FROM usuario WHERE id_usuario = ?', [id]).then(res => {
+      this.presentAlert("Eliminar", "Usuario Eliminado");
       this.listarUsuario();
-    }).catch(e=>{
-      this.presentAlert('Eliminar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
     })
   }
 
-  modificarUsuario(id:number,nombre_usuario:string,apellido_usuario:string,carrera_usuario:string,telefono:number,correo_usuario:string,contrasena:string,rol_id_rol:number){
-    return this.database.executeSql('UPDATE usuario SET nombre_usuario = ?, apellido_usuario = ?, carrera_usuario = ?, telefono = ?, correo_usuario = ?, contrasena = ?, rol_id_rol = ? WHERE id_usuario = ?',[nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena,rol_id_rol,id]).then(res =>{
-      this.presentAlert("Modificar","Usuario Modificado");
+  modificarUsuario(id: number, nombre_usuario: string, apellido_usuario: string, carrera_usuario: string, telefono: number, correo_usuario: string, contrasena: string, rol_id_rol: number) {
+    return this.database.executeSql('UPDATE usuario SET nombre_usuario = ?, apellido_usuario = ?, carrera_usuario = ?, telefono = ?, correo_usuario = ?, contrasena = ?, rol_id_rol = ? WHERE id_usuario = ?', [nombre_usuario, apellido_usuario, carrera_usuario, telefono, correo_usuario, contrasena, rol_id_rol, id]).then(res => {
+      this.presentAlert("Modificar", "Usuario Modificado");
       this.listarUsuario();
-    }).catch(e=>{
-      this.presentAlert('Modificar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
     })
   }
 
-  insertarUsuario(nombre_usuario:string,apellido_usuario:string,carrera_usuario:string,telefono:number,correo_usuario:string,contrasena:string,rol_id_rol:number){
-    return this.database.executeSql('INSERT INTO usuario(nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena,rol_id_rol,control_usuario_id_veto) VALUES (?,?,?,?,?,?,?,1)',[nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena,rol_id_rol]).then(res =>{
-      this.presentToast('bottom','Usuario Registrado Correctamente.')
+  insertarUsuario(nombre_usuario: string, apellido_usuario: string, carrera_usuario: string, telefono: number, correo_usuario: string, contrasena: string, rol_id_rol: number) {
+    return this.database.executeSql('INSERT INTO usuario(nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena,rol_id_rol,control_usuario_id_veto) VALUES (?,?,?,?,?,?,?,1)', [nombre_usuario, apellido_usuario, carrera_usuario, telefono, correo_usuario, contrasena, rol_id_rol]).then(res => {
+      this.presentToast('bottom', 'Usuario Registrado Correctamente.')
       this.listarUsuario();
-    }).catch(e=>{
-      this.presentAlert('Insertar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })
   }
   //APARTADO DE Categorias
-  fetchCategorias(): Observable<Categoria[]>{
+  fetchCategorias(): Observable<Categoria[]> {
     return this.listadoCategorias.asObservable();
   }
-  listarCategorias(){
-    return this.database.executeSql('SELECT * FROM categoria_publicacion', []).then(res=>{
+  listarCategorias() {
+    return this.database.executeSql('SELECT * FROM categoria_publicacion', []).then(res => {
       //variable para almacenar el rsultado de la consulta
       let items: Categoria[] = [];
       //valido si trae al menos un registro
-      if(res.rows.length > 0){
+      if (res.rows.length > 0) {
         //recorro mi resultado
-        for(var i=0; i < res.rows.length; i++)
-        //agrego los registros a mi lista
-        items.push({
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
             id_categoria: res.rows.item(i).id_categoria,
             nombre_categoria: res.rows.item(i).nombre_categoria,
-        })
+          })
       }
       this.listadoCategorias.next(items as any);
     })
   }
 
-  elimarCategoria(id:number){
-    return this.database.executeSql('DELETE FROM categoria_publicacion WHERE id_categoria = ?', [id] ).then(res =>{
-      this.presentAlert("Eliminar","Categoria Eliminada");
+  elimarCategoria(id: number) {
+    return this.database.executeSql('DELETE FROM categoria_publicacion WHERE id_categoria = ?', [id]).then(res => {
+      this.presentAlert("Eliminar", "Categoria Eliminada");
       this.listarCategorias();
-    }).catch(e=>{
-      this.presentAlert('Eliminar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
     })
   }
 
-  modificarCategoria(id:number,nombre_categoria:string){
-    return this.database.executeSql('UPDATE categoria_publicacion SET nombre_categoria = ? WHERE id_categoria = ?',[nombre_categoria,id]).then(res =>{
-      this.presentAlert("Modificar","Categoria Modificada");
+  modificarCategoria(id: number, nombre_categoria: string) {
+    return this.database.executeSql('UPDATE categoria_publicacion SET nombre_categoria = ? WHERE id_categoria = ?', [nombre_categoria, id]).then(res => {
+      this.presentAlert("Modificar", "Categoria Modificada");
       this.listarCategorias();
-    }).catch(e=>{
-      this.presentAlert('Modificar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
     })
   }
 
-  insertarCategoria(nombre_categoria:string){
-    return this.database.executeSql('INSERT INTO categoria_publicacion(nombre_categoria) VALUES (?)',[nombre_categoria]).then(res =>{
-      this.presentAlert("Insertar","Categoria Insertada");
+  insertarCategoria(nombre_categoria: string) {
+    return this.database.executeSql('INSERT INTO categoria_publicacion(nombre_categoria) VALUES (?)', [nombre_categoria]).then(res => {
+      this.presentAlert("Insertar", "Categoria Insertada");
       this.listarCategorias();
-    }).catch(e=>{
-      this.presentAlert('Insertar','Error:'+ JSON.stringify(e));
+    }).catch(e => {
+      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })
   }
 
