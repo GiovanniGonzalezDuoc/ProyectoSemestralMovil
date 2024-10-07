@@ -3,24 +3,20 @@
     <ion-button class="dimension">
       <ion-menu-button></ion-menu-button>
     </ion-button>
-  </ion-buttons>
 
-  <ion-buttons slot="start" [routerLink]="['/home']">
-    <ion-button class="dimension">
+    <ion-button class="dimension" (click)="mostrarTodasPublicaciones()">
       <img src="assets/icon/logo.webp" alt="Logo Empresa" class="logo" />
     </ion-button>
   </ion-buttons>
 
-   <ion-searchbar [value]="searchText" placeholder="Buscar" slot="start" class="dimension"></ion-searchbar>
+  <ion-searchbar [value]="searchText" placeholder="Buscar" slot="start" class="dimension"></ion-searchbar>
 
   <ion-buttons slot="end">
     <ion-button class="dimension" [routerLink]="['/publicar']">
       <ion-icon name="add-circle-outline"></ion-icon>
     </ion-button>
-  </ion-buttons>
 
-  <ion-buttons slot="end" [routerLink]="['/perfil']">
-    <ion-button class="dimension">
+    <ion-button class="dimension" [routerLink]="['/perfil']">
       <ion-icon name="person-circle-outline"></ion-icon>
     </ion-button>
   </ion-buttons>

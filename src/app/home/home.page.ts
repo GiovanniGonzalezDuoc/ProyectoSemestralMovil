@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { ModalController, ToastController } from '@ionic/angular';
+import { NavigationExtras, Router } from '@angular/router';
 import { ServicebdService } from '../services/servicebd.service';
+
 
 
 @Component({
@@ -10,69 +10,58 @@ import { ServicebdService } from '../services/servicebd.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-
-  Perfiles:any = [
+  arregloPublicacion: any = [
     {
-      id:1,
-      foto:"assets/icon/favicon.png",
-      nombreperfil:"Juan",
-      horas:25,
-      titulo:"Importancia de la informatica",
-      mensaje:"Lorem ipsum es el texto que se usa habitualmente en diseño gráfico en demostraciones de tipografías o de borradores de diseño para probar el diseño visual antes de insertar el texto final. Aunque no posee actualmente fuentes para justificar sus hipótesis, el profesor de filología clásica Richard McClintock asegura que su uso se remonta a los impresores de comienzos del siglo XVI. Su uso en algunos editores de texto muy conocidos en la actualidad ha dado al texto lorem ipsum nueva popularidad.",
-      like:25,
-      comentarios:10,
-   },
-    {
-      id:2,
-      foto:"assets/icon/favicon.png",
-      nombreperfil:"Sergio",
-      horas:25,
-      titulo:"Lenguaje",
-      mensaje:"Lorem ipsum es el texto que se usa habitualmente en diseño gráfico en demostraciones de tipografías o de borradores de diseño para probar el diseño visual antes de insertar el texto final. Aunque no posee actualmente fuentes para justificar sus hipótesis, el profesor de filología clásica Richard McClintock asegura que su uso se remonta a los impresores de comienzos del siglo XVI. Su uso en algunos editores de texto muy conocidos en la actualidad ha dado al texto lorem ipsum nueva popularidad.",
-      like:25,
-      comentarios:10,
-    },
-    {
-      id:3,
-      foto:"assets/icon/favicon.png",
-      nombreperfil:"Pedrito",
-      horas:25,
-      titulo:"Matematicas",
-      mensaje:"El Caso de matematicas es demasiado dificil quien me ayuda.",
-      like:25,
-      comentarios:10,
-    },
-    {
-      id:4,
-      foto:"assets/icon/favicon.png",
-      nombreperfil:"Sebastian",
-      horas:25,
-      titulo:"Base De Datos",
-      mensaje:"Cabros ayuden que me estoy hechando base de datos.",
-      like:25,
-      comentarios:10,
-    },
+      id_publicacion: '',
+      nombre_usuario_publicacion: '',
+      titulo_publicacion: '',
+      descripcion_publicacion: '',
+      like_publicacion: '',
+      fecha_publicacion: '',
+      usuario_id_usuario: '',
+      categoria_publicacion_id_categoria: '',
+    }
   ]
+  categorias: any = {};
+  // Variable que contendrá la foto predeterminada
+  fotoPredeterminada: string = "assets/icon/logo.png";
 
-
-  constructor(private router:Router,private toastcontroller:ToastController,private bd:ServicebdService) {}
-
-  comentario(){
-    this.router.navigate(['/descripcion'])
+  constructor(private router: Router, private bd: ServicebdService) {
+    this.bd.dbState().subscribe(data => {
+      //validar si la bd esta lista
+      if (data) {
+        //subscribir al observable de la listaRoles
+        this.bd.fetchPublicacion().subscribe(res => {
+          this.arregloPublicacion = res;
+          this.loadCategoriaNames();
+        })
+      }
+    })
   }
-  guardar(){
-    this.presentToast('bottom', 'El Post Se Guardo Correctamente.');
-  }
-  like(){
-    this.presentToast('bottom', 'Se Dio Like Correctamente.');
-  }
-  async presentToast(position: 'top' | 'middle' | 'bottom',text:string) { //posición
-    const toast = await this.toastcontroller.create({
-      message: text,
-      duration: 1500,
-      position: position,
+  loadCategoriaNames() {
+    this.bd.fetchCategorias().subscribe(categorias => {
+      categorias.forEach(categoria => {
+        this.categorias[categoria.id_categoria] = categoria.nombre_categoria; // Suponiendo que tu categoría tiene propiedades id_categoria y nombre
+      });
     });
-
-    await toast.present();
   }
+
+  // Método para navegar a la descripción de la publicación
+  comentario(id: number) {
+    this.router.navigate(['/descripcion', id]);
+  }
+
+  // Método para guardar el post
+  guardar() {
+    this.bd.presentToast('bottom', 'El Post Se Guardó Correctamente.');
+  }
+
+  // Método para dar like
+  like() {
+    this.bd.presentToast('bottom', 'Se Dio Like Correctamente.');
+  }
+  descripcion(x: any) {
+    this.router.navigate(['/descripcion', { id: x.id_publicacion }]);
+  }
+
 }

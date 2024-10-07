@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AlertController, PopoverController, ToastController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
   selector: 'app-descripcion',
@@ -8,97 +8,42 @@ import { AlertController, PopoverController, ToastController } from '@ionic/angu
   styleUrls: ['./descripcion.page.scss'],
 })
 export class DescripcionPage implements OnInit {
-
-  Perfiles:any = [
-    {
-      id:1,
-      foto:"assets/icon/favicon.png",
-      nombreperfil:"Juan",
-      horas:25,
-      titulo:"Importancia de la informatica",
-      mensaje:"Lorem ipsum es el texto que se usa habitualmente en diseño gráfico en demostraciones de tipografías o de borradores de diseño para probar el diseño visual antes de insertar el texto final. Aunque no posee actualmente fuentes para justificar sus hipótesis, el profesor de filología clásica Richard McClintock asegura que su uso se remonta a los impresores de comienzos del siglo XVI. Su uso en algunos editores de texto muy conocidos en la actualidad ha dado al texto lorem ipsum nueva popularidad.",
-      like:25,
-      comentarios:10,
-   },
-    {
-      id:2,
-      foto:"assets/icon/favicon.png",
-      nombreperfil:"Sergio",
-      horas:25,
-      titulo:"Lenguaje",
-      mensaje:"Lorem ipsum es el texto que se usa habitualmente en diseño gráfico en demostraciones de tipografías o de borradores de diseño para probar el diseño visual antes de insertar el texto final. Aunque no posee actualmente fuentes para justificar sus hipótesis, el profesor de filología clásica Richard McClintock asegura que su uso se remonta a los impresores de comienzos del siglo XVI. Su uso en algunos editores de texto muy conocidos en la actualidad ha dado al texto lorem ipsum nueva popularidad.",
-      like:25,
-      comentarios:10,
-    },
-    {
-      id:3,
-      foto:"assets/icon/favicon.png",
-      nombreperfil:"Pedrito",
-      horas:25,
-      titulo:"Matematicas",
-      mensaje:"El Caso de matematicas es demasiado dificil quien me ayuda.",
-      like:25,
-      comentarios:10,
-    },
-    {
-      id:4,
-      foto:"assets/icon/favicon.png",
-      nombreperfil:"Sebastian",
-      horas:25,
-      titulo:"Base De Datos",
-      mensaje:"Cabros ayuden que me estoy hechando base de datos.",
-      like:25,
-      comentarios:10,
-    },
-  ]
-  comentarios:any=[
-    {
-      id:1,
-      foto:"assets/icon/favicon.png",
-      nombreperfil:"Sebastian",
-      horas:25,
-      mensajecomentario:"El Caso de matematicas es demasiado dificil quien me ayuda."
-    },
-    {
-      id:2,
-      foto:"assets/icon/favicon.png",
-      nombreperfil:"Sebastian",
-      horas:25,
-      mensajecomentario:"Cabros ayuden que me estoy hechando base de datos."
-    },
-    {
-      id:3,
-      foto:"assets/icon/favicon.png",
-      nombreperfil:"Juan Carlos",
-      horas:25,
-      mensajecomentario:"Cabros ayuden que me estoy hechando programación."
-    },
-    {
-      id:4,
-      foto:"assets/icon/favicon.png",
-      nombreperfil:"Martin",
-      horas:25,
-      mensajecomentario:"Cabros ayuden que me estoy hechando Ingles."
-    },
-  ]
-  likes:number = 25;
-  coment:number = 10;
-
+  arregloPublicacion: any;
+  likes: number = 25;
   nuevoComentario: string = '';
   isPopoverOpen = false;
   selectedOption!: string;
-  
-  constructor(private router:Router,private popoverController:PopoverController, private alertController:AlertController,private toastcontroller:ToastController) {
-  }
-  
+  fotoPredeterminada: string = "assets/icon/logo.png";
+  categorias: any = {}; // Para almacenar los nombres de las categorías
+
+  constructor(
+    private router: Router,
+    private activedrouter: ActivatedRoute,
+    private bd: ServicebdService
+  ) {}
+
   ngOnInit() {
+    // Cargar nombres de categorías
+    this.bd.fetchCategorias().subscribe(categorias => {
+      categorias.forEach(categoria => {
+        this.categorias[categoria.id_categoria] = categoria.nombre_categoria; // Suponiendo que tu categoría tiene propiedades id_categoria y nombre
+      });
+    });
+
+    this.activedrouter.paramMap.subscribe(params => {
+      const id = params.get('id'); 
+      if (id) {
+        this.bd.descripcionPublicaciones(Number(id)).then(() => {
+          this.bd.listadoPublicacion.subscribe(data => {
+            this.arregloPublicacion = data; 
+          });
+        });
+      }
+    });
   }
-  
+
   agregarComentario() {
-    if (this.nuevoComentario.trim()) {
-      this.Perfiles.mensajescomentarios.push(this.nuevoComentario);
-      this.nuevoComentario = '';
-    }
+    // Lógica para agregar comentario
   }
 
   openPopover(ev: any) {
@@ -110,46 +55,27 @@ export class DescripcionPage implements OnInit {
   }
 
   handleOption(option: string) {
-    
     this.closePopover();
-  
-    
     setTimeout(() => {
       if (option === 'option1') {
-        this.presentToast('bottom', 'El Post Se Elimino Correctamente.');
+        this.bd.presentToast('bottom', 'El Post Se Eliminó Correctamente.');
         this.router.navigate(['/home']);
-      }else if (option ==='option2'){
-        this.presentToast('bottom', 'Se Ha Seguido Correctamente Al Usuario.');
+      } else if (option === 'option2') {
+        this.bd.presentToast('bottom', 'Se Ha Seguido Correctamente Al Usuario.');
         this.router.navigate(['/home']);
       }
-    }, 0); 
+    }, 0);
   }
-  like(){
-    this.presentToast('bottom', 'Se Dio Like Correctamente.');
+
+  like() {
+    this.bd.presentToast('bottom', 'Se Dio Like Correctamente.');
   }
+
+  guardar() {
+    this.bd.presentToast('bottom', 'El Post Se Guardó Correctamente.');
+  }
+
   comentario(){
-    this.router.navigate(['/descripcion'])
-  }
-  guardar(){
-    this.presentToast('bottom', 'El Post Se Guardo Correctamente.');
-  }
-  async presentAlert(titulo: string, msj: string) {
-    const alert = await this.alertController.create({
-      header: titulo,
-      message: msj,
-      buttons: ['ok'],
-    });
-
-    await alert.present();
-  }
-
-  async presentToast(position: 'top' | 'middle' | 'bottom',text:string) { //posición
-    const toast = await this.toastcontroller.create({
-      message: text,
-      duration: 1500,
-      position: position,
-    });
-
-    await toast.present();
+    // Lógica para comentario
   }
 }

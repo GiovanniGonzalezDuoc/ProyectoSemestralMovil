@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, ToastController } from '@ionic/angular';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { ServicebdService } from 'src/app/services/servicebd.service';
-import { UserIDService } from 'src/app/services/user-id.service';
 
 @Component({
   selector: 'app-publicar',
@@ -18,15 +17,36 @@ export class PublicarPage implements OnInit {
   categorias: any[] = []; // Aquí se almacenarán las categorías desde la BD
   categoriasSeleccionadas: number[] = []; // Para las categorías seleccionadas
 
-  constructor(private router: Router, private bd: ServicebdService, private userService: UserIDService) {}
+  constructor(
+    private router: Router, 
+    private bd: ServicebdService,
+    private storage: NativeStorage
+  ) {}
 
   ngOnInit() {
+    // Cargar las categorías desde la BD
     this.bd.fetchCategorias().subscribe(categorias => {
       this.categorias = categorias;
     });
-    this.id_usuario = this.userService.getUserId();
-    this.nombre_usuario = this.userService.getUserName();
-    this.apellido_usuario = this.userService.getUserLastName();
+
+    // Recuperar datos del usuario almacenados en NativeStorage
+    this.storage.getItem('id_usuario').then(id => {
+      this.id_usuario = id;
+    }).catch(err => {
+      console.error('Error obteniendo id_usuario:', err);
+    });
+
+    this.storage.getItem('nombre_usuario').then(nombre => {
+      this.nombre_usuario = nombre;
+    }).catch(err => {
+      console.error('Error obteniendo nombre_usuario:', err);
+    });
+
+    this.storage.getItem('apellido_usuario').then(apellido => {
+      this.apellido_usuario = apellido;
+    }).catch(err => {
+      console.error('Error obteniendo apellido_usuario:', err);
+    });
   }
 
   publicar() {
@@ -34,29 +54,25 @@ export class PublicarPage implements OnInit {
       this.bd.presentAlert("La Publicación está incompleta.", "Favor de rellenar todos los campos de la publicación.");
       return;
     }
-  
+
     const categoria_publicacion = this.categoriasSeleccionadas[0];
-    const usuario_id_usuario = this.userService.getUserId();
-    if (!usuario_id_usuario) {
-      this.bd.presentAlert('Error', 'No se encontró el ID del usuario. Inicia sesión nuevamente.');
-      return;
-    }
-  
+    const id_usuario = this.id_usuario;
+    
     const publicacionData = {
       nombre_usuario_publicacion: `${this.nombre_usuario || ''} ${this.apellido_usuario || ''}`.trim(),
       titulo_publicacion: this.Titulo,
       descripcion_publicacion: this.Contenido,
       categoria_publicacion: categoria_publicacion,
-      usuario_id_usuario: usuario_id_usuario
+      id_usuario
     };
-  
-    // Llamada a insertarPublicacion con los 5 argumentos requeridos
+
+    // Llamada a insertarPublicacion con los argumentos requeridos
     this.bd.insertarPublicacion(
       publicacionData.nombre_usuario_publicacion,
       publicacionData.titulo_publicacion,
       publicacionData.descripcion_publicacion,
-      publicacionData.usuario_id_usuario,
       publicacionData.categoria_publicacion,
+      publicacionData.id_usuario // El quinto argumento
     ).then(() => {
       this.bd.presentToast('bottom', 'Se publicó correctamente.');
       this.router.navigate(['/home']);

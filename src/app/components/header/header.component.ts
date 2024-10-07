@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import {  Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -10,8 +10,11 @@ export class HeaderComponent  implements OnInit {
 
   @Input() searchText:string = '';
 
-  constructor() {}
+  constructor(private router:Router) {}
 
   ngOnInit() {}
 
+  mostrarTodasPublicaciones() {
+    this.router.navigate(['/home']);
+  }
 }

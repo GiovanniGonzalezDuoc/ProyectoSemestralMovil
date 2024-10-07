@@ -11,12 +11,13 @@ export class AgregarPublicacionPage implements OnInit {
   titulo_publicacion:string="";
   descripcion_publicacion:string="";
   categoria_publicacion_id_categoria!:number;
+  usuario_id_usuario!:number;
 
   constructor(private bd:ServicebdService) { }
 
   ngOnInit() {
   }
   insertar(){
-    this.bd.insertarPublicacion(this.nombre_usuario,this.titulo_publicacion,this.descripcion_publicacion,this.categoria_publicacion_id_categoria);
+    this.bd.insertarPublicacion(this.nombre_usuario,this.titulo_publicacion,this.descripcion_publicacion,this.categoria_publicacion_id_categoria,this.usuario_id_usuario);
   }
 }

@@ -19,7 +19,7 @@ export class ServicebdService {
   //variables de creación de Tablas
   tablaRol: string = "CREATE TABLE IF NOT EXISTS rol (id_rol INTEGER PRIMARY KEY NOT NULL, nombre_rol TEXT NOT NULL);";
   tablaUsuario: string = "CREATE TABLE IF NOT EXISTS usuario (id_usuario INTEGER PRIMARY KEY NOT NULL, nombre_usuario TEXT NOT NULL, apellido_usuario TEXT NOT NULL, carrera_usuario TEXT NOT NULL, telefono INTEGER NOT NULL, correo_usuario TEXT NOT NULL, contrasena TEXT NOT NULL, rol_id_rol INTEGER NOT NULL, control_usuario_id_veto INTEGER, FOREIGN KEY (rol_id_rol) REFERENCES rol(id_rol), FOREIGN KEY (control_usuario_id_veto) REFERENCES control_usuario(id_veto));";
-  tablaPublicacion: string = "CREATE TABLE IF NOT EXISTS publicacion (id_publicacion INTEGER PRIMARY KEY NOT NULL, nombre_usuario_publicacion TEXT NOT NULL, titulo_publicacion TEXT NOT NULL, descripcion_publicacion TEXT NOT NULL, like_publicacion INTEGER, fecha_publicacion TEXT NOT NULL, usuario_id_usuario INTEGER , categoria_publicacion_id_categoria INTEGER , FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario), FOREIGN KEY (categoria_publicacion_id_categoria) REFERENCES categoria_publicacion(id_categoria));";
+  tablaPublicacion: string = "CREATE TABLE IF NOT EXISTS publicacion (id_publicacion INTEGER PRIMARY KEY NOT NULL, nombre_usuario_publicacion TEXT NOT NULL, titulo_publicacion TEXT NOT NULL, descripcion_publicacion TEXT NOT NULL, like_publicacion INTEGER, fecha_publicacion TEXT NOT NULL, usuario_id_usuario INTEGER, categoria_publicacion_id_categoria INTEGER, FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario), FOREIGN KEY (categoria_publicacion_id_categoria) REFERENCES categoria_publicacion(id_categoria));";
   tablaControl_Usuario: string = "CREATE TABLE IF NOT EXISTS control_usuario (id_veto INTEGER PRIMARY KEY NOT NULL, tiempo_veto INTEGER NOT NULL, fecha_veto TEXT NOT NULL, motivo_veto TEXT NOT NULL, usuario_id_usuario INTEGER NOT NULL, FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario));";
   tablaSeguimiento: string = "CREATE TABLE IF NOT EXISTS seguimiento (id_seguimiento INTEGER PRIMARY KEY NOT NULL, usuario_seguimiento TEXT NOT NULL);";
   tablaComentario: string = "CREATE TABLE IF NOT EXISTS comentario (id_comentario INTEGER PRIMARY KEY NOT NULL, nombre_usuario_comentario TEXT NOT NULL, comentario_publicacion TEXT NOT NULL, publicacion_id_publicacion INTEGER NOT NULL, FOREIGN KEY (publicacion_id_publicacion) REFERENCES publicacion(id_publicacion));";
@@ -31,7 +31,7 @@ export class ServicebdService {
   registroRol: string = "INSERT or IGNORE INTO rol(id_rol,nombre_rol) VALUES (1,'usuario'), (2,'admin');";
   registroControl_Usuario: string = "INSERT or IGNORE INTO control_usuario(id_veto,tiempo_veto,fecha_veto,usuario_id_usuario) VALUES(1,7,'06/10/2024','1')"
   registroUsuario: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena) Values (2,'Giovanni','Gonzalez','Ingeniero En Informatica','37742574','juan.cristian@duocuc.cl','Tumama132$');";
-  registroPublicacion: string = "INSERT or IGNORE INTO publicacion(id_publicacion,nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,like_publicacion,fecha_publicacion,usuario_id_usuario)values(1,'Giovanni Gonzalez','Seba WEKO','SOY MUITO GAY',15,'3/10/2024',1);"
+  
   //variables para guardar los datos de las consultas en las tablas
   listadoRol = new BehaviorSubject([]);
   listadoPublicacion = new BehaviorSubject([]);
@@ -109,7 +109,6 @@ export class ServicebdService {
       //ejecuto los insert por defecto en el caso que existan
       await this.database.executeSql(this.registroRol, []);
       await this.database.executeSql(this.registroUsuario, []);
-      await this.database.executeSql(this.registroPublicacion, []);
       await this.database.executeSql(this.registroControl_Usuario, []);
 
       //modifica el estado de la Base De Datos
@@ -195,7 +194,26 @@ export class ServicebdService {
       this.listadoPublicacion.next(items as any);
     })
   }
-
+  descripcionPublicaciones(id: number): Promise<void> {
+    return this.database.executeSql('SELECT * FROM publicacion WHERE id_publicacion = ?', [id]).then(res => {
+      let items: Publicacion[] = [];
+      if (res.rows.length > 0) {
+        for (var i = 0; i < res.rows.length; i++) {
+          items.push({
+            id_publicacion: res.rows.item(i).id_publicacion,
+            nombre_usuario_publicacion: res.rows.item(i).nombre_usuario_publicacion,
+            titulo_publicacion: res.rows.item(i).titulo_publicacion,
+            descripcion_publicacion: res.rows.item(i).descripcion_publicacion,
+            like_publicacion: res.rows.item(i).like_publicacion,
+            fecha_publicacion: res.rows.item(i).fecha_publicacion,
+            usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
+            categoria_publicacion_id_categoria: res.rows.item(i).categoria_publicacion_id_categoria,
+          });
+        }
+      }
+      this.listadoPublicacion.next(items as any); // Actualiza el observable
+    });
+  }
   eliminarPublicacion(id: number) {
     return this.database.executeSql('DELETE FROM publicacion WHERE id_publicacion = ?', [id]).then(res => {
       this.presentAlert("Eliminar", "Publicacion Eliminado");
@@ -214,8 +232,8 @@ export class ServicebdService {
     })
   }
 
-  insertarPublicacion(nombre_usuario_publicacion: string, titulo_publicacion: string, descripcion_publicacion: string, usuario_id_usuario: number,categoria_publicacion: number) {
-    return this.database.executeSql('INSERT INTO publicacion(nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,fecha_publicacion,usuario_id_usuario,categoria_publicacion_id_categoria) VALUES (?,?,?,CURRENT_TIMESTAMP,?,?)', [nombre_usuario_publicacion, titulo_publicacion, descripcion_publicacion, usuario_id_usuario , categoria_publicacion]).then(res => {
+  insertarPublicacion(nombre_usuario_publicacion: string, titulo_publicacion: string, descripcion_publicacion: string,categoria_publicacion: number,usuario_id_usuario:number) {
+    return this.database.executeSql('INSERT INTO publicacion(nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,fecha_publicacion,categoria_publicacion_id_categoria,usuario_id_usuario) VALUES (?,?,?,CURRENT_TIMESTAMP,?,?)', [nombre_usuario_publicacion, titulo_publicacion, descripcion_publicacion , categoria_publicacion,usuario_id_usuario]).then(res => {
       this.presentAlert("Insertar", "Publicacion Insertado");
       this.listarPublicaciones();
     }).catch(e => {
@@ -301,22 +319,6 @@ export class ServicebdService {
       this.listadoUsuarios.next(items as any);
     })
   }
-  verificarUsuario(email: string, contrasena: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      const query = 'SELECT * FROM usuario WHERE correo_usuario = ? AND contrasena = ?';
-      this.database.executeSql(query, [email, contrasena])
-        .then((res) => {
-          if (res.rows.length > 0) {
-            resolve(true); // Usuario encontrado
-          } else {
-            resolve(false); // Usuario no encontrado
-          }
-        })
-        .catch(e => {
-          this.presentAlert('Encontrar Usuario', 'Error:' + JSON.stringify(e));
-        })
-    });
-  }
   verificarEmail(email: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const query = 'SELECT * FROM usuario WHERE correo_usuario = ?';
@@ -333,52 +335,22 @@ export class ServicebdService {
         })
     });
   }
-  verificarID(email: string): Promise<{ id_usuario: number; nombre_usuario: string; apellido_usuario: string }> {
-    return new Promise((resolve, reject) => {
-      const query = 'SELECT id_usuario, nombre_usuario, apellido_usuario FROM usuario WHERE correo_usuario = ?';
-      this.database.executeSql(query, [email])
-        .then((res) => {
-          if (res.rows.length > 0) {
-            const userData = {
-              id_usuario: res.rows.item(0).id_usuario,
-              nombre_usuario: res.rows.item(0).nombre_usuario,
-              apellido_usuario: res.rows.item(0).apellido_usuario,
-            };
-            resolve(userData);
-          }
-        })
-        .catch(e => {
-          this.presentAlert('Encontrar Usuario', 'Error: ' + JSON.stringify(e));
-          reject(e);
-        });
+  recopilarDatos(email: string, contrasena: string) {
+    return this.database.executeSql('SELECT id_usuario,nombre_usuario,apellido_usuario FROM usuario WHERE correo_usuario = ? AND contrasena = ?', [email, contrasena]).then(res => {
+      if (res.rows.length > 0) {
+        const id_usuario = res.rows.item(0).id_usuario;
+        const nombre_usuario = res.rows.item(0).nombre_usuario; 
+        const apellido_usuario = res.rows.item(0).apellido_usuario;
+        return {id_usuario,nombre_usuario,apellido_usuario}; // Retorna los datos si se verifica correctamente
+      } else {
+        this.presentAlert("Login", "Credenciales incorrectas. Intente de nuevo.");
+        return null; // No se encontró el usuario
+      }
+    }).catch(e => {
+      this.presentAlert('Login', 'Error: ' + JSON.stringify(e));
+      return null; // Manejo de errores
     });
   }
-  verificarInformacionUsuario(email: string): Promise<{ idUsuario: number, nombreUsuario: string, apellidoUsuario: string } | null> {
-    return this.database.executeSql('SELECT id_usuario, nombre_usuario, apellido_usuario FROM usuario WHERE correo_usuario = ?', [email])
-      .then(res => {
-        // Verifica si la consulta trajo resultados
-        if (res.rows.length > 0) {
-          // Almacenar los resultados en variables
-          const idUsuario = res.rows.item(0).id_usuario;
-          const nombreUsuario = res.rows.item(0).nombre_usuario;
-          const apellidoUsuario = res.rows.item(0).apellido_usuario;
-  
-          // Retorna un objeto con los datos almacenados
-          return {
-            idUsuario,
-            nombreUsuario,
-            apellidoUsuario
-          };
-        } else {
-          // Si no se encuentra el usuario, retorna null
-          return null;
-        }
-      })
-      .catch(e => {
-        console.error('Error en la consulta SQL:', e);
-        throw e; // Propaga el error para manejarlo externamente
-      });
-  }  
   eliminarUsuario(id: number) {
     return this.database.executeSql('DELETE FROM usuario WHERE id_usuario = ?', [id]).then(res => {
       this.presentAlert("Eliminar", "Usuario Eliminado");
