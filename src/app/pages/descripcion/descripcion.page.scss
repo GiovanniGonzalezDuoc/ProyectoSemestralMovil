@@ -120,11 +120,9 @@ ion-icon {
   margin-right: 16px;
 }
 
-
 ion-card {
   --color: #000000; 
 }
-
 
 ion-textarea {
   --placeholder-color: #000000; 
@@ -133,4 +131,13 @@ ion-textarea {
 
 ion-button {
   --color: #000000; 
+}
+
+ion-item {
+  padding: 10px; /* Mejora el espacio del comentario */
+  border: none; /* Elimina el borde para una apariencia más limpia */
+}
+
+ion-list {
+  padding: 0; /* Elimina el padding por defecto */
 }

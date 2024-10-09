@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { ServicebdService } from '../services/servicebd.service';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 
 
 
@@ -22,11 +23,12 @@ export class HomePage {
       categoria_publicacion_id_categoria: '',
     }
   ]
+  rol_id_rol!:number;
   categorias: any = {};
   // Variable que contendrá la foto predeterminada
   fotoPredeterminada: string = "assets/icon/logo.png";
 
-  constructor(private router: Router, private bd: ServicebdService) {
+  constructor(private router: Router, private bd: ServicebdService, private storage:NativeStorage) {
     this.bd.dbState().subscribe(data => {
       //validar si la bd esta lista
       if (data) {
@@ -37,6 +39,11 @@ export class HomePage {
         })
       }
     })
+    this.storage.getItem('rol_id_rol').then(id => {
+      this.rol_id_rol = id;
+    }).catch(err => {
+      console.error('Error obteniendo id_usuario:', err);
+    });
   }
   loadCategoriaNames() {
     this.bd.fetchCategorias().subscribe(categorias => {
@@ -61,7 +68,12 @@ export class HomePage {
     this.bd.presentToast('bottom', 'Se Dio Like Correctamente.');
   }
   descripcion(x: any) {
-    this.router.navigate(['/descripcion', { id: x.id_publicacion }]);
+    let navigationExtras: NavigationExtras = {
+      state: {
+        publicacion: x 
+      }
+    };
+    this.router.navigate(['/descripcion'], navigationExtras);
   }
 
 }

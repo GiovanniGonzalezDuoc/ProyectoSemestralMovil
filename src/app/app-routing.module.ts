@@ -36,10 +36,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/ajustes/ajustes.module').then(m => m.AjustesPageModule)
   },
   {
-    path: 'admin/home',
-    loadChildren: () => import('./admin-pages/home/home.module').then(m => m.HomePageModule)
-  },
-  {
     path: 'admin/perfil',
     loadChildren: () => import('./admin-pages/perfil/perfil.module').then(m => m.PerfilPageModule)
   },

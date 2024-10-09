@@ -29,9 +29,10 @@ export class LoginPage implements OnInit {
       // Verificar si el email y la contraseña existen en la base de datos
       this.bd.recopilarDatos(email, contrasena).then((usuarioEncontrado) => {
         if (usuarioEncontrado) {
-          this.storage.setItem('id_usuario',usuarioEncontrado.id_usuario)
-          this.storage.setItem('nombre_usuario',usuarioEncontrado.nombre_usuario)
-          this.storage.setItem('apellido_usuario',usuarioEncontrado.apellido_usuario)
+          this.storage.setItem('id_usuario',usuarioEncontrado.id_usuario);
+          this.storage.setItem('nombre_usuario',usuarioEncontrado.nombre_usuario);
+          this.storage.setItem('apellido_usuario',usuarioEncontrado.apellido_usuario);
+          this.storage.setItem('rol_id_rol',usuarioEncontrado.rol_id_rol);
           this.router.navigate(['/home']);
           this.bd.presentToast('bottom','El Usuario Se Ingreso Correctamente');
         } else {

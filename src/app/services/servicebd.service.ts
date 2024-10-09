@@ -7,6 +7,7 @@ import { Publicacion } from '../models/publicacion';
 import { Usuarios } from '../models/usuarios';
 import { Control } from '../models/control';
 import { Categoria } from '../models/categoria';
+import { Comentarios } from '../models/comentarios';
 
 
 @Injectable({
@@ -38,6 +39,7 @@ export class ServicebdService {
   listadoUsuarios = new BehaviorSubject([]);
   listadoControlUsuario = new BehaviorSubject([]);
   listadoCategorias = new BehaviorSubject([]);
+  listadoComentarios = new BehaviorSubject([]);
 
   private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
@@ -93,6 +95,7 @@ export class ServicebdService {
       this.listarRoles();
       this.listarUsuario();
       this.listarCategorias();
+      this.listarComentarios();
 
       //ejecuto la creación de Tablas
       await this.database.executeSql(this.tablaRol, []);
@@ -211,9 +214,13 @@ export class ServicebdService {
           });
         }
       }
-      this.listadoPublicacion.next(items as any); // Actualiza el observable
+      // Actualiza el observable con la publicación encontrada
+      this.listadoPublicacion.next(items as any);
+  
+      // Llamar a listarPublicaciones para recargar todas las publicaciones
+      return this.listarPublicaciones();
     });
-  }
+  }  
   eliminarPublicacion(id: number) {
     return this.database.executeSql('DELETE FROM publicacion WHERE id_publicacion = ?', [id]).then(res => {
       this.presentAlert("Eliminar", "Publicacion Eliminado");
@@ -336,12 +343,13 @@ export class ServicebdService {
     });
   }
   recopilarDatos(email: string, contrasena: string) {
-    return this.database.executeSql('SELECT id_usuario,nombre_usuario,apellido_usuario FROM usuario WHERE correo_usuario = ? AND contrasena = ?', [email, contrasena]).then(res => {
+    return this.database.executeSql('SELECT id_usuario,nombre_usuario,apellido_usuario,rol_id_rol FROM usuario WHERE correo_usuario = ? AND contrasena = ?', [email, contrasena]).then(res => {
       if (res.rows.length > 0) {
         const id_usuario = res.rows.item(0).id_usuario;
         const nombre_usuario = res.rows.item(0).nombre_usuario; 
         const apellido_usuario = res.rows.item(0).apellido_usuario;
-        return {id_usuario,nombre_usuario,apellido_usuario}; // Retorna los datos si se verifica correctamente
+        const rol_id_rol = res.rows.item(0).rol_id_rol
+        return {id_usuario,nombre_usuario,apellido_usuario,rol_id_rol}; // Retorna los datos si se verifica correctamente
       } else {
         this.presentAlert("Login", "Credenciales incorrectas. Intente de nuevo.");
         return null; // No se encontró el usuario
@@ -425,6 +433,74 @@ export class ServicebdService {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })
   }
+  //APARTADO DE Comentarios
+  fetchComentarios(): Observable<Comentarios[]> {
+    return this.listadoComentarios.asObservable();
+  }
+  listarComentarios() {
+    return this.database.executeSql('SELECT * FROM comentario', []).then(res => {
+      //variable para almacenar el rsultado de la consulta
+      let items: Comentarios[] = [];
+      //valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        //recorro mi resultado
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
+            id_comentario: res.rows.item(i).id_comentario,
+            nombre_usuario_comentario: res.rows.item(i).nombre_usuario_comentario,
+            comentario_publicacion: res.rows.item(i).comentario_publicacion,
+            publicacion_id_publicacion: res.rows.item(i).publicacion_id_publicacion
+          })
+      }
+      this.listadoComentarios.next(items as any);
+    })
+  }
+  listarComentariosID(id:number) {
+    return this.database.executeSql('SELECT * FROM comentario WHERE publicacion_id_publicacion = ?', [id]).then(res => {
+      //variable para almacenar el rsultado de la consulta
+      let items: Comentarios[] = [];
+      //valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        //recorro mi resultado
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
+            id_comentario: res.rows.item(i).id_comentario,
+            nombre_usuario_comentario: res.rows.item(i).nombre_usuario_comentario,
+            comentario_publicacion: res.rows.item(i).comentario_publicacion,
+            publicacion_id_publicacion: res.rows.item(i).publicacion_id_publicacion
+          })
+      }
+      this.listadoComentarios.next(items as any);
+    })
+  }
 
+  eliminarComentario(id: number) {
+    return this.database.executeSql('DELETE FROM comentario  WHERE id_comentario = ?', [id]).then(res => {
+      this.presentAlert("Eliminar", "Comentario Eliminado");
+      this.listarComentarios();
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  modificarComentario(id: number, nombre_usuario_comentario: string, comentario_publicacion: string) {
+    return this.database.executeSql('UPDATE comentario SET nombre_usuario_comentario = ?, comentario_publicacion = ? WHERE id_comentario = ?', [nombre_usuario_comentario, comentario_publicacion, id]).then(res => {
+      this.presentAlert("Modificar", "Comentario Modificado");
+      this.listarComentarios();
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  insertarComentario(nombre_usuario_comentario: string, comentario_publicacion: string, publicacion_id_publicacion: number) {
+    return this.database.executeSql('INSERT INTO comentario(nombre_usuario_comentario,comentario_publicacion,publicacion_id_publicacion) VALUES (?,?,?)', [nombre_usuario_comentario, comentario_publicacion, publicacion_id_publicacion]).then(res => {
+      this.presentAlert("Insertar", "Comentario Insertado");
+      this.listarComentarios();
+    }).catch(e => {
+      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
+    })
+  }
 
 }
