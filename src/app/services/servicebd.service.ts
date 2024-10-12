@@ -8,6 +8,8 @@ import { Usuarios } from '../models/usuarios';
 import { Control } from '../models/control';
 import { Categoria } from '../models/categoria';
 import { Comentarios } from '../models/comentarios';
+import { Seguimiento } from '../models/seguimiento';
+import { Guardado } from '../models/guardado';
 
 
 @Injectable({
@@ -22,17 +24,16 @@ export class ServicebdService {
   tablaUsuario: string = "CREATE TABLE IF NOT EXISTS usuario (id_usuario INTEGER PRIMARY KEY NOT NULL, nombre_usuario TEXT NOT NULL, apellido_usuario TEXT NOT NULL, carrera_usuario TEXT NOT NULL, telefono INTEGER NOT NULL, correo_usuario TEXT NOT NULL, contrasena TEXT NOT NULL, rol_id_rol INTEGER NOT NULL, control_usuario_id_veto INTEGER, FOREIGN KEY (rol_id_rol) REFERENCES rol(id_rol), FOREIGN KEY (control_usuario_id_veto) REFERENCES control_usuario(id_veto));";
   tablaPublicacion: string = "CREATE TABLE IF NOT EXISTS publicacion (id_publicacion INTEGER PRIMARY KEY NOT NULL, nombre_usuario_publicacion TEXT NOT NULL, titulo_publicacion TEXT NOT NULL, descripcion_publicacion TEXT NOT NULL, like_publicacion INTEGER, fecha_publicacion TEXT NOT NULL, usuario_id_usuario INTEGER, categoria_publicacion_id_categoria INTEGER, FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario), FOREIGN KEY (categoria_publicacion_id_categoria) REFERENCES categoria_publicacion(id_categoria));";
   tablaControl_Usuario: string = "CREATE TABLE IF NOT EXISTS control_usuario (id_veto INTEGER PRIMARY KEY NOT NULL, tiempo_veto INTEGER NOT NULL, fecha_veto TEXT NOT NULL, motivo_veto TEXT NOT NULL, usuario_id_usuario INTEGER NOT NULL, FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario));";
-  tablaSeguimiento: string = "CREATE TABLE IF NOT EXISTS seguimiento (id_seguimiento INTEGER PRIMARY KEY NOT NULL, usuario_seguimiento TEXT NOT NULL);";
   tablaComentario: string = "CREATE TABLE IF NOT EXISTS comentario (id_comentario INTEGER PRIMARY KEY NOT NULL, nombre_usuario_comentario TEXT NOT NULL, comentario_publicacion TEXT NOT NULL, publicacion_id_publicacion INTEGER NOT NULL, FOREIGN KEY (publicacion_id_publicacion) REFERENCES publicacion(id_publicacion));";
   tablaCategoria_Publicacion: string = "CREATE TABLE IF NOT EXISTS categoria_publicacion (id_categoria INTEGER PRIMARY KEY NOT NULL, nombre_categoria TEXT NOT NULL);";
   tablaGuardado_Publicacion: string = "CREATE TABLE IF NOT EXISTS guardado_publicacion (publicacion_id_publicacion INTEGER NOT NULL, usuario_id_usuario INTEGER NOT NULL, PRIMARY KEY (publicacion_id_publicacion, usuario_id_usuario), FOREIGN KEY (publicacion_id_publicacion) REFERENCES publicacion(id_publicacion), FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario));";
-  tablaSeguimiento_Usuario: string = "CREATE TABLE IF NOT EXISTS seguimiento_usuario (usuario_id_usuario INTEGER NOT NULL, seguimiento_id_seguimiento INTEGER NOT NULL, PRIMARY KEY (usuario_id_usuario, seguimiento_id_seguimiento), FOREIGN KEY (seguimiento_id_seguimiento) REFERENCES seguimiento(id_seguimiento), FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario));";
+  tablaSeguimiento_Usuario: string = "CREATE TABLE IF NOT EXISTS seguimiento_usuario (usuario_id_usuario INTEGER NOT NULL, seguimiento_id_seguimiento INTEGER NOT NULL,PRIMARY KEY (usuario_id_usuario, seguimiento_id_seguimiento),FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario),FOREIGN KEY (seguimiento_id_seguimiento) REFERENCES usuario(id_usuario))";
 
   //variables para los insert por defecto en nuestras tablas
   registroRol: string = "INSERT or IGNORE INTO rol(id_rol,nombre_rol) VALUES (1,'usuario'), (2,'admin');";
   registroControl_Usuario: string = "INSERT or IGNORE INTO control_usuario(id_veto,tiempo_veto,fecha_veto,usuario_id_usuario) VALUES(1,7,'06/10/2024','1')"
   registroUsuario: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena) Values (2,'Giovanni','Gonzalez','Ingeniero En Informatica','37742574','juan.cristian@duocuc.cl','Tumama132$');";
-  
+
   //variables para guardar los datos de las consultas en las tablas
   listadoRol = new BehaviorSubject([]);
   listadoPublicacion = new BehaviorSubject([]);
@@ -40,6 +41,8 @@ export class ServicebdService {
   listadoControlUsuario = new BehaviorSubject([]);
   listadoCategorias = new BehaviorSubject([]);
   listadoComentarios = new BehaviorSubject([]);
+  listadoSeguimiento = new BehaviorSubject([]);
+  listadoGuardado = new BehaviorSubject([]);
 
   private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
@@ -97,11 +100,11 @@ export class ServicebdService {
       this.listarCategorias();
       this.listarComentarios();
 
+
       //ejecuto la creación de Tablas
       await this.database.executeSql(this.tablaRol, []);
       await this.database.executeSql(this.tablaUsuario, []);
       await this.database.executeSql(this.tablaControl_Usuario, []);
-      await this.database.executeSql(this.tablaSeguimiento, []);
       await this.database.executeSql(this.tablaCategoria_Publicacion, []);
       await this.database.executeSql(this.tablaPublicacion, []);
       await this.database.executeSql(this.tablaComentario, []);
@@ -197,7 +200,7 @@ export class ServicebdService {
       this.listadoPublicacion.next(items as any);
     })
   }
-  listarPublicacionesID(id:number) {
+  listarPublicacionesID(id: number) {
     return this.database.executeSql('SELECT * FROM publicacion WHERE usuario_id_usuario= ?', [id]).then(res => {
       //variable para almacenar el rsultado de la consulta
       let items: Publicacion[] = [];
@@ -240,13 +243,28 @@ export class ServicebdService {
       }
       // Actualiza el observable con la publicación encontrada
       this.listadoPublicacion.next(items as any);
-  
+
       // Llamar a listarPublicaciones para recargar todas las publicaciones
       return this.listarPublicaciones();
     });
-  }  
+  }
+  aumentarLike(idPublicacion: number) {
+    return this.database.executeSql('UPDATE publicacion SET like_publicacion = COALESCE(like_publicacion, 0) + 1 WHERE id_publicacion = ?', [idPublicacion]).then(res => {
+      this.listarPublicaciones()
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
+    })
+  }
   eliminarPublicacion(id: number) {
     return this.database.executeSql('DELETE FROM publicacion WHERE id_publicacion = ?', [id]).then(res => {
+      this.presentAlert("Eliminar", "Publicacion Eliminado");
+      this.listarPublicaciones();
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
+    })
+  }
+  eliminarPublicacionID(id: number) {
+    return this.database.executeSql('DELETE FROM publicacion WHERE  = usuario_id_usuario ?', [id]).then(res => {
       this.presentAlert("Eliminar", "Publicacion Eliminado");
       this.listarPublicaciones();
     }).catch(e => {
@@ -263,8 +281,8 @@ export class ServicebdService {
     })
   }
 
-  insertarPublicacion(nombre_usuario_publicacion: string, titulo_publicacion: string, descripcion_publicacion: string,categoria_publicacion: number,usuario_id_usuario:number) {
-    return this.database.executeSql('INSERT INTO publicacion(nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,fecha_publicacion,categoria_publicacion_id_categoria,usuario_id_usuario) VALUES (?,?,?,CURRENT_TIMESTAMP,?,?)', [nombre_usuario_publicacion, titulo_publicacion, descripcion_publicacion , categoria_publicacion,usuario_id_usuario]).then(res => {
+  insertarPublicacion(nombre_usuario_publicacion: string, titulo_publicacion: string, descripcion_publicacion: string, categoria_publicacion: number, usuario_id_usuario: number) {
+    return this.database.executeSql('INSERT INTO publicacion(nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,fecha_publicacion,categoria_publicacion_id_categoria,usuario_id_usuario) VALUES (?,?,?,CURRENT_TIMESTAMP,?,?)', [nombre_usuario_publicacion, titulo_publicacion, descripcion_publicacion, categoria_publicacion, usuario_id_usuario]).then(res => {
       this.presentAlert("Insertar", "Publicacion Insertado");
       this.listarPublicaciones();
     }).catch(e => {
@@ -370,10 +388,10 @@ export class ServicebdService {
     return this.database.executeSql('SELECT id_usuario,nombre_usuario,apellido_usuario,rol_id_rol FROM usuario WHERE correo_usuario = ? AND contrasena = ?', [email, contrasena]).then(res => {
       if (res.rows.length > 0) {
         const id_usuario = res.rows.item(0).id_usuario;
-        const nombre_usuario = res.rows.item(0).nombre_usuario; 
+        const nombre_usuario = res.rows.item(0).nombre_usuario;
         const apellido_usuario = res.rows.item(0).apellido_usuario;
         const rol_id_rol = res.rows.item(0).rol_id_rol
-        return {id_usuario,nombre_usuario,apellido_usuario,rol_id_rol}; // Retorna los datos si se verifica correctamente
+        return { id_usuario, nombre_usuario, apellido_usuario, rol_id_rol }; // Retorna los datos si se verifica correctamente
       } else {
         this.presentAlert("Login", "Credenciales incorrectas. Intente de nuevo.");
         return null; // No se encontró el usuario
@@ -480,7 +498,7 @@ export class ServicebdService {
       this.listadoComentarios.next(items as any);
     })
   }
-  listarComentariosID(id:number) {
+  listarComentariosID(id: number) {
     return this.database.executeSql('SELECT * FROM comentario WHERE publicacion_id_publicacion = ?', [id]).then(res => {
       //variable para almacenar el rsultado de la consulta
       let items: Comentarios[] = [];
@@ -526,5 +544,123 @@ export class ServicebdService {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })
   }
+  //APARTADO DE Seguimiento
+  fetchSeguimiento(): Observable<Seguimiento[]> {
+    return this.listadoSeguimiento.asObservable();
+  }
+  listarSeguimiento() {
+    return this.database.executeSql('SELECT * FROM seguimiento_usuario', []).then(res => {
+      //variable para almacenar el rsultado de la consulta
+      let items: Seguimiento[] = [];
+      //valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        //recorro mi resultado
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
+            usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
+            seguimiento_id_seguimiento: res.rows.item(i).seguimiento_id_seguimiento,
+          })
+      }
+      this.listadoComentarios.next(items as any);
+    })
+  }
+  verificarSeguimiento(usuario_id_usuario: number, seguimiento_id_seguimiento: number): Promise<boolean> {
+    return this.database.executeSql(
+      'SELECT * FROM seguimiento_usuario WHERE usuario_id_usuario = ? AND seguimiento_id_seguimiento = ?',
+      [usuario_id_usuario, seguimiento_id_seguimiento]
+    ).then(res => {
+      return res.rows.length > 0; // Devuelve true si ya existe el seguimiento
+    }).catch(err => {
+      console.error('Error al verificar seguimiento:', err);
+      return false; // En caso de error, devuelve false por defecto
+    });
+  }
+  eliminarSeguidor(id: number) {
+    return this.database.executeSql('DELETE FROM seguimiento_usuario  WHERE id_comentario = ?', [id]).then(res => {
+      this.presentAlert("Eliminar", "Seguidores Eliminado");
+      this.listarSeguimiento();
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
+    })
+  }
 
+  modificarSeguidor(usuario_id_usuario: number, seguimiento_id_seguimiento: number) {
+    return this.database.executeSql('UPDATE seguimiento_usuario SET usuario_id_usuario = ?, seguimiento_id_seguimiento = ? WHERE usuario_id_usuario = ?', [usuario_id_usuario, seguimiento_id_seguimiento, usuario_id_usuario]).then(res => {
+      this.presentAlert("Modificar", "Seguidores Modificado");
+      this.listarSeguimiento();
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  insertarSeguidores(usuario_id_usuario: number, seguimiento_id_seguimiento: number) {
+    return this.database.executeSql('INSERT INTO seguimiento_usuario(usuario_id_usuario,seguimiento_id_seguimiento) VALUES (?,?)', [usuario_id_usuario, seguimiento_id_seguimiento]).then(res => {
+      this.presentAlert("Insertar", "Seguidores Insertado");
+      this.listarSeguimiento();
+    }).catch(e => {
+      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
+    })
+  }
+  //APARTADO DE Guardado
+  fetchGuardado(): Observable<Guardado[]> {
+    return this.listadoGuardado.asObservable();
+  }
+  listarGuardados() {
+    return this.database.executeSql('SELECT * FROM guardado_publicacion', []).then(res => {
+      //variable para almacenar el rsultado de la consulta
+      let items: Guardado[] = [];
+      //valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        //recorro mi resultado
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
+            publicacion_id_publicacion: res.rows.item(i).publicacion_id_publicacion,
+            usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
+          })
+      }
+      this.listadoGuardado.next(items as any);
+    })
+  }
+  listarGuardado(): Promise<Guardado[]> {
+    return this.database.executeSql('SELECT * FROM guardado_publicacion', []).then(res => {
+      let items: Guardado[] = [];
+      if (res.rows.length > 0) {
+        for (let i = 0; i < res.rows.length; i++) {
+          items.push({
+            publicacion_id_publicacion: res.rows.item(i).publicacion_id_publicacion,
+            usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
+          });
+        }
+      }
+      return items; // Devuelve el arreglo de guardados
+    });
+  }
+  eliminarGuardado(id: number) {
+    return this.database.executeSql('DELETE FROM guardado_publicacion  WHERE publicacion_id_publicacion = ?', [id]).then(res => {
+      this.presentAlert("Eliminar", "Seguidores Eliminado");
+      this.listarSeguimiento();
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  modificarGuardado(publicacion_id_publicacion: number, usuario_id_usuario: number) {
+    return this.database.executeSql('UPDATE guardado_publicacion SET publicacion_id_publicacion = ?, usuario_id_usuario = ? WHERE usuario_id_usuario = ?', [publicacion_id_publicacion, usuario_id_usuario, usuario_id_usuario]).then(res => {
+      this.presentAlert("Modificar", "Seguidores Modificado");
+      this.listarSeguimiento();
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  insertarGuardado(publicacion_id_publicacion: number, usuario_id_usuario: number) {
+    return this.database.executeSql('INSERT INTO guardado_publicacion(publicacion_id_publicacion,usuario_id_usuario) VALUES (?,?)', [publicacion_id_publicacion, usuario_id_usuario]).then(res => {
+      this.presentAlert("Insertar", "Seguidores Insertado");
+      this.listarSeguimiento();
+    }).catch(e => {
+      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
+    })
+  }
 }

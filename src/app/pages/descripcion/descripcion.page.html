@@ -41,11 +41,11 @@
       </p>
     </ion-card-content>
 
-    <ion-item lines="none">
+    <ion-item lines="none" *ngIf="arregloPublicacion; else noData">
       <ion-buttons>
-        <ion-button class="icon-dimension" (click)="like()">
+        <ion-button class="icon-dimension" (click)="like(arregloPublicacion.id_publicacion)">
           <ion-icon name="thumbs-up-outline"></ion-icon>
-          <p>{{ likes }}</p>
+          <p>{{ arregloPublicacion.like_publicacion || 0 }}</p>
         </ion-button>
         <ion-button class="icon-dimension" (click)="comentario()">
           <ion-icon name="chatbubble-outline"></ion-icon>
@@ -100,8 +100,8 @@
   <ion-popover [isOpen]="isPopoverOpen" (didDismiss)="closePopover()">
     <ng-template>
       <ion-list>
-        <ion-item (click)="handleOption('option1')">Eliminar Post</ion-item>
-        <ion-item (click)="handleOption('option2')">Seguir Usuario</ion-item>
+        <ion-item (click)="handleOption('option1', idUsuarioSeguir)">Eliminar Post</ion-item>
+        <ion-item (click)="handleOption('option2', idUsuarioSeguir)">Seguir Usuario</ion-item>        
       </ion-list>
     </ng-template>
   </ion-popover>
