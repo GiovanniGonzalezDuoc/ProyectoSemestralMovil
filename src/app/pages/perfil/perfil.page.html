@@ -8,10 +8,10 @@
     
     <ion-card-content class="perfil-content-verde">
       <ion-avatar class="perfil-avatar">
-        <img [src]="Perfiles[0].foto" alt="Perfil">
+        <img [src]="fotoPredeterminada" alt="Perfil">
       </ion-avatar>
       <ion-label class="perfil-info">
-        <h2>{{Perfiles[0].nombreperfil}}</h2>
+        <h2>{{nombre_usuario}} {{apellido_usuario}}</h2>
       </ion-label>
       
       <ion-button 
@@ -35,8 +35,8 @@
     
     <ion-card-content class="perfil-content-blanco">
       <div class="followers-info">
-        <p>{{Perfiles[0].seguidores}} seguidores</p>
-        <p>{{Perfiles[0].seguidos}} siguiendo</p>
+        <p> seguidores</p>
+        <p> siguiendo</p>
       </div>
     </ion-card-content>
   </ion-card>
@@ -49,22 +49,22 @@
   
   <ion-card-content>
     <ion-list>
-      <ion-card *ngFor="let dato of Publicaciones" class="publicacion-card">
+      <ion-card *ngFor="let x of arregloPublicacion" class="publicacion-card">
         
         <ion-item lines="none" class="publicacion-info-verde">
           <ion-avatar slot="start" class="publicacion-avatar">
-            <img [src]="dato.foto" alt="Perfil">
+            <img [src]="fotoPredeterminada" alt="Perfil">
           </ion-avatar>
           <ion-label>
-            <h2 class="nombre-usuario">{{dato.nombreperfil}}</h2>
-            <p class="hora-publicacion">{{dato.horas}} horas</p>
+            <h2 class="nombre-usuario">{{x.nombre_usuario_publicacion}}</h2>
+            <p class="hora-publicacion">hace {{ x.fecha_publicacion }} horas</p>
           </ion-label>
         </ion-item>
         
         <ion-item lines="none" class="publicacion-content-blanco">
           <ion-label>
-            <h3 class="titulo-publicacion" [routerLink]="['/descripcion']">{{dato.titulo}}</h3>
-            <p class="contenido-publicacion">{{dato.contenido}}</p>
+            <h3 class="titulo-publicacion" [routerLink]="['/descripcion']">{{ x.titulo_publicacion }}</h3>
+            <p class="contenido-publicacion">{{ x.descripcion_publicacion || 'Sin descripción disponible.' }}</p>
           </ion-label>
         </ion-item>
       </ion-card>

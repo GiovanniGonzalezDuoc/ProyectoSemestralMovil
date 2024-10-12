@@ -197,6 +197,30 @@ export class ServicebdService {
       this.listadoPublicacion.next(items as any);
     })
   }
+  listarPublicacionesID(id:number) {
+    return this.database.executeSql('SELECT * FROM publicacion WHERE usuario_id_usuario= ?', [id]).then(res => {
+      //variable para almacenar el rsultado de la consulta
+      let items: Publicacion[] = [];
+      //valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        //recorro mi resultado
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
+            id_publicacion: res.rows.item(i).id_publicacion,
+            nombre_usuario_publicacion: res.rows.item(i).nombre_usuario_publicacion,
+            titulo_publicacion: res.rows.item(i).titulo_publicacion,
+            descripcion_publicacion: res.rows.item(i).descripcion_publicacion,
+            like_publicacion: res.rows.item(i).like_publicacion,
+            fecha_publicacion: res.rows.item(i).fecha_publicacion,
+            usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
+            categoria_publicacion_id_categoria: res.rows.item(i).categoria_publicacion_id_categoria,
+          })
+      }
+      this.listadoPublicacion.next(items as any);
+      return this.listarPublicaciones();
+    })
+  }
   descripcionPublicaciones(id: number): Promise<void> {
     return this.database.executeSql('SELECT * FROM publicacion WHERE id_publicacion = ?', [id]).then(res => {
       let items: Publicacion[] = [];
