@@ -115,14 +115,14 @@ export class ServicebdService {
       await this.database.executeSql(this.tablaComentario, []);
       await this.database.executeSql(this.tablaGuardado_Publicacion, []);
       await this.database.executeSql(this.tablaSeguimiento_Usuario, []);
-      await this.database.executeSql(this.tablaPreguntas,[]);
+      await this.database.executeSql(this.tablaPreguntas, []);
 
 
       //ejecuto los insert por defecto en el caso que existan
       await this.database.executeSql(this.registroRol, []);
       await this.database.executeSql(this.registroUsuario, []);
       await this.database.executeSql(this.registroControl_Usuario, []);
-      await this.database.executeSql(this.registroAdmin,[]);
+      await this.database.executeSql(this.registroAdmin, []);
 
       //modifica el estado de la Base De Datos
       await this.isDBReady.next(true);
@@ -373,8 +373,8 @@ export class ServicebdService {
             contrasena: res.rows.item(i).contrasena,
             rol_id_rol: res.rows.item(i).rol_id_rol,
             control_usuario_id_veto: res.rows.item(i).control_usuario_id_veto,
-            id_pregunta:res.rows.item(i).id_pregunta,
-            respuesta:res.rows.item(i).respuesta,
+            id_pregunta: res.rows.item(i).id_pregunta,
+            respuesta: res.rows.item(i).respuesta,
           })
       }
       this.listadoUsuarios.next(items as any);
@@ -394,6 +394,23 @@ export class ServicebdService {
         .catch(e => {
           this.presentAlert('Encontrar Usuario', 'Error:' + JSON.stringify(e));
         })
+    });
+  }
+  verificarRespuesta(correo_usuario:string,preguntaId: number, respuesta: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const query = 'SELECT * FROM usuario WHERE correo_usuario = ? AND id_pregunta = ? AND respuesta = ?';
+      this.database.executeSql(query, [correo_usuario, preguntaId, respuesta])
+        .then((res) => {
+          if (res.rows.length > 0) {
+            resolve(true); // Respuesta correcta
+          } else {
+            resolve(false); // Respuesta incorrecta
+          }
+        })
+        .catch(e => {
+          this.presentAlert('Verificar Respuesta', 'Error:' + JSON.stringify(e));
+          reject(e);
+        });
     });
   }
   recopilarDatos(email: string, contrasena: string) {
@@ -430,9 +447,17 @@ export class ServicebdService {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
     })
   }
+  modificarContrasena(correo_usuario: string, contrasena: string) {
+    return this.database.executeSql('UPDATE usuario SET contrasena = ? WHERE correo_usuario = ?', [contrasena, correo_usuario]).then(res => {
+      this.presentAlert("Modificar", "Usuario Modificado");
+      this.listarUsuario();
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+    })
+  }
 
-  insertarUsuario(nombre_usuario: string, apellido_usuario: string, carrera_usuario: string, telefono: number, correo_usuario: string, contrasena: string, rol_id_rol: number,id_pregunta:number,respuesta:string) {
-    return this.database.executeSql('INSERT INTO usuario(nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena,rol_id_rol,control_usuario_id_veto,id_pregunta,respuesta) VALUES (?,?,?,?,?,?,?,1,?,?)', [nombre_usuario, apellido_usuario, carrera_usuario, telefono, correo_usuario, contrasena, rol_id_rol,id_pregunta,respuesta]).then(res => {
+  insertarUsuario(nombre_usuario: string, apellido_usuario: string, carrera_usuario: string, telefono: number, correo_usuario: string, contrasena: string, rol_id_rol: number, id_pregunta: number, respuesta: string) {
+    return this.database.executeSql('INSERT INTO usuario(nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena,rol_id_rol,control_usuario_id_veto,id_pregunta,respuesta) VALUES (?,?,?,?,?,?,?,1,?,?)', [nombre_usuario, apellido_usuario, carrera_usuario, telefono, correo_usuario, contrasena, rol_id_rol, id_pregunta, respuesta]).then(res => {
       this.presentToast('bottom', 'Usuario Registrado Correctamente.')
       this.listarUsuario();
     }).catch(e => {
@@ -675,67 +700,67 @@ export class ServicebdService {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })
   }
-    //APARTADO DE Preguntas
-    fetchPreguntas(): Observable<Pregunta[]> {
-      return this.listadoPreguntas.asObservable();
-    }
-    listarPreguntas() {
-      return this.database.executeSql('SELECT * FROM preguntas', []).then(res => {
-        //variable para almacenar el rsultado de la consulta
-        let items: Pregunta[] = [];
-        //valido si trae al menos un registro
-        if (res.rows.length > 0) {
-          //recorro mi resultado
-          for (var i = 0; i < res.rows.length; i++)
-            //agrego los registros a mi lista
-            items.push({
-              id_pregunta: res.rows.item(i).id_pregunta,
-              pregunta:res.rows.item(i).pregunta
-            })
-        }
-        this.listadoPreguntas.next(items as any);
-      })
-    }
-    listarPreguntasPorId(id: number): Promise<Pregunta | null> {
-      return this.database.executeSql('SELECT * FROM preguntas WHERE id_pregunta = ?', [id]).then(res => {
-        // Verifica si se obtuvo al menos un registro
-        if (res.rows.length > 0) {
-          // Retorna la pregunta correspondiente
-          return {
-            id_pregunta: res.rows.item(0).id_pregunta,
-            pregunta: res.rows.item(0).pregunta,
-          };
-        }
-        return null; // Si no se encontró la pregunta, retorna null
-      }).catch(e => {
-        console.error('Error al listar pregunta por ID:', e);
-        return null; // Manejo de errores
-      });
-    }
-    eliminarPreguntas(id: number) {
-      return this.database.executeSql('DELETE FROM preguntas  WHERE id_pregunta = ?', [id]).then(res => {
-        this.presentAlert("Eliminar", "La Pregunta se elimino");
-        this.listarPreguntas();
-      }).catch(e => {
-        this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
-      })
-    }
-  
-    modificarPreguntas(id_pregunta:number, pregunta: string) {
-      return this.database.executeSql('UPDATE preguntas SET  pregunta = ? WHERE id_pregunta = ?', [ pregunta, id_pregunta]).then(res => {
-        this.presentAlert("Modificar", "La Pregunta se Modifico");
-        this.listarPreguntas();
-      }).catch(e => {
-        this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
-      })
-    }
-  
-    insertarPreguntas(pregunta: string) {
-      return this.database.executeSql('INSERT INTO preguntas(pregunta) VALUES (?)', [pregunta]).then(res => {
-        this.presentAlert("Insertar", "La Pregunta Se Inserto Correctamente.");
-        this.listarPreguntas();
-      }).catch(e => {
-        this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
-      })
-    }
+  //APARTADO DE Preguntas
+  fetchPreguntas(): Observable<Pregunta[]> {
+    return this.listadoPreguntas.asObservable();
+  }
+  listarPreguntas() {
+    return this.database.executeSql('SELECT * FROM preguntas', []).then(res => {
+      //variable para almacenar el rsultado de la consulta
+      let items: Pregunta[] = [];
+      //valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        //recorro mi resultado
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
+            id_pregunta: res.rows.item(i).id_pregunta,
+            pregunta: res.rows.item(i).pregunta
+          })
+      }
+      this.listadoPreguntas.next(items as any);
+    })
+  }
+  listarPreguntasPorId(id: number): Promise<Pregunta | null> {
+    return this.database.executeSql('SELECT * FROM preguntas WHERE id_pregunta = ?', [id]).then(res => {
+      // Verifica si se obtuvo al menos un registro
+      if (res.rows.length > 0) {
+        // Retorna la pregunta correspondiente
+        return {
+          id_pregunta: res.rows.item(0).id_pregunta,
+          pregunta: res.rows.item(0).pregunta,
+        };
+      }
+      return null; // Si no se encontró la pregunta, retorna null
+    }).catch(e => {
+      console.error('Error al listar pregunta por ID:', e);
+      return null; // Manejo de errores
+    });
+  }
+  eliminarPreguntas(id: number) {
+    return this.database.executeSql('DELETE FROM preguntas  WHERE id_pregunta = ?', [id]).then(res => {
+      this.presentAlert("Eliminar", "La Pregunta se elimino");
+      this.listarPreguntas();
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  modificarPreguntas(id_pregunta: number, pregunta: string) {
+    return this.database.executeSql('UPDATE preguntas SET  pregunta = ? WHERE id_pregunta = ?', [pregunta, id_pregunta]).then(res => {
+      this.presentAlert("Modificar", "La Pregunta se Modifico");
+      this.listarPreguntas();
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  insertarPreguntas(pregunta: string) {
+    return this.database.executeSql('INSERT INTO preguntas(pregunta) VALUES (?)', [pregunta]).then(res => {
+      this.presentAlert("Insertar", "La Pregunta Se Inserto Correctamente.");
+      this.listarPreguntas();
+    }).catch(e => {
+      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
+    })
+  }
 }
