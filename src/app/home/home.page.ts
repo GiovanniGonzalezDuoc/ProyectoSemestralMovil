@@ -58,14 +58,43 @@ export class HomePage {
     this.router.navigate(['/descripcion', id]);
   }
 
-  // Método para guardar el post
-  guardar() {
-    this.bd.presentToast('bottom', 'El Post Se Guardó Correctamente.');
+  // Método para likear el post
+  like(idPublicacion: number) {
+    // Primero, actualizamos el número de likes en la base de datos
+    this.bd.aumentarLike(idPublicacion).then(() => {
+      this.bd.presentToast('bottom', 'Se Dio Like Correctamente.');
+    }).catch(err => {
+      console.error('Error al dar like:', err);
+      this.bd.presentToast('bottom', 'Error al dar like.');
+    });
   }
-
-  // Método para dar like
-  like() {
-    this.bd.presentToast('bottom', 'Se Dio Like Correctamente.');
+  // Método para Guardar El post
+  guardar() {
+    // Asumiendo que tienes acceso al ID de la publicación actual
+    const publicacionId = this.arregloPublicacion.id_publicacion; // Asegúrate de que esto se refiere al ID correcto
+    // También necesitas el ID del usuario que está guardando la publicación
+    this.storage.getItem('id_usuario').then(usuarioId => {
+      // Verificar si la publicación ya está guardada
+      this.bd.listarGuardado().then(guardados => {
+        const yaGuardado = guardados.some(guardado => guardado.publicacion_id_publicacion === publicacionId && guardado.usuario_id_usuario === usuarioId);
+        
+        if (!yaGuardado) {
+          // Insertar la publicación en la tabla guardado
+          this.bd.insertarGuardado(publicacionId, usuarioId).then(() => {
+            this.bd.presentToast('bottom', 'El Post Se Guardó Correctamente.');
+          }).catch(err => {
+            console.error('Error al guardar el post:', err);
+            this.bd.presentToast('bottom', 'Error al guardar el post.');
+          });
+        } else {
+          this.bd.presentToast('bottom', 'Ya has guardado este post.');
+        }
+      }).catch(err => {
+        console.error('Error al listar guardados:', err);
+      });
+    }).catch(err => {
+      console.error('Error obteniendo id_usuario:', err);
+    });
   }
   descripcion(x: any) {
     let navigationExtras: NavigationExtras = {
