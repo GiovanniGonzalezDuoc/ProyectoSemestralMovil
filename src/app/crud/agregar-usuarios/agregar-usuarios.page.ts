@@ -14,11 +14,22 @@ export class AgregarUsuariosPage implements OnInit {
   correo_usuario:string="";
   contrasena:string="";
   rol_id_rol!:number;
+  id_pregunta!:number;
+  respuesta:string = "";
+  preguntasSeguridad: any[] = []; // Aquí se almacenarán las categorías desde la BD
+  preguntaSeleccionada: number[] = []; // Para las categorías seleccionadas
+  
   constructor(private bd:ServicebdService) { }
 
-  ngOnInit() {
+  ngOnInit() { this.listarPreguntas();
+  }
+  listarPreguntas() {
+    this.bd.fetchPreguntas().subscribe(preguntas => {
+      this.preguntasSeguridad = preguntas; // Almacena las preguntas obtenidas
+    })
   }
   insertar(){
-    this.bd.insertarUsuario(this.nombre_usuario,this.apellido_usuario,this.carrera_usuario,this.telefono,this.correo_usuario,this.contrasena,this.rol_id_rol);
+    const preguntaSelecion = this.preguntaSeleccionada[0]
+    this.bd.insertarUsuario(this.nombre_usuario,this.apellido_usuario,this.carrera_usuario,this.telefono,this.correo_usuario,this.contrasena,this.rol_id_rol,preguntaSelecion,this.respuesta);
   }
 }

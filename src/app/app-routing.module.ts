@@ -119,6 +119,19 @@ const routes: Routes = [
     path: 'crud/modificar-categorias',
     loadChildren: () => import('./crud/modificar-categorias/modificar-categorias.module').then( m => m.ModificarCategoriasPageModule)
   },
+  {
+    path: 'crud/preguntas',
+    loadChildren: () => import('./crud/preguntas/preguntas.module').then( m => m.PreguntasPageModule)
+  },
+  {
+    path: 'crud/agregar-preguntas',
+    loadChildren: () => import('./crud/agregar-preguntas/agregar-preguntas.module').then( m => m.AgregarPreguntasPageModule)
+  },
+  {
+    path: 'crud/modificar-preguntas',
+    loadChildren: () => import('./crud/modificar-preguntas/modificar-preguntas.module').then( m => m.ModificarPreguntasPageModule)
+  },
+
 
 
 

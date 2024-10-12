@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Pregunta } from 'src/app/models/pregunta';
 import { Usuarios } from 'src/app/models/usuarios';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
@@ -17,7 +18,11 @@ export class RegistroPage implements OnInit {
     correo_usuario: "",
     contrasena: '',
     rol_id_rol: 1,
+    id_pregunta: '', // ID de la pregunta seleccionada
+    respuesta: '', // Respuesta de la pregunta de seguridad
   };
+  preguntasSeguridad: any[] = []; // Aquí se almacenarán las preguntas desde la BD
+  preguntaSeleccionada: number | null = null; // Para almacenar la pregunta seleccionada
 
   // Variables para almacenar mensajes de error
   errorNombre: string = '';
@@ -26,11 +31,21 @@ export class RegistroPage implements OnInit {
   errorTelefono: string = '';
   errorCorreo: string = '';
   errorContrasena: string = '';
+  errorPregunta: string = ''; // Mensaje de error para la pregunta
+  errorRespuesta: string = ''; // Mensaje de error para la respuesta
   errorMessage: string = '';
 
   constructor(private router: Router, private bd: ServicebdService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.listarPreguntas(); // Cargar las preguntas al inicializar
+  }
+
+  listarPreguntas() {
+    this.bd.fetchPreguntas().subscribe(preguntas => {
+      this.preguntasSeguridad = preguntas; // Almacena las preguntas obtenidas
+    });
+  }
 
   registro() {
     const email = this.arregloUsuario.correo_usuario.trim();
@@ -44,12 +59,17 @@ export class RegistroPage implements OnInit {
     this.errorTelefono = '';
     this.errorCorreo = '';
     this.errorContrasena = '';
+    this.errorPregunta = ''; // Limpiar mensaje de error de la pregunta
+    this.errorRespuesta = ''; // Limpiar mensaje de error de la respuesta
     this.errorMessage = '';
 
     let formValid = true;
 
     // Validar que no hayan campos vacíos
-    if (!this.arregloUsuario.nombre_usuario || !this.arregloUsuario.apellido_usuario || !this.arregloUsuario.carrera_usuario || !this.arregloUsuario.telefono || !this.arregloUsuario.correo_usuario || !this.arregloUsuario.contrasena) {
+    if (!this.arregloUsuario.nombre_usuario || !this.arregloUsuario.apellido_usuario || 
+        !this.arregloUsuario.carrera_usuario || !this.arregloUsuario.telefono || 
+        !this.arregloUsuario.correo_usuario || !this.arregloUsuario.contrasena || 
+        !this.preguntaSeleccionada || !this.arregloUsuario.respuesta) {
       this.errorMessage = 'Por favor, rellene todos los campos.';
       formValid = false;
     }
@@ -79,14 +99,13 @@ export class RegistroPage implements OnInit {
     }
 
     // Validar que el correo sea válido
-    
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       this.errorCorreo = 'El correo electrónico no es válido.';
       formValid = false;
-    }else if (email){
+    } else if (email) {
       this.bd.verificarEmail(email).then((usuarioEncontrado) => {
-        if (usuarioEncontrado){
-          this.errorCorreo = 'El Correo electrónico ya esta registrado en la base de datos';
+        if (usuarioEncontrado) {
+          this.errorCorreo = 'El Correo electrónico ya está registrado en la base de datos';
           formValid = false;
         }
       });
@@ -95,6 +114,20 @@ export class RegistroPage implements OnInit {
     // Validar que la contraseña cumpla con las reglas
     if (!/(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/.test(contrasena)) {
       this.errorContrasena = 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un carácter especial.';
+      formValid = false;
+    }
+
+    // Validar que se haya seleccionado una pregunta de seguridad
+    if (!this.preguntaSeleccionada) {
+      this.errorPregunta = 'Por favor, seleccione una pregunta de seguridad.';
+      formValid = false;
+    } else {
+      this.arregloUsuario.id_pregunta = this.preguntaSeleccionada; // Asignar el ID de la pregunta seleccionada
+    }
+
+    // Validar que la respuesta no esté vacía
+    if (!this.arregloUsuario.respuesta) {
+      this.errorRespuesta = 'Por favor, ingrese una respuesta a la pregunta de seguridad.';
       formValid = false;
     }
 
@@ -107,7 +140,9 @@ export class RegistroPage implements OnInit {
         this.arregloUsuario.telefono,
         this.arregloUsuario.correo_usuario,
         this.arregloUsuario.contrasena,
-        this.arregloUsuario.rol_id_rol
+        this.arregloUsuario.rol_id_rol,
+        this.arregloUsuario.id_pregunta, // Usar el ID de la pregunta seleccionada
+        this.arregloUsuario.respuesta
       );
 
       // Redirigir al login después del registro

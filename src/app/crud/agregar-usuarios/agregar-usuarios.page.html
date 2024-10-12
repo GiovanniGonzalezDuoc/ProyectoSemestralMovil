@@ -4,26 +4,55 @@
 
 <ion-content [fullscreen]="true">
   <ion-item>
-    <ion-input label="Nombre Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="nombre_usuario"></ion-input>
+    <ion-input label="Nombre Usuario" labelPlacement="floating" placeholder="Ingrese nombre"
+      [(ngModel)]="nombre_usuario"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-input label="Apellido Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="apellido_usuario"></ion-input>
+    <ion-input label="Apellido Usuario" labelPlacement="floating" placeholder="Ingrese nombre"
+      [(ngModel)]="apellido_usuario"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-input label="Carrera Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="carrera_usuario"></ion-input>
+    <ion-input label="Carrera Usuario" labelPlacement="floating" placeholder="Ingrese nombre"
+      [(ngModel)]="carrera_usuario"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-input label="Telefono Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="telefono"></ion-input>
+    <ion-input label="Telefono Usuario" labelPlacement="floating" placeholder="Ingrese nombre"
+      [(ngModel)]="telefono"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-input label="Correo Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="correo_usuario"></ion-input>
+    <ion-input label="Correo Usuario" labelPlacement="floating" placeholder="Ingrese nombre"
+      [(ngModel)]="correo_usuario"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-input label="Contrasena Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="contrasena"></ion-input>
+    <ion-input label="Contrasena Usuario" labelPlacement="floating" placeholder="Ingrese nombre"
+      [(ngModel)]="contrasena"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-input label="Rol Usuario" labelPlacement="floating" placeholder="Ingrese nombre" [(ngModel)]="rol_id_rol"></ion-input>
+    <ion-input label="Rol Usuario" labelPlacement="floating" placeholder="Ingrese nombre"
+      [(ngModel)]="rol_id_rol"></ion-input>
   </ion-item>
+  <!-- Pregunta de Seguridad -->
+  <ion-item class="input-item">
+    <ion-select 
+      [(ngModel)]="preguntaSeleccionada" 
+      label="Preguntas" 
+      labelPlacement="floating" 
+      placeholder="Seleccione Pregunta"
+      multiple="true">
+      <ion-select-option *ngFor="let preguntasSeguridad of preguntasSeguridad" [value]="preguntasSeguridad.id_pregunta">
+        {{ preguntasSeguridad.pregunta }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>   
+
+
+  <!-- Respuesta a la Pregunta -->
+  <span class="texto-label">Respuesta</span>
+  <div class="bordes-texto">
+    <ion-input class="input" [(ngModel)]="respuesta" name="respuesta" placeholder="Ingrese su Respuesta"
+      required></ion-input>
+  </div>
+
   <ion-button color="success" (click)="insertar()">Agregar Usuario</ion-button>
   <ion-button color="warning" [routerLink]="['/crud/usuarios']">Ir a Lista Usuarios</ion-button>
 </ion-content>

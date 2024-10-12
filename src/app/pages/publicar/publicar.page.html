@@ -29,7 +29,7 @@
           label="Categoría" 
           labelPlacement="floating" 
           placeholder="Seleccione Categorías"
-          multiple="true">
+          multiple="false">
           <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id_categoria">
             {{ categoria.nombre_categoria }}
           </ion-select-option>

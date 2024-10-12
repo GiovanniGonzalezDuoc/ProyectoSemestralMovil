@@ -8,4 +8,6 @@ export class Usuarios {
     contrasena!:string;
     rol_id_rol!:number;
     control_usuario_id_veto!:number
+    id_pregunta!:number;
+    respuesta!:string;
 }

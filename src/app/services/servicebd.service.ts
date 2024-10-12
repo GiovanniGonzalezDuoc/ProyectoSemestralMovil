@@ -10,6 +10,8 @@ import { Categoria } from '../models/categoria';
 import { Comentarios } from '../models/comentarios';
 import { Seguimiento } from '../models/seguimiento';
 import { Guardado } from '../models/guardado';
+import { Pregunta } from '../models/pregunta';
+import { RegistroPageRoutingModule } from '../pages/registro/registro-routing.module';
 
 
 @Injectable({
@@ -21,7 +23,8 @@ export class ServicebdService {
 
   //variables de creación de Tablas
   tablaRol: string = "CREATE TABLE IF NOT EXISTS rol (id_rol INTEGER PRIMARY KEY NOT NULL, nombre_rol TEXT NOT NULL);";
-  tablaUsuario: string = "CREATE TABLE IF NOT EXISTS usuario (id_usuario INTEGER PRIMARY KEY NOT NULL, nombre_usuario TEXT NOT NULL, apellido_usuario TEXT NOT NULL, carrera_usuario TEXT NOT NULL, telefono INTEGER NOT NULL, correo_usuario TEXT NOT NULL, contrasena TEXT NOT NULL, rol_id_rol INTEGER NOT NULL, control_usuario_id_veto INTEGER, FOREIGN KEY (rol_id_rol) REFERENCES rol(id_rol), FOREIGN KEY (control_usuario_id_veto) REFERENCES control_usuario(id_veto));";
+  tablaUsuario: string = "CREATE TABLE IF NOT EXISTS usuario (id_usuario INTEGER PRIMARY KEY NOT NULL, nombre_usuario TEXT NOT NULL, apellido_usuario TEXT NOT NULL, carrera_usuario TEXT NOT NULL, telefono INTEGER NOT NULL, correo_usuario TEXT NOT NULL, contrasena TEXT NOT NULL, rol_id_rol INTEGER NOT NULL, control_usuario_id_veto INTEGER, id_pregunta INTEGER NOT NULL, respuesta TEXT NOT NULL, FOREIGN KEY (rol_id_rol) REFERENCES rol(id_rol), FOREIGN KEY (control_usuario_id_veto) REFERENCES control_usuario(id_veto), FOREIGN KEY (id_pregunta) REFERENCES preguntas(id_pregunta));";
+  tablaPreguntas: string = "CREATE TABLE IF NOT EXISTS preguntas (id_pregunta INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, pregunta TEXT NOT NULL);";
   tablaPublicacion: string = "CREATE TABLE IF NOT EXISTS publicacion (id_publicacion INTEGER PRIMARY KEY NOT NULL, nombre_usuario_publicacion TEXT NOT NULL, titulo_publicacion TEXT NOT NULL, descripcion_publicacion TEXT NOT NULL, like_publicacion INTEGER, fecha_publicacion TEXT NOT NULL, usuario_id_usuario INTEGER, categoria_publicacion_id_categoria INTEGER, foto BLOB, FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario), FOREIGN KEY (categoria_publicacion_id_categoria) REFERENCES categoria_publicacion(id_categoria));";
   tablaControl_Usuario: string = "CREATE TABLE IF NOT EXISTS control_usuario (id_veto INTEGER PRIMARY KEY NOT NULL, tiempo_veto INTEGER NOT NULL, fecha_veto TEXT NOT NULL, motivo_veto TEXT NOT NULL, usuario_id_usuario INTEGER NOT NULL, FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario));";
   tablaComentario: string = "CREATE TABLE IF NOT EXISTS comentario (id_comentario INTEGER PRIMARY KEY NOT NULL, nombre_usuario_comentario TEXT NOT NULL, comentario_publicacion TEXT NOT NULL, publicacion_id_publicacion INTEGER NOT NULL, FOREIGN KEY (publicacion_id_publicacion) REFERENCES publicacion(id_publicacion));";
@@ -33,6 +36,7 @@ export class ServicebdService {
   registroRol: string = "INSERT or IGNORE INTO rol(id_rol,nombre_rol) VALUES (1,'usuario'), (2,'admin');";
   registroControl_Usuario: string = "INSERT or IGNORE INTO control_usuario(id_veto,tiempo_veto,fecha_veto,usuario_id_usuario) VALUES(1,7,'06/10/2024','1')"
   registroUsuario: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena) Values (2,'Giovanni','Gonzalez','Ingeniero En Informatica','37742574','juan.cristian@duocuc.cl','Tumama132$');";
+  registroAdmin: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena,rol_id_rol) Values (1,'admin','admin','Ingeniero En Informatica','37742574','admin','admin',2);";
 
   //variables para guardar los datos de las consultas en las tablas
   listadoRol = new BehaviorSubject([]);
@@ -43,6 +47,7 @@ export class ServicebdService {
   listadoComentarios = new BehaviorSubject([]);
   listadoSeguimiento = new BehaviorSubject([]);
   listadoGuardado = new BehaviorSubject([]);
+  listadoPreguntas = new BehaviorSubject([]);
 
   private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
@@ -99,6 +104,7 @@ export class ServicebdService {
       this.listarUsuario();
       this.listarCategorias();
       this.listarComentarios();
+      this.listarPreguntas();
 
       //ejecuto la creación de Tablas
       await this.database.executeSql(this.tablaRol, []);
@@ -109,12 +115,14 @@ export class ServicebdService {
       await this.database.executeSql(this.tablaComentario, []);
       await this.database.executeSql(this.tablaGuardado_Publicacion, []);
       await this.database.executeSql(this.tablaSeguimiento_Usuario, []);
+      await this.database.executeSql(this.tablaPreguntas,[]);
 
 
       //ejecuto los insert por defecto en el caso que existan
       await this.database.executeSql(this.registroRol, []);
       await this.database.executeSql(this.registroUsuario, []);
       await this.database.executeSql(this.registroControl_Usuario, []);
+      await this.database.executeSql(this.registroAdmin,[]);
 
       //modifica el estado de la Base De Datos
       await this.isDBReady.next(true);
@@ -365,6 +373,8 @@ export class ServicebdService {
             contrasena: res.rows.item(i).contrasena,
             rol_id_rol: res.rows.item(i).rol_id_rol,
             control_usuario_id_veto: res.rows.item(i).control_usuario_id_veto,
+            id_pregunta:res.rows.item(i).id_pregunta,
+            respuesta:res.rows.item(i).respuesta,
           })
       }
       this.listadoUsuarios.next(items as any);
@@ -421,8 +431,8 @@ export class ServicebdService {
     })
   }
 
-  insertarUsuario(nombre_usuario: string, apellido_usuario: string, carrera_usuario: string, telefono: number, correo_usuario: string, contrasena: string, rol_id_rol: number) {
-    return this.database.executeSql('INSERT INTO usuario(nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena,rol_id_rol,control_usuario_id_veto) VALUES (?,?,?,?,?,?,?,1)', [nombre_usuario, apellido_usuario, carrera_usuario, telefono, correo_usuario, contrasena, rol_id_rol]).then(res => {
+  insertarUsuario(nombre_usuario: string, apellido_usuario: string, carrera_usuario: string, telefono: number, correo_usuario: string, contrasena: string, rol_id_rol: number,id_pregunta:number,respuesta:string) {
+    return this.database.executeSql('INSERT INTO usuario(nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena,rol_id_rol,control_usuario_id_veto,id_pregunta,respuesta) VALUES (?,?,?,?,?,?,?,1,?,?)', [nombre_usuario, apellido_usuario, carrera_usuario, telefono, correo_usuario, contrasena, rol_id_rol,id_pregunta,respuesta]).then(res => {
       this.presentToast('bottom', 'Usuario Registrado Correctamente.')
       this.listarUsuario();
     }).catch(e => {
@@ -665,4 +675,67 @@ export class ServicebdService {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })
   }
+    //APARTADO DE Preguntas
+    fetchPreguntas(): Observable<Pregunta[]> {
+      return this.listadoPreguntas.asObservable();
+    }
+    listarPreguntas() {
+      return this.database.executeSql('SELECT * FROM preguntas', []).then(res => {
+        //variable para almacenar el rsultado de la consulta
+        let items: Pregunta[] = [];
+        //valido si trae al menos un registro
+        if (res.rows.length > 0) {
+          //recorro mi resultado
+          for (var i = 0; i < res.rows.length; i++)
+            //agrego los registros a mi lista
+            items.push({
+              id_pregunta: res.rows.item(i).id_pregunta,
+              pregunta:res.rows.item(i).pregunta
+            })
+        }
+        this.listadoPreguntas.next(items as any);
+      })
+    }
+    listarPreguntasPorId(id: number): Promise<Pregunta | null> {
+      return this.database.executeSql('SELECT * FROM preguntas WHERE id_pregunta = ?', [id]).then(res => {
+        // Verifica si se obtuvo al menos un registro
+        if (res.rows.length > 0) {
+          // Retorna la pregunta correspondiente
+          return {
+            id_pregunta: res.rows.item(0).id_pregunta,
+            pregunta: res.rows.item(0).pregunta,
+          };
+        }
+        return null; // Si no se encontró la pregunta, retorna null
+      }).catch(e => {
+        console.error('Error al listar pregunta por ID:', e);
+        return null; // Manejo de errores
+      });
+    }
+    eliminarPreguntas(id: number) {
+      return this.database.executeSql('DELETE FROM preguntas  WHERE id_pregunta = ?', [id]).then(res => {
+        this.presentAlert("Eliminar", "La Pregunta se elimino");
+        this.listarPreguntas();
+      }).catch(e => {
+        this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
+      })
+    }
+  
+    modificarPreguntas(id_pregunta:number, pregunta: string) {
+      return this.database.executeSql('UPDATE preguntas SET  pregunta = ? WHERE id_pregunta = ?', [ pregunta, id_pregunta]).then(res => {
+        this.presentAlert("Modificar", "La Pregunta se Modifico");
+        this.listarPreguntas();
+      }).catch(e => {
+        this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+      })
+    }
+  
+    insertarPreguntas(pregunta: string) {
+      return this.database.executeSql('INSERT INTO preguntas(pregunta) VALUES (?)', [pregunta]).then(res => {
+        this.presentAlert("Insertar", "La Pregunta Se Inserto Correctamente.");
+        this.listarPreguntas();
+      }).catch(e => {
+        this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
+      })
+    }
 }
