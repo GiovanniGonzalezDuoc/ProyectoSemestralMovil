@@ -1,5 +1,10 @@
 <ion-header [translucent]="true">
-  <app-header [searchText]="searchQuery"></app-header>
+  <ng-container *ngIf="rol_id_rol === 2; else NormalHeader">
+    <app-header-admin [searchText]="searchQuery"></app-header-admin>
+  </ng-container>
+  <ng-template #NormalHeader>
+    <app-header [searchText]="searchQuery"></app-header>
+  </ng-template>
 </ion-header>
 
 <ion-content [fullscreen]="true">

@@ -36,14 +36,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/ajustes/ajustes.module').then(m => m.AjustesPageModule)
   },
   {
-    path: 'admin/perfil',
-    loadChildren: () => import('./admin-pages/perfil/perfil.module').then(m => m.PerfilPageModule)
-  },
-  {
-    path: 'admin/descripcion',
-    loadChildren: () => import('./admin-pages/descripcion/descripcion.module').then(m => m.DescripcionPageModule)
-  },
-  {
     path: 'busqueda',
     loadChildren: () => import('./pages/busqueda/busqueda.module').then(m => m.BusquedaPageModule)
   },

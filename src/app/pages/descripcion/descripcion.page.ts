@@ -19,7 +19,7 @@ export class DescripcionPage implements OnInit {
   nombre_usuario: any;
   apellido_usuario: any;
   comentarios: any[] = []; // Arreglo propio para los comentarios
-
+  rol_id_rol!:number;
   constructor(private router: Router, private activedrouter: ActivatedRoute, private bd: ServicebdService, private storage: NativeStorage) {
     this.activedrouter.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation()?.extras.state) {
@@ -45,6 +45,11 @@ export class DescripcionPage implements OnInit {
       this.apellido_usuario = apellido;
     }).catch(err => {
       console.error('Error obteniendo apellido_usuario:', err);
+    });
+    this.storage.getItem('rol_id_rol').then(id => {
+      this.rol_id_rol = id;
+    }).catch(err => {
+      console.error('Error obteniendo id_usuario:', err);
     });
 
     if (this.arregloPublicacion) {

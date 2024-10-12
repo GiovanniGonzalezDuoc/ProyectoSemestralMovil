@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { AlertController, ToastController } from '@ionic/angular';
 
 @Component({
@@ -10,9 +11,15 @@ import { AlertController, ToastController } from '@ionic/angular';
 export class ContactoPage implements OnInit {
   emailsolicitado:string="";
   mensaje:string="";
-  constructor(private router:Router, private activedroute:ActivatedRoute,private alertController:AlertController,private toastcontroller:ToastController) { }
+  rol_id_rol!:number;
+  constructor(private router:Router, private activedroute:ActivatedRoute,private alertController:AlertController,private toastcontroller:ToastController, private storage:NativeStorage) { }
 
   ngOnInit() {
+    this.storage.getItem('rol_id_rol').then(id => {
+      this.rol_id_rol = id;
+    }).catch(err => {
+      console.error('Error obteniendo id_usuario:', err);
+    });
   }
 
   Contacto(){

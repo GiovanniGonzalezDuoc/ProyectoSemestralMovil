@@ -16,6 +16,7 @@ export class PublicarPage implements OnInit {
   apellido_usuario: any;
   categorias: any[] = []; // Aquí se almacenarán las categorías desde la BD
   categoriasSeleccionadas: number[] = []; // Para las categorías seleccionadas
+  rol_id_rol!:number;
 
   constructor(
     private router: Router, 
@@ -46,6 +47,11 @@ export class PublicarPage implements OnInit {
       this.apellido_usuario = apellido;
     }).catch(err => {
       console.error('Error obteniendo apellido_usuario:', err);
+    });
+    this.storage.getItem('rol_id_rol').then(id => {
+      this.rol_id_rol = id;
+    }).catch(err => {
+      console.error('Error obteniendo id_usuario:', err);
     });
   }
 

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { ToastController } from '@ionic/angular';
 
 @Component({
@@ -53,10 +54,15 @@ export class BusquedaPage implements OnInit {
       comentarios:10,
     },
   ]
-
-  constructor(private router:Router,private toastcontroller:ToastController) {}
+  rol_id_rol!:number;
+  constructor(private router:Router,private toastcontroller:ToastController, private storage:NativeStorage) {}
 
   ngOnInit() {
+    this.storage.getItem('rol_id_rol').then(id => {
+      this.rol_id_rol = id;
+    }).catch(err => {
+      console.error('Error obteniendo id_usuario:', err);
+    });
   }
   
   comentario(){

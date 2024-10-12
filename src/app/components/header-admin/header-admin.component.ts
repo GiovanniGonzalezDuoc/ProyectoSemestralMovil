@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-header-admin',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header-admin.component.scss'],
 })
 export class HeaderAdminComponent  implements OnInit {
-
+  @Input() searchText: string = '';
   constructor() { }
 
   ngOnInit() {}

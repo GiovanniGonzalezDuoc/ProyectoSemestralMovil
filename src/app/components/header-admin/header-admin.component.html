@@ -5,13 +5,13 @@
     </ion-button>
   </ion-buttons>
 
-  <ion-buttons slot="start" [routerLink]="['/admin/home']">
+  <ion-buttons slot="start" [routerLink]="['/home']">
     <ion-button class="dimension">
       <img src="assets/icon/logo.webp" alt="Logo Empresa" class="logo" />
     </ion-button>
   </ion-buttons>
 
-  <ion-searchbar placeholder="Buscar" slot="start" class="dimension"></ion-searchbar>
+  <ion-searchbar [value]="searchText" placeholder="Buscar" slot="start" class="dimension"></ion-searchbar>
 
   <ion-buttons slot="end">
     <ion-button class="dimension" [routerLink]="['/admin/crud']">
@@ -19,7 +19,7 @@
     </ion-button>
   </ion-buttons>
 
-  <ion-buttons slot="end" [routerLink]="['/admin/perfil']">
+  <ion-buttons slot="end" [routerLink]="['/perfil']">
     <ion-button class="dimension">
       <ion-icon name="person-circle-outline"></ion-icon>
     </ion-button>

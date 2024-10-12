@@ -1,5 +1,10 @@
 <ion-header [translucent]="true">
-  <app-header></app-header>
+  <ng-container *ngIf="rol_id_rol === 2; else NormalHeader">
+    <app-header-admin></app-header-admin>
+  </ng-container>
+  <ng-template #NormalHeader>
+    <app-header></app-header>
+  </ng-template>
 </ion-header>
 
 <ion-content [fullscreen]="true">
