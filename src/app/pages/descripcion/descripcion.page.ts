@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
+import { LocalNotifications } from '@capacitor/local-notifications';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
@@ -75,18 +76,18 @@ export class DescripcionPage implements OnInit {
   }
 
   handleOption(option: string, idUsuarioSeguir: number) {
-    idUsuarioSeguir = this.arregloPublicacion.usuario_id_usuario
+    idUsuarioSeguir = this.arregloPublicacion.usuario_id_usuario;
     this.closePopover();
     setTimeout(() => {
       if (option === 'option1') {
         // Eliminar post
-        if (idUsuarioSeguir = this.id_usuario){
+        if (idUsuarioSeguir === this.id_usuario) {
           this.bd.presentToast('bottom', 'El Post Se Eliminó Correctamente.');
-          this.bd.eliminarPublicacionID(this.id_usuario)
-          this.volverAlInicio(); 
-        }else{
+          this.bd.eliminarPublicacionID(this.id_usuario);
+          this.volverAlInicio();
+        } else {
           this.bd.presentToast('bottom', 'El Post No Se Eliminó Correctamente Debido a que no te pertenece.');
-          this.volverAlInicio(); 
+          this.volverAlInicio();
         }
       } else if (option === 'option2') {
         // Lógica para seguir a un usuario
@@ -95,9 +96,26 @@ export class DescripcionPage implements OnInit {
           this.bd.verificarSeguimiento(idUsuarioActual, idUsuarioSeguir).then(isFollowing => {
             if (!isFollowing) {
               // Si no lo sigue, agregar a la tabla seguimiento
-              this.bd.insertarSeguidores(idUsuarioActual, idUsuarioSeguir).then(() => {
+              this.bd.insertarSeguidores(idUsuarioActual, idUsuarioSeguir).then(async () => {
                 this.bd.presentToast('bottom', 'Se Ha Seguido Correctamente Al Usuario.');
-                this.volverAlInicio(); 
+  
+                // Enviar notificación local
+                await LocalNotifications.schedule({
+                  notifications: [
+                    {
+                      title: '¡Nuevo Seguidor!',
+                      body: `${this.nombre_usuario} te ha seguido.`,
+                      id: 1,
+                      schedule: { at: new Date(Date.now() + 1000 * 5) }, // Notificación después de 5 segundos
+                      sound: undefined, // Omitir este campo
+                      attachments: [], // O puedes dejarlo fuera si no lo usas
+                      actionTypeId: '',
+                      extra: null,
+                    },
+                  ],
+                });
+  
+                this.volverAlInicio();
               }).catch(err => {
                 console.error('Error al seguir al usuario:', err);
                 this.bd.presentToast('bottom', 'Error al seguir al usuario.');
@@ -114,9 +132,8 @@ export class DescripcionPage implements OnInit {
         });
       }
     }, 0);
-  }
+  }  
   
-
   like(idPublicacion: number) {
     // Primero, actualizamos el número de likes en la base de datos
     this.bd.aumentarLike(idPublicacion).then(() => {

@@ -18,6 +18,15 @@
   <ion-item>
     <ion-input label="Descripcion Publicacion" labelPlacement="floating" placeholder="Ingrese Descripcion" [(ngModel)]="descripcion_publicacion"></ion-input>
   </ion-item>
+  
+  <ion-item class="input-item">
+    <ion-label>Adjuntar Archivo</ion-label>
+    <ion-button fill="outline" slot="end" (click)="takePicture()">
+      <ion-icon slot="start" name="attach-outline"></ion-icon>
+      Adjuntar
+    </ion-button>
+  </ion-item>
+  
   <ion-button color="success" (click)="insertar()">Agregar Publicacion</ion-button>
   <ion-button color="warning" [routerLink]="['/crud/publicacion']">Ir a Lista Publicacion</ion-button>
 </ion-content>
