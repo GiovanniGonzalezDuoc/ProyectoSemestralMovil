@@ -47,11 +47,13 @@
 
       <ion-item class="input-item">
         <ion-label>Adjuntar Archivo</ion-label>
-        <ion-button fill="outline" slot="end">
+        <ion-button fill="outline" slot="end" (click)="takePicture()">
           <ion-icon slot="start" name="attach-outline"></ion-icon>
           Adjuntar
         </ion-button>
       </ion-item>
+      
+      <img *ngIf="foto" [src]="foto" alt="Image preview" />
 
       <div class="button-group">
         <ion-button class="color-button" (click)="publicar()">

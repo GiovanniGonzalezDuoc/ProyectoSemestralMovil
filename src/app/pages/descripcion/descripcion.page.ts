@@ -22,6 +22,9 @@ export class DescripcionPage implements OnInit {
   rol_id_rol!:number;
   idUsuarioSeguir!:number;
   id_usuario!: number;
+  fotoUrl!: string; // Nueva propiedad para almacenar la URL de la imagen
+
+  
   constructor(private router: Router, private activedrouter: ActivatedRoute, private bd: ServicebdService, private storage: NativeStorage) {
     this.activedrouter.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation()?.extras.state) {

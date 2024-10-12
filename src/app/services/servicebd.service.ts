@@ -22,7 +22,7 @@ export class ServicebdService {
   //variables de creación de Tablas
   tablaRol: string = "CREATE TABLE IF NOT EXISTS rol (id_rol INTEGER PRIMARY KEY NOT NULL, nombre_rol TEXT NOT NULL);";
   tablaUsuario: string = "CREATE TABLE IF NOT EXISTS usuario (id_usuario INTEGER PRIMARY KEY NOT NULL, nombre_usuario TEXT NOT NULL, apellido_usuario TEXT NOT NULL, carrera_usuario TEXT NOT NULL, telefono INTEGER NOT NULL, correo_usuario TEXT NOT NULL, contrasena TEXT NOT NULL, rol_id_rol INTEGER NOT NULL, control_usuario_id_veto INTEGER, FOREIGN KEY (rol_id_rol) REFERENCES rol(id_rol), FOREIGN KEY (control_usuario_id_veto) REFERENCES control_usuario(id_veto));";
-  tablaPublicacion: string = "CREATE TABLE IF NOT EXISTS publicacion (id_publicacion INTEGER PRIMARY KEY NOT NULL, nombre_usuario_publicacion TEXT NOT NULL, titulo_publicacion TEXT NOT NULL, descripcion_publicacion TEXT NOT NULL, like_publicacion INTEGER, fecha_publicacion TEXT NOT NULL, usuario_id_usuario INTEGER, categoria_publicacion_id_categoria INTEGER, FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario), FOREIGN KEY (categoria_publicacion_id_categoria) REFERENCES categoria_publicacion(id_categoria));";
+  tablaPublicacion: string = "CREATE TABLE IF NOT EXISTS publicacion (id_publicacion INTEGER PRIMARY KEY NOT NULL, nombre_usuario_publicacion TEXT NOT NULL, titulo_publicacion TEXT NOT NULL, descripcion_publicacion TEXT NOT NULL, like_publicacion INTEGER, fecha_publicacion TEXT NOT NULL, usuario_id_usuario INTEGER, categoria_publicacion_id_categoria INTEGER, foto BLOB, FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario), FOREIGN KEY (categoria_publicacion_id_categoria) REFERENCES categoria_publicacion(id_categoria));";
   tablaControl_Usuario: string = "CREATE TABLE IF NOT EXISTS control_usuario (id_veto INTEGER PRIMARY KEY NOT NULL, tiempo_veto INTEGER NOT NULL, fecha_veto TEXT NOT NULL, motivo_veto TEXT NOT NULL, usuario_id_usuario INTEGER NOT NULL, FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario));";
   tablaComentario: string = "CREATE TABLE IF NOT EXISTS comentario (id_comentario INTEGER PRIMARY KEY NOT NULL, nombre_usuario_comentario TEXT NOT NULL, comentario_publicacion TEXT NOT NULL, publicacion_id_publicacion INTEGER NOT NULL, FOREIGN KEY (publicacion_id_publicacion) REFERENCES publicacion(id_publicacion));";
   tablaCategoria_Publicacion: string = "CREATE TABLE IF NOT EXISTS categoria_publicacion (id_categoria INTEGER PRIMARY KEY NOT NULL, nombre_categoria TEXT NOT NULL);";
@@ -99,7 +99,6 @@ export class ServicebdService {
       this.listarUsuario();
       this.listarCategorias();
       this.listarComentarios();
-
 
       //ejecuto la creación de Tablas
       await this.database.executeSql(this.tablaRol, []);
@@ -195,6 +194,7 @@ export class ServicebdService {
             fecha_publicacion: res.rows.item(i).fecha_publicacion,
             usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
             categoria_publicacion_id_categoria: res.rows.item(i).categoria_publicacion_id_categoria,
+            foto: res.rows.item(i).foto
           })
       }
       this.listadoPublicacion.next(items as any);
@@ -218,6 +218,7 @@ export class ServicebdService {
             fecha_publicacion: res.rows.item(i).fecha_publicacion,
             usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
             categoria_publicacion_id_categoria: res.rows.item(i).categoria_publicacion_id_categoria,
+            foto: res.rows.item(i).foto
           })
       }
       this.listadoPublicacion.next(items as any);
@@ -238,6 +239,7 @@ export class ServicebdService {
             fecha_publicacion: res.rows.item(i).fecha_publicacion,
             usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
             categoria_publicacion_id_categoria: res.rows.item(i).categoria_publicacion_id_categoria,
+            foto: res.rows.item(i).foto
           });
         }
       }
@@ -281,8 +283,8 @@ export class ServicebdService {
     })
   }
 
-  insertarPublicacion(nombre_usuario_publicacion: string, titulo_publicacion: string, descripcion_publicacion: string, categoria_publicacion: number, usuario_id_usuario: number) {
-    return this.database.executeSql('INSERT INTO publicacion(nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,fecha_publicacion,categoria_publicacion_id_categoria,usuario_id_usuario) VALUES (?,?,?,CURRENT_TIMESTAMP,?,?)', [nombre_usuario_publicacion, titulo_publicacion, descripcion_publicacion, categoria_publicacion, usuario_id_usuario]).then(res => {
+  insertarPublicacion(nombre_usuario_publicacion: string, titulo_publicacion: string, descripcion_publicacion: string, categoria_publicacion: number, usuario_id_usuario: number, foto: Blob) {
+    return this.database.executeSql('INSERT INTO publicacion(nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,fecha_publicacion,categoria_publicacion_id_categoria,usuario_id_usuario,foto) VALUES (?,?,?,CURRENT_TIMESTAMP,?,?,?)', [nombre_usuario_publicacion, titulo_publicacion, descripcion_publicacion, categoria_publicacion, usuario_id_usuario, foto]).then(res => {
       this.presentAlert("Insertar", "Publicacion Insertado");
       this.listarPublicaciones();
     }).catch(e => {

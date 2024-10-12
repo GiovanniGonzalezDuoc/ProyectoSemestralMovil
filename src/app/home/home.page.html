@@ -40,7 +40,7 @@
 
     <ion-item lines="none">
       <ion-buttons>
-        <ion-button class="icon-dimension" (click)="like(); $event.stopPropagation();">
+        <ion-button class="icon-dimension" (click)="like(x.id_publicacion); $event.stopPropagation();">
           <ion-icon name="thumbs-up-outline"></ion-icon>
           <p>{{ x.like_publicacion }}</p>
         </ion-button>

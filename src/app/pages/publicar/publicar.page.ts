@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { ServicebdService } from 'src/app/services/servicebd.service';
+import { Camera, CameraResultType } from '@capacitor/camera';
 
 @Component({
   selector: 'app-publicar',
@@ -16,13 +17,15 @@ export class PublicarPage implements OnInit {
   apellido_usuario: any;
   categorias: any[] = []; // Aquí se almacenarán las categorías desde la BD
   categoriasSeleccionadas: number[] = []; // Para las categorías seleccionadas
-  rol_id_rol!:number;
+  rol_id_rol!: number;
+  foto!: any;
+
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private bd: ServicebdService,
     private storage: NativeStorage
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Cargar las categorías desde la BD
@@ -63,13 +66,15 @@ export class PublicarPage implements OnInit {
 
     const categoria_publicacion = this.categoriasSeleccionadas[0];
     const id_usuario = this.id_usuario;
-    
+    const foto = this.foto
+
     const publicacionData = {
       nombre_usuario_publicacion: `${this.nombre_usuario || ''} ${this.apellido_usuario || ''}`.trim(),
       titulo_publicacion: this.Titulo,
       descripcion_publicacion: this.Contenido,
       categoria_publicacion: categoria_publicacion,
-      id_usuario
+      id_usuario,
+      foto
     };
 
     // Llamada a insertarPublicacion con los argumentos requeridos
@@ -78,12 +83,28 @@ export class PublicarPage implements OnInit {
       publicacionData.titulo_publicacion,
       publicacionData.descripcion_publicacion,
       publicacionData.categoria_publicacion,
-      publicacionData.id_usuario // El quinto argumento
+      publicacionData.id_usuario, // El quinto argumento
+      publicacionData.foto
     ).then(() => {
       this.bd.presentToast('bottom', 'Se publicó correctamente.');
       this.router.navigate(['/home']);
     }).catch(err => {
       console.error(err);
     });
-  }  
+  }
+  // Función para tomar la foto
+  takePicture = async () => {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: CameraResultType.Uri
+    });
+  
+    // image.webPath will contain a path that can be set as an image src.
+    // You can access the original file using image.path, which can be
+    // passed to the Filesystem API to read the raw data of the image,
+    // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+    this.foto = image.webPath;
+  
+  };
 }

@@ -39,6 +39,7 @@
           {{ arregloPublicacion.descripcion_publicacion }}
         </span>
       </p>
+      <img *ngIf="arregloPublicacion.foto" [src]="arregloPublicacion.foto" alt="Image preview" />
     </ion-card-content>
 
     <ion-item lines="none" *ngIf="arregloPublicacion; else noData">

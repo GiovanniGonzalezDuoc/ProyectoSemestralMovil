@@ -7,4 +7,5 @@ export class Publicacion {
     fecha_publicacion!:Date;
     usuario_id_usuario!:number;
     categoria_publicacion_id_categoria!:number;
+    foto!:Blob;
 }
