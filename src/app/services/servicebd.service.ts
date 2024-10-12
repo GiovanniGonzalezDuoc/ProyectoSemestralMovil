@@ -639,7 +639,7 @@ export class ServicebdService {
   }
   eliminarGuardado(id: number) {
     return this.database.executeSql('DELETE FROM guardado_publicacion  WHERE publicacion_id_publicacion = ?', [id]).then(res => {
-      this.presentAlert("Eliminar", "Seguidores Eliminado");
+      this.presentAlert("Eliminar", "La Publicacion Guardada Se Elimino");
       this.listarSeguimiento();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
@@ -648,7 +648,7 @@ export class ServicebdService {
 
   modificarGuardado(publicacion_id_publicacion: number, usuario_id_usuario: number) {
     return this.database.executeSql('UPDATE guardado_publicacion SET publicacion_id_publicacion = ?, usuario_id_usuario = ? WHERE usuario_id_usuario = ?', [publicacion_id_publicacion, usuario_id_usuario, usuario_id_usuario]).then(res => {
-      this.presentAlert("Modificar", "Seguidores Modificado");
+      this.presentAlert("Modificar", "La Publicacion Guardada se Modifico");
       this.listarSeguimiento();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
@@ -657,7 +657,7 @@ export class ServicebdService {
 
   insertarGuardado(publicacion_id_publicacion: number, usuario_id_usuario: number) {
     return this.database.executeSql('INSERT INTO guardado_publicacion(publicacion_id_publicacion,usuario_id_usuario) VALUES (?,?)', [publicacion_id_publicacion, usuario_id_usuario]).then(res => {
-      this.presentAlert("Insertar", "Seguidores Insertado");
+      this.presentAlert("Insertar", "La Publicacion Se Guardo Correctamente.");
       this.listarSeguimiento();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
