@@ -13,7 +13,7 @@ export class RegistroPage implements OnInit {
   arregloUsuario: any = {
     nombre_usuario: "",
     apellido_usuario: "",
-    carrera_usuario: "",
+    id_carrera: '',
     telefono: '',
     correo_usuario: "",
     contrasena: '',
@@ -23,6 +23,8 @@ export class RegistroPage implements OnInit {
   };
   preguntasSeguridad: any[] = []; // Aquí se almacenarán las preguntas desde la BD
   preguntaSeleccionada: number | null = null; // Para almacenar la pregunta seleccionada
+  carreras: any[] = []; // Almacenar las carreras desde la BD
+  carreraSeleccionada!: number; // Carrera seleccionada
 
   // Variables para almacenar mensajes de error
   errorNombre: string = '';
@@ -39,11 +41,18 @@ export class RegistroPage implements OnInit {
 
   ngOnInit() {
     this.listarPreguntas(); // Cargar las preguntas al inicializar
+    this.listarCarreras();
   }
 
   listarPreguntas() {
     this.bd.fetchPreguntas().subscribe(preguntas => {
       this.preguntasSeguridad = preguntas; // Almacena las preguntas obtenidas
+    });
+  }
+
+  listarCarreras() {
+    this.bd.fetchCarreras().subscribe(carreras => {
+      this.carreras = carreras; // Almacenar las carreras obtenidas
     });
   }
 
@@ -67,7 +76,7 @@ export class RegistroPage implements OnInit {
 
     // Validar que no hayan campos vacíos
     if (!this.arregloUsuario.nombre_usuario || !this.arregloUsuario.apellido_usuario || 
-        !this.arregloUsuario.carrera_usuario || !this.arregloUsuario.telefono || 
+        !this.arregloUsuario.id_carrera || !this.arregloUsuario.telefono || 
         !this.arregloUsuario.correo_usuario || !this.arregloUsuario.contrasena || 
         !this.preguntaSeleccionada || !this.arregloUsuario.respuesta) {
       this.errorMessage = 'Por favor, rellene todos los campos.';
@@ -86,10 +95,12 @@ export class RegistroPage implements OnInit {
       formValid = false;
     }
 
-    // Validar que la carrera no contenga números ni signos
-    if (/[^a-zA-Z\s]/.test(this.arregloUsuario.carrera_usuario)) {
-      this.errorCarrera = 'La carrera no puede contener números, guiones o signos.';
+    // Validar que se haya seleccionado una pregunta de seguridad
+    if (!this.carreraSeleccionada) {
+      this.errorCarrera = 'Por favor, seleccione una carrera.';
       formValid = false;
+    } else {
+      this.arregloUsuario.id_carrera = this.carreraSeleccionada; // Asignar el ID de la pregunta seleccionada
     }
 
     // Validar que el teléfono tenga exactamente 8 dígitos
@@ -136,7 +147,7 @@ export class RegistroPage implements OnInit {
       this.bd.insertarUsuario(
         this.arregloUsuario.nombre_usuario,
         this.arregloUsuario.apellido_usuario,
-        this.arregloUsuario.carrera_usuario,
+        this.arregloUsuario.id_carrera,
         this.arregloUsuario.telefono,
         this.arregloUsuario.correo_usuario,
         this.arregloUsuario.contrasena,

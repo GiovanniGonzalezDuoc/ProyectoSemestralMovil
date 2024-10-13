@@ -11,9 +11,14 @@
     <ion-input label="Apellido Usuario" labelPlacement="floating" placeholder="Ingrese nombre"
       [(ngModel)]="apellido_usuario"></ion-input>
   </ion-item>
-  <ion-item>
-    <ion-input label="Carrera Usuario" labelPlacement="floating" placeholder="Ingrese nombre"
-      [(ngModel)]="carrera_usuario"></ion-input>
+  <!-- Campo para seleccionar la Carrera -->
+  <ion-item class="input-item">
+    <ion-select [(ngModel)]="carreraSeleccionada" label="Carrera" labelPlacement="floating"
+      placeholder="Seleccione Carrera">
+      <ion-select-option *ngFor="let carrera of carreras" [value]="carrera.id_carrera">
+        {{ carrera.nombre_carrera }}
+      </ion-select-option>
+    </ion-select>
   </ion-item>
   <ion-item>
     <ion-input label="Telefono Usuario" labelPlacement="floating" placeholder="Ingrese nombre"
@@ -33,17 +38,13 @@
   </ion-item>
   <!-- Pregunta de Seguridad -->
   <ion-item class="input-item">
-    <ion-select 
-      [(ngModel)]="preguntaSeleccionada" 
-      label="Preguntas" 
-      labelPlacement="floating" 
-      placeholder="Seleccione Pregunta"
-      multiple="true">
+    <ion-select [(ngModel)]="preguntaSeleccionada" label="Preguntas" labelPlacement="floating"
+      placeholder="Seleccione Pregunta" multiple="false">
       <ion-select-option *ngFor="let preguntasSeguridad of preguntasSeguridad" [value]="preguntasSeguridad.id_pregunta">
         {{ preguntasSeguridad.pregunta }}
       </ion-select-option>
     </ion-select>
-  </ion-item>   
+  </ion-item>
 
 
   <!-- Respuesta a la Pregunta -->

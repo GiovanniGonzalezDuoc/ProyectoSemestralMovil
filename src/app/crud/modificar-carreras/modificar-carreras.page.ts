@@ -3,26 +3,28 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
-  selector: 'app-modificar-usuarios',
-  templateUrl: './modificar-usuarios.page.html',
-  styleUrls: ['./modificar-usuarios.page.scss'],
+  selector: 'app-modificar-carreras',
+  templateUrl: './modificar-carreras.page.html',
+  styleUrls: ['./modificar-carreras.page.scss'],
 })
-export class ModificarUsuariosPage implements OnInit {
-  usuario:any;
+export class ModificarCarrerasPage implements OnInit {
+
+  carrera: any;
+
   constructor(private router:Router,private activedrouter:ActivatedRoute, private bd:ServicebdService) {
     this.activedrouter.queryParams.subscribe(res=>{
       if (this.router.getCurrentNavigation()?.extras.state){
-        this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
+        this.carrera = this.router.getCurrentNavigation()?.extras?.state?.['carrera'];
       }
     })
   }
 
   ngOnInit() {
   }
-
+  
   modificar(){
     //this.bd.presentAlert("Mod","ID: " + this.noticia.idnoticia)
-    this.bd.modificarUsuario(this.usuario.id_usuario,this.usuario.nombre_usuario,this.usuario.apellido_usuario,this.usuario.id_carrera,this.usuario.telefono,this.usuario.correo_usuario,this.usuario.contrasena,this.usuario.rol_id_rol);
+    this.bd.modificarCarrera(this.carrera.id_carrera,this.carrera.nombre_carrera);
   }
 
 }

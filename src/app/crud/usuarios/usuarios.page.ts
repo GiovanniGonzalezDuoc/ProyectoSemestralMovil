@@ -14,7 +14,7 @@ export class UsuariosPage implements OnInit {
       id_usuario:'',
       nombre_usuario:'',
       apellido_usuario:'',
-      carrera_usuario:'',
+      id_carrera:'',
       telefono:'',
       correo_usuario:'',
       contrasena:'',

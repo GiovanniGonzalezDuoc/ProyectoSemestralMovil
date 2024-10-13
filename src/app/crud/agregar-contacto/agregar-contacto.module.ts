@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { NuevaContrasenaPageRoutingModule } from './nueva-contrasena-routing.module';
+import { AgregarContactoPageRoutingModule } from './agregar-contacto-routing.module';
 
-import { NuevaContrasenaPage } from './nueva-contrasena.page';
+import { AgregarContactoPage } from './agregar-contacto.page';
 import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { ComponentsModule } from 'src/app/components/components.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    NuevaContrasenaPageRoutingModule,
+    AgregarContactoPageRoutingModule,
     ComponentsModule
   ],
-  declarations: [NuevaContrasenaPage]
+  declarations: [AgregarContactoPage]
 })
-export class NuevaContrasenaPageModule {}
+export class AgregarContactoPageModule {}

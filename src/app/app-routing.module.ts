@@ -40,10 +40,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/busqueda/busqueda.module').then(m => m.BusquedaPageModule)
   },
   {
-    path: 'admin/nueva-contrasena',
-    loadChildren: () => import('./admin-pages/nueva-contrasena/nueva-contrasena.module').then(m => m.NuevaContrasenaPageModule)
-  },
-  {
     path: 'admin/crud',
     loadChildren: () => import('./admin-pages/crud/crud.module').then( m => m.CRUDPageModule)
   },
@@ -131,6 +127,37 @@ const routes: Routes = [
     path: 'crud/modificar-preguntas',
     loadChildren: () => import('./crud/modificar-preguntas/modificar-preguntas.module').then( m => m.ModificarPreguntasPageModule)
   },
+  {
+    path: 'crud/carreras',
+    loadChildren: () => import('./crud/carreras/carreras.module').then( m => m.CarrerasPageModule)
+  },
+  {
+    path: 'crud/agregar-carreras',
+    loadChildren: () => import('./crud/agregar-carreras/agregar-carreras.module').then( m => m.AgregarCarrerasPageModule)
+  },
+  {
+    path: 'crud/modificar-carreras',
+    loadChildren: () => import('./crud/modificar-carreras/modificar-carreras.module').then( m => m.ModificarCarrerasPageModule)
+  },
+  {
+    path: 'crud/contacto',
+    loadChildren: () => import('./crud/contacto/contacto.module').then( m => m.ContactoPageModule)
+  },
+  {
+    path: 'crud/agregar-contacto',
+    loadChildren: () => import('./crud/agregar-contacto/agregar-contacto.module').then( m => m.AgregarContactoPageModule)
+  },
+  {
+    path: 'crud/modificar-contacto',
+    loadChildren: () => import('./crud/modificar-contacto/modificar-contacto.module').then( m => m.ModificarContactoPageModule)
+  },
+  {
+    path: 'agregar-carreras',
+    loadChildren: () => import('./crud/agregar-carreras/agregar-carreras.module').then( m => m.AgregarCarrerasPageModule)
+  },
+
+
+
 
 
 

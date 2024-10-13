@@ -30,12 +30,15 @@
           <p>{{ errorApellido }}</p>
         </div>
 
-        <!-- Campo Carrera -->
-        <span class="texto-label">Carrera</span>
-        <div class="bordes-texto">
-          <ion-input class="input" [(ngModel)]="arregloUsuario.carrera_usuario" name="carrera"
-            placeholder="Ingrese a qué carrera pertenece" required></ion-input>
-        </div>
+        <!-- Campo para seleccionar la Carrera -->
+        <ion-item class="input-item">
+          <ion-select [(ngModel)]="carreraSeleccionada" label="Carrera" labelPlacement="floating"
+            placeholder="Seleccione Carrera">
+            <ion-select-option *ngFor="let carrera of carreras" [value]="carrera.id_carrera">
+              {{ carrera.nombre_carrera }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
         <div *ngIf="errorCarrera" class="error-message">
           <p>{{ errorCarrera }}</p>
         </div>

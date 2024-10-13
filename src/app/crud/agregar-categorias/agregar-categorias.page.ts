@@ -16,4 +16,5 @@ export class AgregarCategoriasPage implements OnInit {
   insertar(){
     this.bd.insertarCategoria(this.nombre_categoria);
   }
+
 }

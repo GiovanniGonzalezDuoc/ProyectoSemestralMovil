@@ -11,7 +11,8 @@ import { Comentarios } from '../models/comentarios';
 import { Seguimiento } from '../models/seguimiento';
 import { Guardado } from '../models/guardado';
 import { Pregunta } from '../models/pregunta';
-import { RegistroPageRoutingModule } from '../pages/registro/registro-routing.module';
+import { Carreras } from '../models/carreras';
+import { Contacto } from '../models/contacto';
 
 
 @Injectable({
@@ -23,7 +24,9 @@ export class ServicebdService {
 
   //variables de creación de Tablas
   tablaRol: string = "CREATE TABLE IF NOT EXISTS rol (id_rol INTEGER PRIMARY KEY NOT NULL, nombre_rol TEXT NOT NULL);";
-  tablaUsuario: string = "CREATE TABLE IF NOT EXISTS usuario (id_usuario INTEGER PRIMARY KEY NOT NULL, nombre_usuario TEXT NOT NULL, apellido_usuario TEXT NOT NULL, carrera_usuario TEXT NOT NULL, telefono INTEGER NOT NULL, correo_usuario TEXT NOT NULL, contrasena TEXT NOT NULL, rol_id_rol INTEGER NOT NULL, control_usuario_id_veto INTEGER, id_pregunta INTEGER NOT NULL, respuesta TEXT NOT NULL, FOREIGN KEY (rol_id_rol) REFERENCES rol(id_rol), FOREIGN KEY (control_usuario_id_veto) REFERENCES control_usuario(id_veto), FOREIGN KEY (id_pregunta) REFERENCES preguntas(id_pregunta));";
+  tablaCarrera: string = "CREATE TABLE IF NOT EXISTS carrera (id_carrera INTEGER PRIMARY KEY NOT NULL, nombre_carrera TEXT NOT NULL);";
+  tablaUsuario: string = "CREATE TABLE IF NOT EXISTS usuario (id_usuario INTEGER PRIMARY KEY NOT NULL, nombre_usuario TEXT NOT NULL, apellido_usuario TEXT NOT NULL, id_carrera INTEGER NOT NULL, telefono INTEGER NOT NULL, correo_usuario TEXT NOT NULL, contrasena TEXT NOT NULL, rol_id_rol INTEGER NOT NULL, control_usuario_id_veto INTEGER, id_pregunta INTEGER NOT NULL, respuesta TEXT NOT NULL, FOREIGN KEY (rol_id_rol) REFERENCES rol(id_rol), FOREIGN KEY (control_usuario_id_veto) REFERENCES control_usuario(id_veto), FOREIGN KEY (id_pregunta) REFERENCES preguntas(id_pregunta), FOREIGN KEY (id_carrera) REFERENCES carrera(id_carrera));";
+  tablaContacto: string = "CREATE TABLE IF NOT EXISTS contacto (id_contacto INTEGER PRIMARY KEY NOT NULL, correo_usuario_contacto TEXT NOT NULL, mensaje_contacto TEXT NOT NULL);";
   tablaPreguntas: string = "CREATE TABLE IF NOT EXISTS preguntas (id_pregunta INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, pregunta TEXT NOT NULL);";
   tablaPublicacion: string = "CREATE TABLE IF NOT EXISTS publicacion (id_publicacion INTEGER PRIMARY KEY NOT NULL, nombre_usuario_publicacion TEXT NOT NULL, titulo_publicacion TEXT NOT NULL, descripcion_publicacion TEXT NOT NULL, like_publicacion INTEGER, fecha_publicacion TEXT NOT NULL, usuario_id_usuario INTEGER, categoria_publicacion_id_categoria INTEGER, foto BLOB, FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario), FOREIGN KEY (categoria_publicacion_id_categoria) REFERENCES categoria_publicacion(id_categoria));";
   tablaControl_Usuario: string = "CREATE TABLE IF NOT EXISTS control_usuario (id_veto INTEGER PRIMARY KEY NOT NULL, tiempo_veto INTEGER NOT NULL, fecha_veto TEXT NOT NULL, motivo_veto TEXT NOT NULL, usuario_id_usuario INTEGER NOT NULL, FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario));";
@@ -35,8 +38,8 @@ export class ServicebdService {
   //variables para los insert por defecto en nuestras tablas
   registroRol: string = "INSERT or IGNORE INTO rol(id_rol,nombre_rol) VALUES (1,'usuario'), (2,'admin');";
   registroControl_Usuario: string = "INSERT or IGNORE INTO control_usuario(id_veto,tiempo_veto,fecha_veto,usuario_id_usuario) VALUES(1,7,'06/10/2024','1')"
-  registroUsuario: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena) Values (2,'Giovanni','Gonzalez','Ingeniero En Informatica','37742574','juan.cristian@duocuc.cl','Tumama132$');";
-  registroAdmin: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena,rol_id_rol) Values (1,'admin','admin','Ingeniero En Informatica','37742574','admin','admin',2);";
+  registroUsuario: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,telefono,correo_usuario,contrasena) Values (2,'Giovanni','Gonzalez','37742574','juan.cristian@duocuc.cl','Tumama132$');";
+  registroAdmin: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,telefono,correo_usuario,contrasena,rol_id_rol) Values (1,'admin','admin','37742574','admin','admin',2);";
 
   //variables para guardar los datos de las consultas en las tablas
   listadoRol = new BehaviorSubject([]);
@@ -48,6 +51,8 @@ export class ServicebdService {
   listadoSeguimiento = new BehaviorSubject([]);
   listadoGuardado = new BehaviorSubject([]);
   listadoPreguntas = new BehaviorSubject([]);
+  listadoCarreras = new BehaviorSubject([]);
+  listadoContactos = new BehaviorSubject([]);
 
   private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
@@ -105,10 +110,17 @@ export class ServicebdService {
       this.listarCategorias();
       this.listarComentarios();
       this.listarPreguntas();
+      this.listarCarreras();
+      this.listarContactos();
+      this.listarControl();
+      this.listarSeguimiento();
+      this.listarGuardado();
 
       //ejecuto la creación de Tablas
       await this.database.executeSql(this.tablaRol, []);
+      await this.database.executeSql(this.tablaCarrera, []);
       await this.database.executeSql(this.tablaUsuario, []);
+      await this.database.executeSql(this.tablaContacto, []);
       await this.database.executeSql(this.tablaControl_Usuario, []);
       await this.database.executeSql(this.tablaCategoria_Publicacion, []);
       await this.database.executeSql(this.tablaPublicacion, []);
@@ -367,7 +379,7 @@ export class ServicebdService {
             id_usuario: res.rows.item(i).id_usuario,
             nombre_usuario: res.rows.item(i).nombre_usuario,
             apellido_usuario: res.rows.item(i).apellido_usuario,
-            carrera_usuario: res.rows.item(i).carrera_usuario,
+            id_carrera: res.rows.item(i).id_carrera,
             telefono: res.rows.item(i).telefono,
             correo_usuario: res.rows.item(i).correo_usuario,
             contrasena: res.rows.item(i).contrasena,
@@ -380,6 +392,35 @@ export class ServicebdService {
       this.listadoUsuarios.next(items as any);
     })
   }
+  listarUsuarioID(id: number): Promise<Usuarios | null> {
+    return this.database.executeSql('SELECT * FROM usuario WHERE id_usuario = ?', [id])
+      .then(res => {
+        if (res.rows.length > 0) {
+          // Si se encuentra un usuario, devolver el primer registro como un objeto
+          const usuario: Usuarios = {
+            id_usuario: res.rows.item(0).id_usuario,
+            nombre_usuario: res.rows.item(0).nombre_usuario,
+            apellido_usuario: res.rows.item(0).apellido_usuario,
+            id_carrera: res.rows.item(0).id_carrera,
+            telefono: res.rows.item(0).telefono,
+            correo_usuario: res.rows.item(0).correo_usuario,
+            contrasena: res.rows.item(0).contrasena,
+            rol_id_rol: res.rows.item(0).rol_id_rol,
+            control_usuario_id_veto: res.rows.item(0).control_usuario_id_veto,
+            id_pregunta: res.rows.item(0).id_pregunta,
+            respuesta: res.rows.item(0).respuesta,
+          };
+          return usuario;
+        } else {
+          // Si no se encuentra el usuario, devolver null
+          return null;
+        }
+      })
+      .catch(error => {
+        console.error('Error al listar usuario por ID:', error);
+        return null;
+      });
+  }  
   verificarEmail(email: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const query = 'SELECT * FROM usuario WHERE correo_usuario = ?';
@@ -396,7 +437,7 @@ export class ServicebdService {
         })
     });
   }
-  verificarRespuesta(correo_usuario:string,preguntaId: number, respuesta: string): Promise<boolean> {
+  verificarRespuesta(correo_usuario: string, preguntaId: number, respuesta: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const query = 'SELECT * FROM usuario WHERE correo_usuario = ? AND id_pregunta = ? AND respuesta = ?';
       this.database.executeSql(query, [correo_usuario, preguntaId, respuesta])
@@ -439,14 +480,31 @@ export class ServicebdService {
     })
   }
 
-  modificarUsuario(id: number, nombre_usuario: string, apellido_usuario: string, carrera_usuario: string, telefono: number, correo_usuario: string, contrasena: string, rol_id_rol: number) {
-    return this.database.executeSql('UPDATE usuario SET nombre_usuario = ?, apellido_usuario = ?, carrera_usuario = ?, telefono = ?, correo_usuario = ?, contrasena = ?, rol_id_rol = ? WHERE id_usuario = ?', [nombre_usuario, apellido_usuario, carrera_usuario, telefono, correo_usuario, contrasena, rol_id_rol, id]).then(res => {
+  modificarUsuario(id: number, nombre_usuario: string, apellido_usuario: string, id_carrera: number, telefono: number, correo_usuario: string, contrasena: string, rol_id_rol: number) {
+    return this.database.executeSql('UPDATE usuario SET nombre_usuario = ?, apellido_usuario = ?, id_carrera = ?, telefono = ?, correo_usuario = ?, contrasena = ?, rol_id_rol = ? WHERE id_usuario = ?', [nombre_usuario, apellido_usuario, id_carrera, telefono, correo_usuario, contrasena, rol_id_rol, id]).then(res => {
       this.presentAlert("Modificar", "Usuario Modificado");
       this.listarUsuario();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
     })
   }
+  modificarInformacion(id: number, id_carrera: number,correo_usuario: string, telefono: number) {
+    return this.database.executeSql('UPDATE usuario SET id_carrera = ?, correo_usuario = ?, telefono = ?  WHERE id_usuario = ?', [ id_carrera, correo_usuario, telefono, id]).then(res => {
+      this.presentAlert("Modificar", "Usuario Modificado");
+      this.listarUsuario();
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+    })
+  }
+  modificarContra(id: number, contrasena: string) {
+    return this.database.executeSql('UPDATE usuario SET contrasena = ?  WHERE id_usuario = ?', [contrasena, id]).then(res => {
+      this.presentAlert("Modificar", "Usuario Modificado");
+      this.listarUsuario();
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
   modificarContrasena(correo_usuario: string, contrasena: string) {
     return this.database.executeSql('UPDATE usuario SET contrasena = ? WHERE correo_usuario = ?', [contrasena, correo_usuario]).then(res => {
       this.presentAlert("Modificar", "Usuario Modificado");
@@ -456,8 +514,8 @@ export class ServicebdService {
     })
   }
 
-  insertarUsuario(nombre_usuario: string, apellido_usuario: string, carrera_usuario: string, telefono: number, correo_usuario: string, contrasena: string, rol_id_rol: number, id_pregunta: number, respuesta: string) {
-    return this.database.executeSql('INSERT INTO usuario(nombre_usuario,apellido_usuario,carrera_usuario,telefono,correo_usuario,contrasena,rol_id_rol,control_usuario_id_veto,id_pregunta,respuesta) VALUES (?,?,?,?,?,?,?,1,?,?)', [nombre_usuario, apellido_usuario, carrera_usuario, telefono, correo_usuario, contrasena, rol_id_rol, id_pregunta, respuesta]).then(res => {
+  insertarUsuario(nombre_usuario: string, apellido_usuario: string, id_carrera: number, telefono: number, correo_usuario: string, contrasena: string, rol_id_rol: number, id_pregunta: number, respuesta: string) {
+    return this.database.executeSql('INSERT INTO usuario(nombre_usuario,apellido_usuario,id_carrera,telefono,correo_usuario,contrasena,rol_id_rol,control_usuario_id_veto,id_pregunta,respuesta) VALUES (?,?,?,?,?,?,?,1,?,?)', [nombre_usuario, apellido_usuario, id_carrera, telefono, correo_usuario, contrasena, rol_id_rol, id_pregunta, respuesta]).then(res => {
       this.presentToast('bottom', 'Usuario Registrado Correctamente.')
       this.listarUsuario();
     }).catch(e => {
@@ -758,6 +816,134 @@ export class ServicebdService {
   insertarPreguntas(pregunta: string) {
     return this.database.executeSql('INSERT INTO preguntas(pregunta) VALUES (?)', [pregunta]).then(res => {
       this.presentAlert("Insertar", "La Pregunta Se Inserto Correctamente.");
+      this.listarPreguntas();
+    }).catch(e => {
+      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
+    })
+  }
+  //APARTADO DE Carreras
+  fetchCarreras(): Observable<Carreras[]> {
+    return this.listadoCarreras.asObservable();
+  }
+  listarCarreras() {
+    return this.database.executeSql('SELECT * FROM carrera ', []).then(res => {
+      //variable para almacenar el rsultado de la consulta
+      let items: Carreras[] = [];
+      //valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        //recorro mi resultado
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
+            id_carrera: res.rows.item(i).id_carrera,
+            nombre_carrera: res.rows.item(i).nombre_carrera
+          })
+      }
+      this.listadoCarreras.next(items as any);
+    })
+  }
+  listarCarrerasId(id: number): Promise<Carreras | null> {
+    return this.database.executeSql('SELECT * FROM carrera WHERE id_carrera = ?', [id]).then(res => {
+      // Verifica si se obtuvo al menos un registro
+      if (res.rows.length > 0) {
+        // Retorna la pregunta correspondiente
+        return {
+          id_carrera: res.rows.item(0).id_carrera,
+          nombre_carrera: res.rows.item(0).nombre_carrera,
+        };
+      }
+      return null; // Si no se encontró la pregunta, retorna null
+    }).catch(e => {
+      console.error('Error al listar Carrera por ID:', e);
+      return null; // Manejo de errores
+    });
+  }
+  eliminarCarrera(id: number) {
+    return this.database.executeSql('DELETE FROM carrera  WHERE id_carrera = ?', [id]).then(res => {
+      this.presentAlert("Eliminar", "La Carrera se elimino");
+      this.listarPreguntas();
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  modificarCarrera(id_carrera: number, nombre_carrera: string) {
+    return this.database.executeSql('UPDATE carrera SET  nombre_carrera = ? WHERE id_carrera = ?', [nombre_carrera, id_carrera]).then(res => {
+      this.presentAlert("Modificar", "La Carrera se Modifico");
+      this.listarPreguntas();
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  insertarCarrera(nombre_carrera: string) {
+    return this.database.executeSql('INSERT INTO carrera(nombre_carrera) VALUES (?)', [nombre_carrera]).then(res => {
+      this.presentAlert("Insertar", "La Carrera Se Inserto Correctamente.");
+      this.listarPreguntas();
+    }).catch(e => {
+      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
+    })
+  }
+  //APARTADO DE Contacto
+  fetchContacto(): Observable<Contacto[]> {
+    return this.listadoContactos.asObservable();
+  }
+  listarContactos() {
+    return this.database.executeSql('SELECT * FROM contacto', []).then(res => {
+      //variable para almacenar el rsultado de la consulta
+      let items: Contacto[] = [];
+      //valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        //recorro mi resultado
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
+            id_contacto: res.rows.item(i).id_contacto,
+            correo_usuario_contacto: res.rows.item(i).correo_usuario_contacto,
+            mensaje_contacto: res.rows.item(i).mensaje_contacto
+          })
+      }
+      this.listadoContactos.next(items as any);
+    })
+  }
+  listarContactoId(id: number): Promise<Contacto | null> {
+    return this.database.executeSql('SELECT * FROM contacto WHERE id_contacto = ?', [id]).then(res => {
+      // Verifica si se obtuvo al menos un registro
+      if (res.rows.length > 0) {
+        // Retorna la pregunta correspondiente
+        return {
+          id_contacto: res.rows.item(0).id_contacto,
+          correo_usuario_contacto: res.rows.item(0).correo_usuario_contacto,
+          mensaje_contacto: res.rows.item(0).mensaje_contacto
+        };
+      }
+      return null; // Si no se encontró la pregunta, retorna null
+    }).catch(e => {
+      console.error('Error al listar contacto por ID:', e);
+      return null; // Manejo de errores
+    });
+  }
+  eliminarContacto(id: number) {
+    return this.database.executeSql('DELETE FROM contacto  WHERE id_contacto = ?', [id]).then(res => {
+      this.presentAlert("Eliminar", "La Contacto se elimino");
+      this.listarPreguntas();
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  modificarContacto(id_contacto: number, correo_usuario_contacto: string, mensaje_contacto :string) {
+    return this.database.executeSql('UPDATE contacto SET  correo_usuario_contacto = ?, mensaje_contacto = ? WHERE id_contacto = ?', [correo_usuario_contacto,mensaje_contacto, id_contacto]).then(res => {
+      this.presentAlert("Modificar", "La Contacto se Modifico");
+      this.listarPreguntas();
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  insertarContacto(correo_usuario_contacto: string,mensaje_contacto :string) {
+    return this.database.executeSql('INSERT INTO contacto(correo_usuario_contacto,mensaje_contacto) VALUES (?,?)', [correo_usuario_contacto,mensaje_contacto]).then(res => {
+      this.presentAlert("Insertar", "La Contacto Se Inserto Correctamente.");
       this.listarPreguntas();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
