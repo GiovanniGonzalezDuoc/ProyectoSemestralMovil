@@ -944,7 +944,6 @@ export class ServicebdService {
 
   insertarContacto(correo_usuario_contacto: string,mensaje_contacto :string) {
     return this.database.executeSql('INSERT INTO contacto(correo_usuario_contacto,mensaje_contacto) VALUES (?,?)', [correo_usuario_contacto,mensaje_contacto]).then(res => {
-      this.presentAlert("Insertar", "La Contacto Se Inserto Correctamente.");
       this.listarPreguntas();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
