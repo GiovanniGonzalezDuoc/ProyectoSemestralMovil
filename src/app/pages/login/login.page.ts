@@ -33,14 +33,9 @@ export class LoginPage implements OnInit {
           this.storage.setItem('nombre_usuario',usuarioEncontrado.nombre_usuario);
           this.storage.setItem('apellido_usuario',usuarioEncontrado.apellido_usuario);
           this.storage.setItem('rol_id_rol',usuarioEncontrado.rol_id_rol);
+          this.storage.setItem('correo_usuario',usuarioEncontrado.correo_usuario)
           this.router.navigate(['/home']);
           this.bd.presentToast('bottom','El Usuario Se Ingreso Correctamente');
-        } else {
-          // Mostrar una alerta de error si el usuario no es encontrado
-          this.bd.presentAlert(
-            'Email o Contraseña Incorrecta',
-            'Por favor ingrese un Email o Contraseña válidos'
-          );
         }
       }).catch(err => {
         // Manejo de errores de la consulta

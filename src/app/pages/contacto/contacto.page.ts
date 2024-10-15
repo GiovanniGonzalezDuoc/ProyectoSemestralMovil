@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
-import { AlertController, ToastController } from '@ionic/angular';
+import { LocalNotifications } from '@capacitor/local-notifications';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
   selector: 'app-contacto',
@@ -9,42 +10,71 @@ import { AlertController, ToastController } from '@ionic/angular';
   styleUrls: ['./contacto.page.scss'],
 })
 export class ContactoPage implements OnInit {
-  emailsolicitado:string="";
-  mensaje:string="";
-  rol_id_rol!:number;
-  constructor(private router:Router, private activedroute:ActivatedRoute,private alertController:AlertController,private toastcontroller:ToastController, private storage:NativeStorage) { }
+  emailsolicitado: string = "";
+  mensaje: string = "";
+  rol_id_rol!: number;
+  nombre_usuario: string = "";
+  nombre: string = "";
+  apellido: string = "";
+
+  constructor(
+    private router: Router,
+    private storage: NativeStorage,
+    private bd: ServicebdService
+  ) {}
 
   ngOnInit() {
+    // Recuperar datos almacenados del usuario
     this.storage.getItem('rol_id_rol').then(id => {
       this.rol_id_rol = id;
     }).catch(err => {
-      console.error('Error obteniendo id_usuario:', err);
+      console.error('Error obteniendo rol_id_rol:', err);
+    });
+
+    this.storage.getItem('correo_usuario').then(correo => {
+      this.emailsolicitado = correo;
+    }).catch(err => {
+      console.error('Error obteniendo correo_usuario:', err);
+    });
+
+    this.storage.getItem('nombre_usuario').then(nombre => {
+      this.nombre = nombre;
+    }).catch(err => {
+      this.bd.presentAlert('Error obteniendo nombre_usuario:', err);
+    });
+    
+    this.storage.getItem('apellido_usuario').then(apellido => {
+      this.apellido = apellido;
+    }).catch(err => {
+      this.bd.presentAlert('Error obteniendo apellido_usuario:', err);
+    });
+
+  }
+
+  Contacto() {
+    this.bd.insertarContacto(this.emailsolicitado, this.mensaje).then(async () => {
+      this.bd.presentToast('bottom', 'Se Ha Enviado Correctamente El Mensaje.');
+
+      // Enviar notificación local
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: '¡Mensaje A Administrador!',
+            body: `${this.nombre} ${this.apellido} te ha mandado un mensaje de contacto.`,
+            id: 1,
+            schedule: { at: new Date(Date.now() + 1000 * 5) }, // Notificación después de 5 segundos
+          },
+        ],
+      });
+
+      this.volverAlInicio();
+    }).catch(err => {
+      console.error('Error al enviar el mensaje:', err);
+      this.bd.presentToast('bottom', 'Error al enviar el mensaje.');
     });
   }
 
-  Contacto(){
+  volverAlInicio() {
     this.router.navigate(['/home']);
-    this.presentToast('bottom','Se Envio Correctamente El Mensaje Al Administrador.')
   }
-
-  async presentAlert(titulo: string, msj: string) {
-    const alert = await this.alertController.create({
-      header: titulo,
-      message: msj,
-      buttons: ['ok'],
-    });
-
-    await alert.present();
-  }
-
-  async presentToast(position: 'top' | 'middle' | 'bottom',text:string) { //posición
-    const toast = await this.toastcontroller.create({
-      message: text,
-      duration: 1500,
-      position: position,
-    });
-
-    await toast.present();
-  }
-
 }

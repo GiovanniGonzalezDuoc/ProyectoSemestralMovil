@@ -455,13 +455,14 @@ export class ServicebdService {
     });
   }
   recopilarDatos(email: string, contrasena: string) {
-    return this.database.executeSql('SELECT id_usuario,nombre_usuario,apellido_usuario,rol_id_rol FROM usuario WHERE correo_usuario = ? AND contrasena = ?', [email, contrasena]).then(res => {
+    return this.database.executeSql('SELECT id_usuario,nombre_usuario,apellido_usuario,rol_id_rol,correo_usuario FROM usuario WHERE correo_usuario = ? AND contrasena = ?', [email, contrasena]).then(res => {
       if (res.rows.length > 0) {
         const id_usuario = res.rows.item(0).id_usuario;
         const nombre_usuario = res.rows.item(0).nombre_usuario;
         const apellido_usuario = res.rows.item(0).apellido_usuario;
         const rol_id_rol = res.rows.item(0).rol_id_rol
-        return { id_usuario, nombre_usuario, apellido_usuario, rol_id_rol }; // Retorna los datos si se verifica correctamente
+        const correo_usuario = res.rows.item(0).correo_usuario
+        return { id_usuario, nombre_usuario, apellido_usuario, rol_id_rol,correo_usuario }; // Retorna los datos si se verifica correctamente
       } else {
         this.presentAlert("Login", "Credenciales incorrectas. Intente de nuevo.");
         return null; // No se encontró el usuario
