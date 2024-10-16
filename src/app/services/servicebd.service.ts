@@ -197,7 +197,38 @@ export class ServicebdService {
     return this.listadoPublicacion.asObservable();
   }
   listarPublicaciones() {
-    return this.database.executeSql('SELECT * FROM publicacion', []).then(res => {
+    return this.database.executeSql(
+      'SELECT * FROM publicacion ORDER BY fecha_publicacion DESC', // Ordenar por fecha de manera descendente
+      []
+    ).then(res => {
+      // Variable para almacenar el resultado de la consulta
+      let items: Publicacion[] = [];
+      // Verifico si hay al menos un registro
+      if (res.rows.length > 0) {
+        // Recorro los resultados
+        for (var i = 0; i < res.rows.length; i++) {
+          // Agrego los registros a mi lista
+          items.push({
+            id_publicacion: res.rows.item(i).id_publicacion,
+            nombre_usuario_publicacion: res.rows.item(i).nombre_usuario_publicacion,
+            titulo_publicacion: res.rows.item(i).titulo_publicacion,
+            descripcion_publicacion: res.rows.item(i).descripcion_publicacion,
+            like_publicacion: res.rows.item(i).like_publicacion,
+            fecha_publicacion: res.rows.item(i).fecha_publicacion,
+            usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
+            categoria_publicacion_id_categoria: res.rows.item(i).categoria_publicacion_id_categoria,
+            foto: res.rows.item(i).foto
+          });
+        }
+      }
+      // Actualizo la lista de publicaciones
+      this.listadoPublicacion.next(items as any);
+    }).catch(err => {
+      console.error('Error al listar las publicaciones:', err);
+    });
+  }
+  listarPublicacionesID(id: number) {
+    return this.database.executeSql('SELECT * FROM publicacion WHERE usuario_id_usuario= ?', [id]).then(res => {
       //variable para almacenar el rsultado de la consulta
       let items: Publicacion[] = [];
       //valido si trae al menos un registro
@@ -218,10 +249,11 @@ export class ServicebdService {
           })
       }
       this.listadoPublicacion.next(items as any);
+      return this.listarPublicaciones();
     })
   }
-  listarPublicacionesID(id: number) {
-    return this.database.executeSql('SELECT * FROM publicacion WHERE usuario_id_usuario= ?', [id]).then(res => {
+  listarPublicacionesCategoria(id: number) {
+    return this.database.executeSql('SELECT * FROM publicacion WHERE categoria_publicacion_id_categoria= ?', [id]).then(res => {
       //variable para almacenar el rsultado de la consulta
       let items: Publicacion[] = [];
       //valido si trae al menos un registro
@@ -420,7 +452,7 @@ export class ServicebdService {
         console.error('Error al listar usuario por ID:', error);
         return null;
       });
-  }  
+  }
   verificarEmail(email: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const query = 'SELECT * FROM usuario WHERE correo_usuario = ?';
@@ -462,7 +494,7 @@ export class ServicebdService {
         const apellido_usuario = res.rows.item(0).apellido_usuario;
         const rol_id_rol = res.rows.item(0).rol_id_rol
         const correo_usuario = res.rows.item(0).correo_usuario
-        return { id_usuario, nombre_usuario, apellido_usuario, rol_id_rol,correo_usuario }; // Retorna los datos si se verifica correctamente
+        return { id_usuario, nombre_usuario, apellido_usuario, rol_id_rol, correo_usuario }; // Retorna los datos si se verifica correctamente
       } else {
         this.presentAlert("Login", "Credenciales incorrectas. Intente de nuevo.");
         return null; // No se encontró el usuario
@@ -489,8 +521,8 @@ export class ServicebdService {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
     })
   }
-  modificarInformacion(id: number, id_carrera: number,correo_usuario: string, telefono: number) {
-    return this.database.executeSql('UPDATE usuario SET id_carrera = ?, correo_usuario = ?, telefono = ?  WHERE id_usuario = ?', [ id_carrera, correo_usuario, telefono, id]).then(res => {
+  modificarInformacion(id: number, id_carrera: number, correo_usuario: string, telefono: number) {
+    return this.database.executeSql('UPDATE usuario SET id_carrera = ?, correo_usuario = ?, telefono = ?  WHERE id_usuario = ?', [id_carrera, correo_usuario, telefono, id]).then(res => {
       this.presentAlert("Modificar", "Usuario Modificado");
       this.listarUsuario();
     }).catch(e => {
@@ -646,20 +678,86 @@ export class ServicebdService {
   }
   listarSeguimiento() {
     return this.database.executeSql('SELECT * FROM seguimiento_usuario', []).then(res => {
-      //variable para almacenar el rsultado de la consulta
       let items: Seguimiento[] = [];
-      //valido si trae al menos un registro
       if (res.rows.length > 0) {
-        //recorro mi resultado
-        for (var i = 0; i < res.rows.length; i++)
-          //agrego los registros a mi lista
-          items.push({
+        for (var i = 0; i < res.rows.length; i++) {
+          let seguimiento = {
             usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
             seguimiento_id_seguimiento: res.rows.item(i).seguimiento_id_seguimiento,
-          })
+          };
+          items.push(seguimiento);
+
+          // Log para verificar los datos obtenidos
+          console.log('Registro de seguimiento encontrado:', seguimiento);
+        }
       }
-      this.listadoComentarios.next(items as any);
-    })
+      // Actualizar el observable con los elementos obtenidos
+      this.listadoSeguimiento.next(items as any);
+      return items;
+    }).catch(err => {
+      console.error('Error listando seguimiento:', err);
+    });
+  }
+  listarSeguimientos(id_usuario: number): Promise<any[]> {
+    const query = `
+      SELECT s.id_seguido 
+      FROM seguimiento_usuario s 
+      WHERE s.id_seguidor = ?`;
+  
+    return this.database
+      .executeSql(query, [id_usuario])
+      .then(async (res) => {
+        let seguidores: any[] = [];
+        for (let i = 0; i < res.rows.length; i++) {
+          const seguidoId = res.rows.item(i).id_seguido;
+          
+          // Llamamos a listarUsuarioID para obtener los datos completos del usuario seguido
+          const usuario = await this.listarUsuarioID(seguidoId);
+          
+          if (usuario) {
+            seguidores.push({
+              id: usuario.id_usuario,
+              nombre: usuario.nombre_usuario,
+              apellido: usuario.apellido_usuario,
+            });
+          }
+        }
+        return seguidores; // Devolvemos la lista de seguidores con sus datos completos
+      })
+      .catch(error => {
+        console.error('Error al listar seguimientos:', error);
+        return [];
+      });
+  }  
+  // Función para obtener el número de seguidores
+  obtenerSeguidores(id_usuario: number): Promise<number> {
+    return this.database.executeSql(
+      'SELECT COUNT(*) as total FROM seguimiento_usuario WHERE seguimiento_id_seguimiento = ?',
+      [id_usuario]
+    ).then(res => {
+      if (res.rows.length > 0) {
+        return res.rows.item(0).total; // Devuelve el número de seguidores
+      }
+      return 0; // Si no hay seguidores, devuelve 0
+    }).catch(err => {
+      console.error('Error obteniendo seguidores:', err);
+      return 0; // En caso de error, devuelve 0
+    });
+  }
+  // Función para obtener el número de usuarios que el usuario actual sigue
+  obtenerSeguidos(id_usuario: number): Promise<number> {
+    return this.database.executeSql(
+      'SELECT COUNT(*) as total FROM seguimiento_usuario WHERE usuario_id_usuario = ?',
+      [id_usuario]
+    ).then(res => {
+      if (res.rows.length > 0) {
+        return res.rows.item(0).total; // Devuelve el número de seguidos
+      }
+      return 0; // Si no hay seguidos, devuelve 0
+    }).catch(err => {
+      console.error('Error obteniendo seguidos:', err);
+      return 0; // En caso de error, devuelve 0
+    });
   }
   verificarSeguimiento(usuario_id_usuario: number, seguimiento_id_seguimiento: number): Promise<boolean> {
     return this.database.executeSql(
@@ -933,8 +1031,8 @@ export class ServicebdService {
     })
   }
 
-  modificarContacto(id_contacto: number, correo_usuario_contacto: string, mensaje_contacto :string) {
-    return this.database.executeSql('UPDATE contacto SET  correo_usuario_contacto = ?, mensaje_contacto = ? WHERE id_contacto = ?', [correo_usuario_contacto,mensaje_contacto, id_contacto]).then(res => {
+  modificarContacto(id_contacto: number, correo_usuario_contacto: string, mensaje_contacto: string) {
+    return this.database.executeSql('UPDATE contacto SET  correo_usuario_contacto = ?, mensaje_contacto = ? WHERE id_contacto = ?', [correo_usuario_contacto, mensaje_contacto, id_contacto]).then(res => {
       this.presentAlert("Modificar", "La Contacto se Modifico");
       this.listarPreguntas();
     }).catch(e => {
@@ -942,8 +1040,8 @@ export class ServicebdService {
     })
   }
 
-  insertarContacto(correo_usuario_contacto: string,mensaje_contacto :string) {
-    return this.database.executeSql('INSERT INTO contacto(correo_usuario_contacto,mensaje_contacto) VALUES (?,?)', [correo_usuario_contacto,mensaje_contacto]).then(res => {
+  insertarContacto(correo_usuario_contacto: string, mensaje_contacto: string) {
+    return this.database.executeSql('INSERT INTO contacto(correo_usuario_contacto,mensaje_contacto) VALUES (?,?)', [correo_usuario_contacto, mensaje_contacto]).then(res => {
       this.listarPreguntas();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));

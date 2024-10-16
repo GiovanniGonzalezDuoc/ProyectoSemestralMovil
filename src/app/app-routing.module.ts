@@ -152,7 +152,7 @@ const routes: Routes = [
     loadChildren: () => import('./crud/modificar-contacto/modificar-contacto.module').then( m => m.ModificarContactoPageModule)
   },
   {
-    path: 'agregar-carreras',
+    path: 'crud/agregar-carreras',
     loadChildren: () => import('./crud/agregar-carreras/agregar-carreras.module').then( m => m.AgregarCarrerasPageModule)
   },
 
