@@ -9,14 +9,7 @@
     </ion-button>
   </ion-buttons>
 
-  <ion-item class="input-item">
-    <ion-select [(ngModel)]="categoriasSeleccionadas" label="Categoría" labelPlacement="floating"
-      placeholder="Seleccione Categorías" multiple="false">
-      <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id_categoria">
-        {{ categoria.nombre_categoria }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
+  <ion-searchbar [value]="searchText" placeholder="Buscar" slot="start" class="dimension"></ion-searchbar>
 
   <ion-buttons slot="end">
     <ion-button class="dimension" [routerLink]="['/publicar']">

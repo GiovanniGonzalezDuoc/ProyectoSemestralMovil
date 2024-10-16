@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
@@ -96,5 +96,13 @@ export class PerfilPage implements OnInit {
 
   openContact() {
     this.router.navigate(['/contacto']);
+  }
+  descripcion(x: any) {
+    let navigationExtras: NavigationExtras = {
+      state: {
+        publicacion: x 
+      }
+    };
+    this.router.navigate(['/descripcion'], navigationExtras);
   }
 }

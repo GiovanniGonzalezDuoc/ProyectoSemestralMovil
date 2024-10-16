@@ -1,5 +1,5 @@
 <ion-app>
-  <!-- Menú Lateral -->
+  
   <ion-menu side="start" menuId="first" contentId="main-content" type="reveal">
     <ion-header>
       <ion-toolbar class="color-menu">
@@ -9,61 +9,44 @@
     </ion-header>
 
     <ion-content>
-      <ion-list>
-        <!-- Perfil del Usuario -->
+      <ion-list *ngFor="let dato of Perfiles">
+        
         <ion-item lines="none" class="menu-header" [routerLink]="['/perfil']">
           <ion-avatar slot="start">
-            <img [src]="fotoPredeterminada" alt="User Avatar" />
+            <img [src]="dato.foto" alt="User Avatar">
           </ion-avatar>
           <ion-label>
-            <h2>Bienvenido, {{ nombre_usuario }} {{ apellido_usuario }}</h2>
+            <h2>Bienvenido,{{dato.nombreperfil}}</h2>
             <p>Tu perfil</p>
           </ion-label>
         </ion-item>
 
-        <!-- Seguidores en el Menú -->
+       
         <ion-list-header>
-          <ion-label>Gente que sigues</ion-label>
+          <ion-label [routerLink]="['/perfil']">Gente que sigues</ion-label>
         </ion-list-header>
+        <ion-item *ngFor="let persona of personasSiguiendo" >
+          <ion-avatar slot="start">
+            <img [src]="dato.foto" alt="User Avatar">
+          </ion-avatar>
+          {{ persona.nombre }}
+        </ion-item>
 
-        <ion-searchbar [(ngModel)]="searchTerm" placeholder="Buscar seguidor"></ion-searchbar>
-
-        <ng-container *ngIf="personasSiguiendo.length > 0; else noFollowers">
-          <ion-item *ngFor="let persona of filteredFollowers()">
-            <ion-avatar slot="start">
-              <img [src]="persona.foto" alt="User Avatar" />
-            </ion-avatar>
-            {{ persona.nombre }}
-          </ion-item>
-        </ng-container>
-
-        <ng-template #noFollowers>
-          <ion-item lines="none">
-            <ion-label>No sigues a nadie aún.</ion-label>
-          </ion-item>
-        </ng-template>
-
-        <!-- Categorías en el Menú -->
-        <ion-list-header [routerLink]="['/busqueda']" routerDirection="forward">
+       
+        <ion-list-header [routerLink]="['/busqueda']">
           <ion-label>Categorías</ion-label>
         </ion-list-header>
-
-        <!-- Buscador de Categorías -->
-        <ion-searchbar [(ngModel)]="searchCategoria" placeholder="Buscar categoría"></ion-searchbar>
-
-        <ng-container *ngIf="categorias.length > 0; else noCategories">
-          <ion-item *ngFor="let categoria of filteredCategorias()">
-            {{ categoria.nombre_categoria }}
-          </ion-item>
-        </ng-container>
-
-        <ng-template #noCategories>
-          <ion-item lines="none">
-            <ion-label>No hay categorías disponibles.</ion-label>
-          </ion-item>
-        </ng-template>
-        
+        <ion-item *ngFor="let categoria of categorias" >
+          <ion-avatar slot="start">
+            <img [src]="categoria.foto" alt="User Avatar">
+          </ion-avatar>
+          {{ categoria.nombre }}
+        </ion-item>
       </ion-list>
+
+      <ion-list-header [routerLink]="['/admin/home']">
+        <ion-label>Admin Views</ion-label>
+      </ion-list-header>
     </ion-content>
   </ion-menu>
 

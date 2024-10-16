@@ -9,7 +9,6 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
 })
 export class HeaderComponent  implements OnInit {
 
-
   @Input() searchText:string = '';
 
   constructor(private router:Router,private bd:ServicebdService) {}
