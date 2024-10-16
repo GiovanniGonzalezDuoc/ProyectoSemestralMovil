@@ -104,5 +104,11 @@ export class HomePage {
     };
     this.router.navigate(['/descripcion'], navigationExtras);
   }
+  navigateToHome() {
+    this.router.navigate(['/home']);
+  }
 
+  navigateToNoticias() {
+    this.router.navigate(['/noticias']);
+  }
 }

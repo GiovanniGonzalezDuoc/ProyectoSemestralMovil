@@ -152,12 +152,13 @@ const routes: Routes = [
     loadChildren: () => import('./crud/modificar-contacto/modificar-contacto.module').then( m => m.ModificarContactoPageModule)
   },
   {
-    path: 'crud/agregar-carreras',
-    loadChildren: () => import('./crud/agregar-carreras/agregar-carreras.module').then( m => m.AgregarCarrerasPageModule)
-  },  {
     path: 'noticias',
     loadChildren: () => import('./pages/noticias/noticias.module').then( m => m.NoticiasPageModule)
+  },  {
+    path: 'descripcion-noticias',
+    loadChildren: () => import('./pages/descripcion-noticias/descripcion-noticias.module').then( m => m.DescripcionNoticiasPageModule)
   },
+
 
 
 

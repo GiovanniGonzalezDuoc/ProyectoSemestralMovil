@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { NoticiasPageRoutingModule } from './noticias-routing.module';
+import { DescripcionNoticiasPageRoutingModule } from './descripcion-noticias-routing.module';
 
-import { NoticiasPage } from './noticias.page';
+import { DescripcionNoticiasPage } from './descripcion-noticias.page';
 import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { ComponentsModule } from 'src/app/components/components.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    NoticiasPageRoutingModule,
+    DescripcionNoticiasPageRoutingModule,
     ComponentsModule
   ],
-  declarations: [NoticiasPage]
+  declarations: [DescripcionNoticiasPage]
 })
-export class NoticiasPageModule {}
+export class DescripcionNoticiasPageModule {}

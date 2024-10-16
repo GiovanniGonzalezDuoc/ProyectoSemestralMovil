@@ -12,11 +12,12 @@ import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,ComponentsModule,FormsModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,ComponentsModule,FormsModule,HttpClientModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, provideAnimationsAsync(),NativeStorage,SQLite],
   bootstrap: [AppComponent],
 })

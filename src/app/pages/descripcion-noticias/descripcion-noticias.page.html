@@ -1,0 +1,50 @@
+<ion-header [translucent]="true">
+  <ng-container *ngIf="rol_id_rol === 2; else NormalHeader">
+    <app-header-admin></app-header-admin>
+  </ng-container>
+  <ng-template #NormalHeader>
+    <app-header></app-header>
+  </ng-template>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card *ngIf="arregloPublicacion; else noData">
+    <ion-card-header>
+      <ion-item lines="none">
+        <ion-avatar slot="start" class="avatar-container">
+          <img [src]="fotoPredeterminada" alt="Perfil">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ arregloPublicacion.nombre_usuario_publicacion }}</h2>
+          <p>Publicación Creada: {{ arregloPublicacion.fecha_publicacion }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content>
+      <h1>{{ arregloPublicacion.titulo_publicacion }}</h1>
+    </ion-card-content>
+
+    <ion-card-content>
+      <p>
+        <span *ngIf="arregloPublicacion.descripcion_publicacion.length > 70">
+          {{ arregloPublicacion.descripcion_publicacion | slice:0:70 }}...
+        </span>
+        <span *ngIf="arregloPublicacion.descripcion_publicacion.length <= 70">
+          {{ arregloPublicacion.descripcion_publicacion }}
+        </span>
+      </p>
+      <img *ngIf="arregloPublicacion.foto" [src]="arregloPublicacion.foto" alt="Image preview" />
+    </ion-card-content>
+  </ion-card>
+
+  <ng-template #noData>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>No se encontró la publicación.</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Intenta nuevamente más tarde.</p>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+</ion-content>
