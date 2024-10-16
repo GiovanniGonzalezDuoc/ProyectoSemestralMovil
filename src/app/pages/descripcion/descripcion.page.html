@@ -102,7 +102,10 @@
     <ng-template>
       <ion-list>
         <ion-item (click)="handleOption('option1', idUsuarioSeguir)">Eliminar Post</ion-item>
-        <ion-item (click)="handleOption('option2', idUsuarioSeguir)">Seguir Usuario</ion-item>        
+        <ion-item (click)="handleOption('option2', idUsuarioSeguir)">Seguir Usuario</ion-item> 
+        <ion-item lines="none" *ngIf="rol_id_rol === 2;"> 
+          <ion-item (click)="handleOption('option3', idUsuarioSeguir)">Banear Usuario</ion-item>
+        </ion-item>
       </ion-list>
     </ng-template>
   </ion-popover>

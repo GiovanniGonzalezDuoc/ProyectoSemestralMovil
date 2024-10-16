@@ -154,7 +154,11 @@ const routes: Routes = [
   {
     path: 'crud/agregar-carreras',
     loadChildren: () => import('./crud/agregar-carreras/agregar-carreras.module').then( m => m.AgregarCarrerasPageModule)
+  },  {
+    path: 'noticias',
+    loadChildren: () => import('./pages/noticias/noticias.module').then( m => m.NoticiasPageModule)
   },
+
 
 
 

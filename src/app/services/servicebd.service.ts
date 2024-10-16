@@ -342,6 +342,32 @@ export class ServicebdService {
       this.listadoControlUsuario.next(items as any);
     })
   }
+  verificarBaneo(id: number): Promise<{ tiempoRestante: number; motivo: string } | null> {
+    return this.database.executeSql('SELECT * FROM control_usuario WHERE usuario_id_usuario = ?', [id]).then(res => {
+      // Valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        const ban = res.rows.item(0); // Obtener el primer registro
+        const tiempoVeto = ban.tiempo_veto; // Suponiendo que este es el tiempo de baneo en horas
+        const motivoVeto = ban.motivo_veto; // Motivo del baneo
+  
+        // Calcular el tiempo restante (esto puede requerir que manejes el tiempo de baneo)
+        const fechaVeto = new Date(ban.fecha_veto); // Asegúrate de que la fecha se almacene correctamente en la base de datos
+        const tiempoBaneo = tiempoVeto * 60 * 60 * 1000; // Convertir a milisegundos
+        const tiempoRestante = Math.max(0, (fechaVeto.getTime() + tiempoBaneo - Date.now()) / (1000 * 60 * 60)); // Calcular el tiempo restante en horas
+  
+        // Si el tiempo restante es menor o igual a 0, significa que el baneo ha expirado
+        if (tiempoRestante <= 0) {
+          return null; // El baneo ha expirado
+        }
+  
+        return {
+          tiempoRestante: Math.ceil(tiempoRestante), // Redondear hacia arriba
+          motivo: motivoVeto,
+        };
+      }
+      return null; // Si no hay baneos, retornar null
+    });
+  }  
 
   eliminarControl(id: number) {
     return this.database.executeSql('DELETE FROM control_usuario WHERE id_veto = ?', [id]).then(res => {

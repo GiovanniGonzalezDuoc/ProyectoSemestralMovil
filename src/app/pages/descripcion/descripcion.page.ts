@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { LocalNotifications } from '@capacitor/local-notifications';
+import { AlertController } from '@ionic/angular';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
@@ -20,13 +21,13 @@ export class DescripcionPage implements OnInit {
   nombre_usuario: any;
   apellido_usuario: any;
   comentarios: any[] = []; // Arreglo propio para los comentarios
-  rol_id_rol!:number;
-  idUsuarioSeguir!:number;
+  rol_id_rol!: number;
+  idUsuarioSeguir!: number;
   id_usuario!: number;
   fotoUrl!: string; // Nueva propiedad para almacenar la URL de la imagen
 
-  
-  constructor(private router: Router, private activedrouter: ActivatedRoute, private bd: ServicebdService, private storage: NativeStorage) {
+
+  constructor(private router: Router, private activedrouter: ActivatedRoute, private bd: ServicebdService, private storage: NativeStorage, private alertController: AlertController) {
     this.activedrouter.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation()?.extras.state) {
         this.arregloPublicacion = this.router.getCurrentNavigation()?.extras?.state?.['publicacion'];
@@ -89,6 +90,9 @@ export class DescripcionPage implements OnInit {
           this.bd.presentToast('bottom', 'El Post No Se Eliminó Correctamente Debido a que no te pertenece.');
           this.volverAlInicio();
         }
+      } else if (option === 'option3') {
+        // Opción para banear usuario
+        this.solicitarTiempoBaneo(idUsuarioSeguir);
       } else if (option === 'option2') {
         // Lógica para seguir a un usuario
         this.storage.getItem('id_usuario').then(idUsuarioActual => {
@@ -98,7 +102,7 @@ export class DescripcionPage implements OnInit {
               // Si no lo sigue, agregar a la tabla seguimiento
               this.bd.insertarSeguidores(idUsuarioActual, idUsuarioSeguir).then(async () => {
                 this.bd.presentToast('bottom', 'Se Ha Seguido Correctamente Al Usuario.');
-  
+
                 // Enviar notificación local
                 await LocalNotifications.schedule({
                   notifications: [
@@ -114,7 +118,7 @@ export class DescripcionPage implements OnInit {
                     },
                   ],
                 });
-  
+
                 this.volverAlInicio();
               }).catch(err => {
                 console.error('Error al seguir al usuario:', err);
@@ -132,8 +136,8 @@ export class DescripcionPage implements OnInit {
         });
       }
     }, 0);
-  }  
-  
+  }
+
   like(idPublicacion: number) {
     // Primero, actualizamos el número de likes en la base de datos
     this.bd.aumentarLike(idPublicacion).then(() => {
@@ -152,7 +156,7 @@ export class DescripcionPage implements OnInit {
       // Verificar si la publicación ya está guardada
       this.bd.listarGuardado().then(guardados => {
         const yaGuardado = guardados.some(guardado => guardado.publicacion_id_publicacion === publicacionId && guardado.usuario_id_usuario === usuarioId);
-        
+
         if (!yaGuardado) {
           // Insertar la publicación en la tabla guardado
           this.bd.insertarGuardado(publicacionId, usuarioId).then(() => {
@@ -176,15 +180,15 @@ export class DescripcionPage implements OnInit {
     if (this.nuevoComentario.trim().length > 0) {
       const idPublicacion = this.arregloPublicacion.id_publicacion;
       const nombreUsuario = `${this.nombre_usuario || ''} ${this.apellido_usuario || ''}`.trim();
-  
+
       // Inserta el comentario en la base de datos
       this.bd.insertarComentario(nombreUsuario, this.nuevoComentario, idPublicacion).then(() => {
         // Limpiar el textarea después de agregar el comentario
         this.nuevoComentario = '';
-  
+
         // Recargar los comentarios
         this.cargarComentarios(idPublicacion);
-  
+
         this.bd.presentToast('bottom', 'Comentario agregado correctamente.');
       }).catch(() => {
         this.bd.presentToast('bottom', 'Error al agregar el comentario.');
@@ -193,7 +197,7 @@ export class DescripcionPage implements OnInit {
       this.bd.presentToast('bottom', 'No puedes agregar un comentario vacío.');
     }
   }
-  comentario(){}
+  comentario() { }
 
   cargarComentarios(idPublicacion: number) {
     this.bd.listarComentariosID(idPublicacion).then(() => {
@@ -209,5 +213,56 @@ export class DescripcionPage implements OnInit {
         this.arregloPublicacion = publicaciones;
       });
     });
+  }
+  // Método para solicitar el tiempo de baneo
+  async solicitarTiempoBaneo(usuarioId: number) {
+    const alert = await this.alertController.create({
+      header: 'Baneo de Usuario',
+      inputs: [
+        {
+          name: 'tiempoBaneo',
+          type: 'number',
+          placeholder: 'Tiempo en horas'
+        },
+        {
+          name: 'motivoBaneo',
+          type: 'text',
+          placeholder: 'Motivo del baneo' // Nuevo campo para el mensaje
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+        },
+        {
+          text: 'Aceptar',
+          handler: (data: { tiempoBaneo: any; motivoBaneo: string; }) => {
+            const tiempoBaneo = data.tiempoBaneo;
+            const motivo = data.motivoBaneo; // Obtener el motivo del baneo
+
+            if (tiempoBaneo && tiempoBaneo > 0) {
+              const fechaActual = new Date();
+              const fechaBaneo = new Date(fechaActual.getTime() + (tiempoBaneo * 60 * 60 * 1000)); // Convertir horas a milisegundos
+
+              // Concatenar el motivo ingresado con el texto "Baneado por administrador"
+              const mensajeBaneo = motivo ? `${motivo} - Baneado por administrador` : 'Baneado por administrador';
+
+              this.bd.insertarControl(tiempoBaneo, mensajeBaneo, usuarioId).then(() => {
+                this.bd.presentToast('bottom', 'Usuario baneado correctamente.');
+              }).catch(err => {
+                console.error('Error al banear usuario:', err);
+                this.bd.presentToast('bottom', 'Error al banear usuario.');
+              });
+            } else {
+              this.bd.presentToast('bottom', 'Por favor ingresa un tiempo válido.');
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }

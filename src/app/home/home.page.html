@@ -7,6 +7,19 @@
   </ng-template>
 </ion-header>
 
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button [routerLink]="['/home']">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button [routerLink]="['/noticias']">
+      <ion-icon name="newspaper-outline"></ion-icon>
+      <ion-label>Noticias</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>
 
 <ion-content [fullscreen]="true">
   <ion-card *ngFor="let x of arregloPublicacion">
@@ -56,5 +69,5 @@
         <ion-icon name="bookmark-outline"></ion-icon>
       </ion-button>
     </ion-item>
-  </ion-card>  
+  </ion-card>
 </ion-content>
