@@ -252,6 +252,35 @@ export class ServicebdService {
       return this.listarPublicaciones();
     })
   }
+  listarPublicacionesCategorias(id: number) {
+    return this.database.executeSql('SELECT * FROM publicacion WHERE categoria_publicacion_id_categoria= ?', [id])
+      .then(res => {
+        let items: Publicacion[] = [];
+        if (res.rows.length > 0) {
+          for (var i = 0; i < res.rows.length; i++) {
+            items.push({
+              id_publicacion: res.rows.item(i).id_publicacion,
+              nombre_usuario_publicacion: res.rows.item(i).nombre_usuario_publicacion,
+              titulo_publicacion: res.rows.item(i).titulo_publicacion,
+              descripcion_publicacion: res.rows.item(i).descripcion_publicacion,
+              like_publicacion: res.rows.item(i).like_publicacion,
+              fecha_publicacion: res.rows.item(i).fecha_publicacion,
+              usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
+              categoria_publicacion_id_categoria: res.rows.item(i).categoria_publicacion_id_categoria,
+              foto: res.rows.item(i).foto
+            });
+          }
+        } else {
+          this.presentAlert("No hay publicaciones para esta categoría.",'');
+        }
+        this.listadoPublicacion.next(items as any);
+        return items;  // Aquí se retorna el array con los items
+      })
+      .catch(err => {
+        this.presentAlert('Error ejecutando consulta SQL:', err);
+        throw err;
+      });
+  }
   descripcionPublicaciones(id: number): Promise<void> {
     return this.database.executeSql('SELECT * FROM publicacion WHERE id_publicacion = ?', [id]).then(res => {
       let items: Publicacion[] = [];

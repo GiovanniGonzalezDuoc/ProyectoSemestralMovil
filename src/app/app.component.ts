@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
+import { ServicebdService } from './services/servicebd.service';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -6,28 +9,37 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  Perfiles:any = [
-    {
-      id:1,
-      foto:"assets/icon/favicon.png",
-      nombreperfil:"Pedro",
-      horas:25,
-      titulo:"Aguante Brasil",
-      mensaje:"Cristiano Ronaldo Mejor Campeon Do Fochibole",
-      like:25,
-      comentarios:10,
-   }
-  ];
-  personasSiguiendo = [
-    { id: 1, nombre: 'Juan Pérez' },
-    { id: 2, nombre: 'María García' },
-    { id: 3, nombre: 'Carlos Sánchez' }
-  ];
+  fotoPredeterminada: string = "assets/icon/logo.png";
+  nombre_usuario:string="";
+  apellido_usuario:string="";
 
-  categorias = [
-    { id: 1, nombre: 'Tecnología', foto:"https://i.postimg.cc/VNxfr1Jm/desktop-computer-icon-vector.jpg" },
-    { id: 2, nombre: 'Ciencia', foto:"https://i.postimg.cc/hjVSVwmx/dynamic-atom-molecule-science-symbol-vector-icon.jpg"},
-    { id: 3, nombre: 'Arte' , foto:"https://i.postimg.cc/jjwqSCdM/1987925.png"}
-  ];
-  constructor() {}
+  categorias:any[]=[];
+  categoriaSeleccionada:number[]=[];
+  constructor(private storage:NativeStorage,private bd:ServicebdService,private router:Router) {
+    this.storage.getItem('nombre_usuario').then(res=>{
+      this.nombre_usuario=res;
+    }).catch(err => {
+      this.bd.presentAlert('Error obteniendo nombre_usuario:', err);
+    });
+    this.storage.getItem('apellido_usuario').then(res=>{
+      this.apellido_usuario=res;
+    }).catch(err => {
+      this.bd.presentAlert('Error obteniendo apellido_usuario:', err);
+    });
+    this.loadCategoriaNames();
+  }
+
+  loadCategoriaNames() {
+    this.bd.fetchCategorias().subscribe(categorias => {
+      this.categorias = categorias;
+    });
+  }
+  descripcion(id: number) {
+    let navigationExtras: NavigationExtras = {
+      state: {
+        id_categoria: id 
+      }
+    };
+    this.router.navigate(['/busqueda'], navigationExtras);
+  }
 }

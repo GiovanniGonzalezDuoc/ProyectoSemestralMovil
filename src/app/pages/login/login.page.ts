@@ -54,8 +54,6 @@ export class LoginPage implements OnInit {
             console.error('Error al verificar baneo:', err);
             this.bd.presentAlert('Error', 'Ocurrió un error al verificar el estado de baneo.');
           });
-        } else {
-          this.bd.presentAlert('Error', 'Usuario no encontrado.');
         }
       }).catch(err => {
         // Manejo de errores de la consulta
