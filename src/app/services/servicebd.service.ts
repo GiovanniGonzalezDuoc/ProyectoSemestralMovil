@@ -569,8 +569,8 @@ export class ServicebdService {
     })
   }
 
-  modificarUsuario(id: number, nombre_usuario: string, apellido_usuario: string, id_carrera: number, telefono: number, correo_usuario: string, contrasena: string, rol_id_rol: number) {
-    return this.database.executeSql('UPDATE usuario SET nombre_usuario = ?, apellido_usuario = ?, id_carrera = ?, telefono = ?, correo_usuario = ?, contrasena = ?, rol_id_rol = ? WHERE id_usuario = ?', [nombre_usuario, apellido_usuario, id_carrera, telefono, correo_usuario, contrasena, rol_id_rol, id]).then(res => {
+  modificarUsuario(id: number, nombre_usuario: string, apellido_usuario: string, id_carrera: number, telefono: number, correo_usuario: string, contrasena: string, rol_id_rol: number, id_pregunta: number, respuesta: string) {
+    return this.database.executeSql('UPDATE usuario SET nombre_usuario = ?, apellido_usuario = ?, id_carrera = ?, telefono = ?, correo_usuario = ?, contrasena = ?, rol_id_rol = ? id_pregunta = ? ,respuesta = ? WHERE id_usuario = ?', [nombre_usuario, apellido_usuario, id_carrera, telefono, correo_usuario, contrasena, rol_id_rol,id_pregunta,respuesta, id]).then(res => {
       this.presentAlert("Modificar", "Usuario Modificado");
       this.listarUsuario();
     }).catch(e => {

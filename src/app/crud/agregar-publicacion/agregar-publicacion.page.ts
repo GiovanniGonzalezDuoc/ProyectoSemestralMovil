@@ -14,13 +14,25 @@ export class AgregarPublicacionPage implements OnInit {
   categoria_publicacion_id_categoria!:number;
   usuario_id_usuario!:number;
   foto!:any;
+  categorias: any[] = []; // Aquí se almacenarán las categorías desde la BD
+  categoriasSeleccionadas: number[] = []; // Para las categorías seleccionadas
+  usuarios: any[] = []; // Aquí se almacenarán las categorías desde la BD
+  usuariosSeleccionado: number[] = []; // Para las categorías seleccionadas
 
   constructor(private bd:ServicebdService) { }
 
   ngOnInit() {
+    this.bd.fetchCategorias().subscribe(categorias => {
+      this.categorias = categorias;
+    });
+    this.bd.fetchUsuario().subscribe(usuarios => {
+      this.usuarios = usuarios;
+    });
   }
   insertar(){
-    this.bd.insertarPublicacion(this.nombre_usuario,this.titulo_publicacion,this.descripcion_publicacion,this.categoria_publicacion_id_categoria,this.usuario_id_usuario,this.foto);
+    const categoria_publicacion = this.categoriasSeleccionadas[0];
+    const usuario_id_usuario = this.usuariosSeleccionado[0];
+    this.bd.insertarPublicacion(this.nombre_usuario,this.titulo_publicacion,this.descripcion_publicacion,categoria_publicacion,usuario_id_usuario,this.foto);
   }
     // Función para tomar la foto
     takePicture = async () => {

@@ -32,10 +32,18 @@
     <ion-input label="Contrasena Usuario" labelPlacement="floating" placeholder="Ingrese nombre"
       [(ngModel)]="contrasena"></ion-input>
   </ion-item>
-  <ion-item>
-    <ion-input label="Rol Usuario" labelPlacement="floating" placeholder="Ingrese nombre"
-      [(ngModel)]="rol_id_rol"></ion-input>
-  </ion-item>
+  <ion-item class="input-item">
+    <ion-select 
+      [(ngModel)]="rolSeleccionado" 
+      label="Roles" 
+      labelPlacement="floating" 
+      placeholder="Seleccione Rol"
+      multiple="false">
+      <ion-select-option *ngFor="let rol of roles" [value]="rol.id_rol">
+        {{ rol.nombre_rol }} 
+      </ion-select-option>
+    </ion-select>
+  </ion-item>  
   <!-- Pregunta de Seguridad -->
   <ion-item class="input-item">
     <ion-select [(ngModel)]="preguntaSeleccionada" label="Preguntas" labelPlacement="floating"

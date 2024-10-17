@@ -26,14 +26,10 @@
 
     <ion-card-content>
       <p>
-        <span *ngIf="arregloPublicacion.descripcion_publicacion.length > 70">
-          {{ arregloPublicacion.descripcion_publicacion | slice:0:70 }}...
-        </span>
-        <span *ngIf="arregloPublicacion.descripcion_publicacion.length <= 70">
-          {{ arregloPublicacion.descripcion_publicacion }}
-        </span>
+        {{ arregloPublicacion.descripcion_publicacion }}
       </p>
-      <img *ngIf="arregloPublicacion.foto" [src]="arregloPublicacion.foto" alt="Image preview" />
+      <img *ngIf="arregloPublicacion.foto_publicacion" [src]="arregloPublicacion.foto_publicacion"
+        alt="Image preview" />
     </ion-card-content>
   </ion-card>
 

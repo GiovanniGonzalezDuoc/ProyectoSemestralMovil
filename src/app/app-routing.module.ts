@@ -101,7 +101,7 @@ const routes: Routes = [
   },
   {
     path: 'crud/modificar-control-usuario',
-    loadChildren: () => import('./crud/modificar-control-usuario/modificar-control-usuario.module').then( m => m.ModificarControlUsuarioPageModule)
+    loadChildren: () => import('./crud/modificar-control-usuario/modificar-control-usuario.module').then(m => m.ModificarControlUsuarioPageModule)
   },
   {
     path: 'crud/categorias',
@@ -154,7 +154,8 @@ const routes: Routes = [
   {
     path: 'noticias',
     loadChildren: () => import('./pages/noticias/noticias.module').then( m => m.NoticiasPageModule)
-  },  {
+  },
+  {
     path: 'descripcion-noticias',
     loadChildren: () => import('./pages/descripcion-noticias/descripcion-noticias.module').then( m => m.DescripcionNoticiasPageModule)
   },

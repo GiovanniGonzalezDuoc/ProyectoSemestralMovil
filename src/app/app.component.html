@@ -15,21 +15,25 @@
           <img [src]="fotoPredeterminada" alt="User Avatar">
         </ion-avatar>
         <ion-label>
-          <h2>Bienvenido,{{nombre_usuario}} {{apellido_usuario}}</h2>
+          <h2>Bienvenido, {{nombre_usuario}} {{apellido_usuario}}</h2>
           <p>Tu perfil</p>
         </ion-label>
       </ion-item>
-
 
       <ion-list-header>
         <ion-label [routerLink]="['/listado-seguidores']">Gente que sigues</ion-label>
       </ion-list-header>
 
-
-      <ion-list-header [routerLink]="['/busqueda']">
+      <ion-list-header>
         <ion-label>Categorías</ion-label>
       </ion-list-header>
-      <ion-item *ngFor="let categoria of categorias" (click)="descripcion(categoria.id_categoria)">
+
+      <!-- Barra de búsqueda -->
+      <ion-searchbar placeholder="Buscar categorías" [(ngModel)]="searchTerm"
+        (ionInput)="filterCategorias()"></ion-searchbar>
+
+      <!-- Lista de categorías filtradas -->
+      <ion-item *ngFor="let categoria of filteredCategorias" (click)="descripcion(categoria.id_categoria)">
         {{ categoria.nombre_categoria }}
       </ion-item>
 

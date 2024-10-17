@@ -32,12 +32,7 @@
 
     <ion-card-content>
       <p>
-        <span *ngIf="arregloPublicacion.descripcion_publicacion.length > 70">
-          {{ arregloPublicacion.descripcion_publicacion | slice:0:70 }}...
-        </span>
-        <span *ngIf="arregloPublicacion.descripcion_publicacion.length <= 70">
-          {{ arregloPublicacion.descripcion_publicacion }}
-        </span>
+        {{ arregloPublicacion.descripcion_publicacion }}
       </p>
       <img *ngIf="arregloPublicacion.foto" [src]="arregloPublicacion.foto" alt="Image preview" />
     </ion-card-content>
@@ -63,14 +58,18 @@
   </ion-card>
 
   <!-- Sección para agregar comentarios -->
-  <ion-card-content>
+  <ion-card-content class="comment-section">
     <ion-item>
-      <ion-textarea [(ngModel)]="nuevoComentario" placeholder="Escribe un comentario..."></ion-textarea>
-      <ion-button (click)="agregarComentario()">Comentar</ion-button>
+      <ion-textarea class="comment-textarea" [(ngModel)]="nuevoComentario"
+        placeholder="Escribe un comentario..."></ion-textarea>
+      <ion-button class="comment-button" (click)="agregarComentario()">Comentar</ion-button>
     </ion-item>
-    <h2>Comentarios</h2>
+
+    <!-- Encabezado de la sección de comentarios -->
+    <h2 class="comments-title">Comentarios</h2>
+
     <ion-list>
-      <ion-item *ngFor="let comentario of comentarios">
+      <ion-item class="comment-item" *ngFor="let comentario of comentarios">
         <ion-avatar slot="start">
           <img [src]="fotoPredeterminada" alt="Avatar">
         </ion-avatar>
@@ -78,14 +77,11 @@
           <h3>{{ comentario.nombre_usuario_comentario }}</h3>
           <p>{{ comentario.comentario_publicacion }}</p>
         </ion-label>
-        <div class="card-menu">
-          <ion-button fill="clear" (click)="openPopover($event)">
-            <ion-icon name="ellipsis-vertical-outline"></ion-icon>
-          </ion-button>
-        </div>
       </ion-item>
     </ion-list>
+    
   </ion-card-content>
+
 
   <ng-template #noData>
     <ion-card>
@@ -102,8 +98,8 @@
     <ng-template>
       <ion-list>
         <ion-item (click)="handleOption('option1', idUsuarioSeguir)">Eliminar Post</ion-item>
-        <ion-item (click)="handleOption('option2', idUsuarioSeguir)">Seguir Usuario</ion-item> 
-        <ion-item lines="none" *ngIf="rol_id_rol === 2;"> 
+        <ion-item (click)="handleOption('option2', idUsuarioSeguir)">Seguir Usuario</ion-item>
+        <ion-item lines="none" *ngIf="rol_id_rol === 2;">
           <ion-item (click)="handleOption('option3', idUsuarioSeguir)">Banear Usuario</ion-item>
         </ion-item>
       </ion-list>

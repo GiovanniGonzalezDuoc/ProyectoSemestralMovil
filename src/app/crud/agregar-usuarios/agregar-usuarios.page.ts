@@ -19,13 +19,16 @@ export class AgregarUsuariosPage implements OnInit {
   preguntasSeguridad: any[] = []; // Almacenar las preguntas de seguridad desde la BD
   preguntaSeleccionada: number[] = []; // Pregunta seleccionada
   carreras: any[] = []; // Almacenar las carreras desde la BD
-  carreraSeleccionada!: number; // Carrera seleccionada
+  carreraSeleccionada: number[] = []; // Carrera seleccionada
+  roles: any[] = []; // Aquí se almacenarán las categorías desde la BD
+  rolSeleccionado: number[] = []; // Para las categorías seleccionadas
   
   constructor(private bd: ServicebdService) { }
 
   ngOnInit() {
     this.listarPreguntas();
     this.listarCarreras(); // Llamar a la función para obtener las carreras
+    this.listarRoles();
   }
 
   listarPreguntas() {
@@ -39,9 +42,16 @@ export class AgregarUsuariosPage implements OnInit {
       this.carreras = carreras; // Almacenar las carreras obtenidas
     });
   }
+  listarRoles(){
+    this.bd.fetchRol().subscribe(rol => {
+      this.roles = rol;
+    });
+  }
 
   insertar() {
     const preguntaSelecion = this.preguntaSeleccionada[0];
-    this.bd.insertarUsuario(this.nombre_usuario, this.apellido_usuario, this.carreraSeleccionada, this.telefono, this.correo_usuario, this.contrasena, this.rol_id_rol, preguntaSelecion, this.respuesta);
+    const carrera_usuario = this.carreraSeleccionada[0];
+    const rol_usuario = this.roles[0];
+    this.bd.insertarUsuario(this.nombre_usuario, this.apellido_usuario, carrera_usuario, this.telefono, this.correo_usuario, this.contrasena, rol_usuario, preguntaSelecion, this.respuesta);
   }
 }

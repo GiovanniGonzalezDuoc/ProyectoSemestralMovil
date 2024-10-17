@@ -9,6 +9,7 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
 })
 export class ModificarControlUsuarioPage implements OnInit {
   Control: any;
+  nombreBaneado!: string;
 
   constructor(private router: Router, private activedrouter: ActivatedRoute, private bd: ServicebdService) {
     this.activedrouter.queryParams.subscribe(res => {
@@ -19,7 +20,14 @@ export class ModificarControlUsuarioPage implements OnInit {
   }
 
   ngOnInit() {
+    // Verificamos que 'Control' y 'control' no sean null o undefined
+    if (this.Control && this.Control) {
+      this.nombreBaneado = this.Control.nombre_usuario + this.Control.apellido_usuario;
+    } else {
+      this.nombreBaneado = ''; // O maneja el caso de error como prefieras
+    }
   }
+  
 
   modificar() {
     //this.bd.presentAlert("Mod","ID: " + this.noticia.idnoticia)

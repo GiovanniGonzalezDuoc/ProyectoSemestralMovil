@@ -9,12 +9,30 @@
   <ion-item>
     <ion-input label="Titulo Publicacion" labelPlacement="floating" placeholder="Ingrese Titulo" [(ngModel)]="titulo_publicacion"></ion-input>
   </ion-item>
-  <ion-item>
-    <ion-input label="Categoria Publicacion" labelPlacement="floating" placeholder="Ingrese Categoria" [(ngModel)]="categoria_publicacion_id_categoria"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-input label="Id Usuario Publicacion" labelPlacement="floating" placeholder="Ingrese Categoria" [(ngModel)]="usuario_id_usuario"></ion-input>
-  </ion-item>
+  <ion-item class="input-item">
+    <ion-select 
+      [(ngModel)]="categoriasSeleccionadas" 
+      label="Categoría" 
+      labelPlacement="floating" 
+      placeholder="Seleccione Categorías"
+      multiple="true">
+      <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id_categoria">
+        {{ categoria.nombre_categoria }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>      
+  <ion-item class="input-item">
+    <ion-select 
+      [(ngModel)]="usuariosSeleccionado" 
+      label="Usuarios" 
+      labelPlacement="floating" 
+      placeholder="Seleccione Usuario"
+      multiple="false">
+      <ion-select-option *ngFor="let usuario of usuarios" [value]="usuario.id_usuario">
+        {{ usuario.nombre_usuario }} {{usuario.apellido_usuario}}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>  
   <ion-item>
     <ion-input label="Descripcion Publicacion" labelPlacement="floating" placeholder="Ingrese Descripcion" [(ngModel)]="descripcion_publicacion"></ion-input>
   </ion-item>

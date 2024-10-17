@@ -117,3 +117,30 @@ ion-icon {
 .avatar-container {
   margin-right: 16px; 
 }
+ion-toolbar {
+  --background: #ffffff; /* Fondo blanco */
+  --border-bottom: 1px solid #dddddd; /* Línea inferior gris */
+  display: flex;
+  justify-content: space-between; /* Alinear botones a los lados */
+  align-items: center;
+  padding: 0 32px; /* Ajusta el padding para centrar mejor los botones */
+}
+
+ion-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Espacio entre los botones */
+}
+
+ion-button {
+  --background: transparent; /* Sin fondo para estilo plano */
+  --color: #000000; /* Color del texto negro */
+  font-size: 16px; /* Ajuste del tamaño del texto */
+  padding: 8px 16px; /* Espaciado interno de los botones */
+}
+
+ion-button:hover {
+  --background: #e0e0e0; /* Fondo gris claro al hacer hover */
+  --color: #000000; /* Mantener el texto negro */
+}
+

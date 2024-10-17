@@ -10,7 +10,12 @@
     <ion-input label="Motivo Veto" labelPlacement="floating" placeholder="Ingrese El Motivo De Baneo" [(ngModel)]="Control.motivo_veto"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-input label="Usuario Baneado" labelPlacement="floating" placeholder="Ingrese El Id Del Usuario Baneado" [(ngModel)]="Control.usuario_id_usuario"></ion-input>
+    <ion-label position="floating">Usuario Baneado</ion-label>
+    <ion-input 
+      placeholder="Ingrese El Id Del Usuario Baneado" 
+      [(ngModel)]="nombreBaneado" 
+      readonly>
+    </ion-input>
   </ion-item>
   <ion-button color="success" (click)="modificar()">Modificar Control Usuario</ion-button>
   <ion-button color="warning" [routerLink]="['/crud/control-usuario']">Ir a Lista Controles</ion-button>
