@@ -158,6 +158,14 @@ const routes: Routes = [
     path: 'descripcion-noticias',
     loadChildren: () => import('./pages/descripcion-noticias/descripcion-noticias.module').then( m => m.DescripcionNoticiasPageModule)
   },
+  {
+    path: 'listado-seguidores',
+    loadChildren: () => import('./pages/listado-seguidores/listado-seguidores.module').then( m => m.ListadoSeguidoresPageModule)
+  },
+  {
+    path: 'perfil-seguidor',
+    loadChildren: () => import('./pages/perfil-seguidor/perfil-seguidor.module').then( m => m.PerfilSeguidorPageModule)
+  },
 
 
 

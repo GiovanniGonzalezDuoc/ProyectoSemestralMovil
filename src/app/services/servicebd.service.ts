@@ -454,6 +454,32 @@ export class ServicebdService {
       this.listadoUsuarios.next(items as any);
     })
   }
+  listarUsuarioIDSeguidor(id:number) {
+    return this.database.executeSql('SELECT * FROM usuario id_usuario=?', [id]).then(res => {
+      //variable para almacenar el rsultado de la consulta
+      let items: Usuarios[] = [];
+      //valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        //recorro mi resultado
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
+            id_usuario: res.rows.item(i).id_usuario,
+            nombre_usuario: res.rows.item(i).nombre_usuario,
+            apellido_usuario: res.rows.item(i).apellido_usuario,
+            id_carrera: res.rows.item(i).id_carrera,
+            telefono: res.rows.item(i).telefono,
+            correo_usuario: res.rows.item(i).correo_usuario,
+            contrasena: res.rows.item(i).contrasena,
+            rol_id_rol: res.rows.item(i).rol_id_rol,
+            control_usuario_id_veto: res.rows.item(i).control_usuario_id_veto,
+            id_pregunta: res.rows.item(i).id_pregunta,
+            respuesta: res.rows.item(i).respuesta,
+          })
+      }
+      this.listadoUsuarios.next(items as any);
+    })
+  }
   listarUsuarioID(id: number): Promise<Usuarios | null> {
     return this.database.executeSql('SELECT * FROM usuario WHERE id_usuario = ?', [id])
       .then(res => {
@@ -728,37 +754,28 @@ export class ServicebdService {
       console.error('Error listando seguimiento:', err);
     });
   }
-  listarSeguimientos(id_usuario: number): Promise<any[]> {
-    const query = `
-      SELECT s.id_seguido 
-      FROM seguimiento_usuario s 
-      WHERE s.id_seguidor = ?`;
-  
-    return this.database
-      .executeSql(query, [id_usuario])
-      .then(async (res) => {
-        let seguidores: any[] = [];
-        for (let i = 0; i < res.rows.length; i++) {
-          const seguidoId = res.rows.item(i).id_seguido;
-          
-          // Llamamos a listarUsuarioID para obtener los datos completos del usuario seguido
-          const usuario = await this.listarUsuarioID(seguidoId);
-          
-          if (usuario) {
-            seguidores.push({
-              id: usuario.id_usuario,
-              nombre: usuario.nombre_usuario,
-              apellido: usuario.apellido_usuario,
-            });
-          }
+  listarSeguimientos(id:number) {
+    return this.database.executeSql('SELECT * FROM seguimiento_usuario WHERE seguimiento_id_seguimiento = ?', [id]).then(res => {
+      let items: Seguimiento[] = [];
+      if (res.rows.length > 0) {
+        for (var i = 0; i < res.rows.length; i++) {
+          let seguimiento = {
+            usuario_id_usuario: res.rows.item(i).usuario_id_usuario,
+            seguimiento_id_seguimiento: res.rows.item(i).seguimiento_id_seguimiento,
+          };
+          items.push(seguimiento);
+
+          // Log para verificar los datos obtenidos
+          console.log('Registro de seguimiento encontrado:', seguimiento);
         }
-        return seguidores; // Devolvemos la lista de seguidores con sus datos completos
-      })
-      .catch(error => {
-        console.error('Error al listar seguimientos:', error);
-        return [];
-      });
-  }  
+      }
+      // Actualizar el observable con los elementos obtenidos
+      this.listadoSeguimiento.next(items as any);
+      return items;
+    }).catch(err => {
+      console.error('Error listando seguimiento:', err);
+    });
+  }
   // Función para obtener el número de seguidores
   obtenerSeguidores(id_usuario: number): Promise<number> {
     return this.database.executeSql(
