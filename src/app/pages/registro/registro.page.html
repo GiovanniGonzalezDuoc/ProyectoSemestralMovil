@@ -78,7 +78,7 @@
         <span class="texto-label">Pregunta de Seguridad</span>
         <ion-item class="input-item">
           <ion-select [(ngModel)]="preguntaSeleccionada" label="Preguntas" labelPlacement="floating"
-            placeholder="Seleccione Pregunta" multiple="true">
+            placeholder="Seleccione Pregunta" multiple="false">
             <ion-select-option *ngFor="let pregunta of preguntasSeguridad" [value]="pregunta.id_pregunta">
               {{ pregunta.pregunta }}
             </ion-select-option>

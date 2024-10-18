@@ -75,10 +75,8 @@ export class RegistroPage implements OnInit {
     let formValid = true;
 
     // Validar que no hayan campos vacíos
-    if (!this.arregloUsuario.nombre_usuario || !this.arregloUsuario.apellido_usuario || 
-        !this.arregloUsuario.id_carrera || !this.arregloUsuario.telefono || 
-        !this.arregloUsuario.correo_usuario || !this.arregloUsuario.contrasena || 
-        !this.preguntaSeleccionada || !this.arregloUsuario.respuesta) {
+    if (!this.arregloUsuario.nombre_usuario || !this.arregloUsuario.apellido_usuario || !this.arregloUsuario.telefono || 
+        !this.arregloUsuario.correo_usuario || !this.arregloUsuario.contrasena || !this.arregloUsuario.respuesta) {
       this.errorMessage = 'Por favor, rellene todos los campos.';
       formValid = false;
     }

@@ -50,7 +50,7 @@ export class ListadoSeguidoresPage implements OnInit {
   // Función para cargar los nombres de los seguidores
   async loadSeguidoresNames(seguidores: Seguimiento[]) { // Asegúrate de que "Seguimiento" sea el tipo correcto
     for (const seguidor of seguidores) {
-      const usuario = await this.bd.listarUsuarioID(seguidor.usuario_id_usuario);
+      const usuario = await this.bd.listarUsuarioID(seguidor.seguimiento_id_seguimiento);
       if (usuario) {
         this.arregloSeguidores.push({
           id_usuario: usuario.id_usuario,

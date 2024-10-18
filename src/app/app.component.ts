@@ -23,7 +23,7 @@ export class AppComponent {
     }).catch(err => {
       this.bd.presentAlert('Error obteniendo nombre_usuario:', err);
     });
-    
+
     this.storage.getItem('apellido_usuario').then(res => {
       this.apellido_usuario = res;
     }).catch(err => {
@@ -43,7 +43,7 @@ export class AppComponent {
   descripcion(id: number) {
     let navigationExtras: NavigationExtras = {
       state: {
-        id_categoria: id 
+        id_categoria: id
       }
     };
     this.router.navigate(['/busqueda'], navigationExtras);
@@ -52,8 +52,9 @@ export class AppComponent {
   // Método para filtrar categorías basado en el término de búsqueda
   filterCategorias() {
     const term = this.searchTerm.toLowerCase(); // Convierte el término de búsqueda a minúsculas
-    this.filteredCategorias = this.categorias.filter(categoria => 
+    this.filteredCategorias = this.categorias.filter(categoria =>
       categoria.nombre_categoria.toLowerCase().includes(term) // Filtra según el nombre
     );
   }
+
 }

@@ -38,7 +38,7 @@ export class CarrerasPage implements OnInit {
     this.router.navigate(['/crud/modificar-carreras'],navigationsExtras);
   }
   eliminar(x:any){
-    this.bd.eliminarRol(x.id_carrera);
+    this.bd.eliminarCarrera(x.id_carrera);
   }
 
   agregar(){

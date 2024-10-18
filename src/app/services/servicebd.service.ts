@@ -37,8 +37,6 @@ export class ServicebdService {
 
   //variables para los insert por defecto en nuestras tablas
   registroRol: string = "INSERT or IGNORE INTO rol(id_rol,nombre_rol) VALUES (1,'usuario'), (2,'admin');";
-  registroControl_Usuario: string = "INSERT or IGNORE INTO control_usuario(id_veto,tiempo_veto,fecha_veto,usuario_id_usuario) VALUES(1,7,'06/10/2024','1')"
-  registroUsuario: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,telefono,correo_usuario,contrasena) Values (2,'Giovanni','Gonzalez','37742574','juan.cristian@duocuc.cl','Tumama132$');";
   registroAdmin: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,telefono,correo_usuario,contrasena,rol_id_rol) Values (1,'admin','admin','37742574','admin','admin',2);";
 
   //variables para guardar los datos de las consultas en las tablas
@@ -132,8 +130,6 @@ export class ServicebdService {
 
       //ejecuto los insert por defecto en el caso que existan
       await this.database.executeSql(this.registroRol, []);
-      await this.database.executeSql(this.registroUsuario, []);
-      await this.database.executeSql(this.registroControl_Usuario, []);
       await this.database.executeSql(this.registroAdmin, []);
 
       //modifica el estado de la Base De Datos
@@ -168,28 +164,28 @@ export class ServicebdService {
 
   eliminarRol(id: number) {
     return this.database.executeSql('DELETE FROM rol WHERE id_rol = ?', [id]).then(res => {
-      this.presentAlert("Eliminar", "Rol Eliminado");
+      this.presentToast('bottom',"Rol Eliminado");
       this.listarRoles();
     }).catch(e => {
-      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
+      this.presentAlert('Eliminar Rol','Error Eliminando Rol:' + JSON.stringify(e));
     })
   }
 
   modificarRol(id: number, nombre_rol: string) {
     return this.database.executeSql('UPDATE rol SET nombre_rol = ? WHERE id_rol = ?', [nombre_rol, id]).then(res => {
-      this.presentAlert("Modificar", "Rol Modificado");
+      this.presentToast('bottom', "Rol Modificado");
       this.listarRoles();
     }).catch(e => {
-      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+      this.presentAlert('Modificar', 'Error Modificando Rol:' + JSON.stringify(e));
     })
   }
 
   insertarRol(nombre_rol: string) {
     return this.database.executeSql('INSERT INTO rol(nombre_rol) VALUES (?)', [nombre_rol]).then(res => {
-      this.presentAlert("Insertar", "Rol Insertado");
+      this.presentToast('bottom',"Rol Insertado");
       this.listarRoles();
     }).catch(e => {
-      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
+      this.presentAlert('Insertar','Error Insertando Rol:' + JSON.stringify(e));
     })
   }
   //APARTADO DE PUBLICACIONES
@@ -315,24 +311,27 @@ export class ServicebdService {
   }
   eliminarPublicacion(id: number) {
     return this.database.executeSql('DELETE FROM publicacion WHERE id_publicacion = ?', [id]).then(res => {
-      this.presentAlert("Eliminar", "Publicacion Eliminado");
+      this.presentToast('bottom',"Eliminar" + "Publicacion Eliminado");
       this.listarPublicaciones();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
     })
   }
+  
   eliminarPublicacionID(id: number) {
-    return this.database.executeSql('DELETE FROM publicacion WHERE  = usuario_id_usuario ?', [id]).then(res => {
-      this.presentAlert("Eliminar", "Publicacion Eliminado");
-      this.listarPublicaciones();
-    }).catch(e => {
-      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
-    })
+    return this.database.executeSql('DELETE FROM publicacion WHERE usuario_id_usuario = ?', [id])
+      .then(res => {
+        this.presentToast('bottom',"Eliminar" + "Publicación Eliminada");
+        this.listarPublicaciones();
+      })
+      .catch(e => {
+        this.presentAlert('Eliminar', 'Error: ' + JSON.stringify(e));
+      });
   }
 
   modificarPublicacion(id: number, titulo_publicacion: string, descripcion_publicacion: string) {
     return this.database.executeSql('UPDATE publicacion SET titulo_publicacion = ?, descripcion_publicacion = ? WHERE id_publicacion = ?', [titulo_publicacion, descripcion_publicacion, id]).then(res => {
-      this.presentAlert("Modificar", "Publicacion Modificado");
+      this.presentToast('bottom',"Modificar" + "Publicacion Modificado");
       this.listarPublicaciones();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
@@ -341,7 +340,7 @@ export class ServicebdService {
 
   insertarPublicacion(nombre_usuario_publicacion: string, titulo_publicacion: string, descripcion_publicacion: string, categoria_publicacion: number, usuario_id_usuario: number, foto: Blob) {
     return this.database.executeSql('INSERT INTO publicacion(nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,fecha_publicacion,categoria_publicacion_id_categoria,usuario_id_usuario,foto) VALUES (?,?,?,CURRENT_TIMESTAMP,?,?,?)', [nombre_usuario_publicacion, titulo_publicacion, descripcion_publicacion, categoria_publicacion, usuario_id_usuario, foto]).then(res => {
-      this.presentAlert("Insertar", "Publicacion Insertado");
+      this.presentToast('bottom',"Insertar" + "Publicacion Insertado");
       this.listarPublicaciones();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
@@ -400,7 +399,7 @@ export class ServicebdService {
 
   eliminarControl(id: number) {
     return this.database.executeSql('DELETE FROM control_usuario WHERE id_veto = ?', [id]).then(res => {
-      this.presentAlert("Eliminar", "Control Veto Eliminado");
+      this.presentToast('bottom',"Eliminar" + "Control Veto Eliminado");
       this.listarControl();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
@@ -409,7 +408,7 @@ export class ServicebdService {
 
   modificarControl(id_veto: number, tiempo_veto: number, motivo_veto: number, usuario_id_usuario: number) {
     return this.database.executeSql('UPDATE control_usuario SET tiempo_veto = ?, motivo_veto = ?, usuario_id_usuario = ? WHERE id_veto = ?', [tiempo_veto, motivo_veto, usuario_id_usuario, id_veto]).then(res => {
-      this.presentAlert("Modificar", "Control Veto Modificado");
+      this.presentToast('bottom',"Modificar" + "Control Veto Modificado");
       this.listarControl();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
@@ -418,7 +417,7 @@ export class ServicebdService {
 
   insertarControl(tiempo_veto: number, motivo_veto: string, usuario_id_usuario: number) {
     return this.database.executeSql('INSERT INTO control_usuario(tiempo_veto,fecha_veto,motivo_veto,usuario_id_usuario) VALUES (?,CURRENT_TIMESTAMP,?,?)', [tiempo_veto, motivo_veto, usuario_id_usuario]).then(res => {
-      this.presentAlert("Insertar", "Control Veto Insertado");
+      this.presentToast('bottom',"Insertar" + "Control Veto Insertado");
       this.listarControl();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
@@ -562,7 +561,7 @@ export class ServicebdService {
   }
   eliminarUsuario(id: number) {
     return this.database.executeSql('DELETE FROM usuario WHERE id_usuario = ?', [id]).then(res => {
-      this.presentAlert("Eliminar", "Usuario Eliminado");
+      this.presentToast('bottom',"Eliminar" + "Usuario Eliminado");
       this.listarUsuario();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
@@ -571,7 +570,7 @@ export class ServicebdService {
 
   modificarUsuario(id: number, nombre_usuario: string, apellido_usuario: string, id_carrera: number, telefono: number, correo_usuario: string, contrasena: string, rol_id_rol: number, id_pregunta: number, respuesta: string) {
     return this.database.executeSql('UPDATE usuario SET nombre_usuario = ?, apellido_usuario = ?, id_carrera = ?, telefono = ?, correo_usuario = ?, contrasena = ?, rol_id_rol = ? id_pregunta = ? ,respuesta = ? WHERE id_usuario = ?', [nombre_usuario, apellido_usuario, id_carrera, telefono, correo_usuario, contrasena, rol_id_rol,id_pregunta,respuesta, id]).then(res => {
-      this.presentAlert("Modificar", "Usuario Modificado");
+      this.presentToast('bottom',"Modificar" + "Usuario Modificado");
       this.listarUsuario();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
@@ -579,7 +578,7 @@ export class ServicebdService {
   }
   modificarInformacion(id: number, id_carrera: number, correo_usuario: string, telefono: number) {
     return this.database.executeSql('UPDATE usuario SET id_carrera = ?, correo_usuario = ?, telefono = ?  WHERE id_usuario = ?', [id_carrera, correo_usuario, telefono, id]).then(res => {
-      this.presentAlert("Modificar", "Usuario Modificado");
+      this.presentToast('bottom',"Modificar" + "Usuario Modificado");
       this.listarUsuario();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
@@ -587,7 +586,7 @@ export class ServicebdService {
   }
   modificarContra(id: number, contrasena: string) {
     return this.database.executeSql('UPDATE usuario SET contrasena = ?  WHERE id_usuario = ?', [contrasena, id]).then(res => {
-      this.presentAlert("Modificar", "Usuario Modificado");
+      this.presentToast('bottom',"Modificar" + "Usuario Modificado");
       this.listarUsuario();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
@@ -596,7 +595,7 @@ export class ServicebdService {
 
   modificarContrasena(correo_usuario: string, contrasena: string) {
     return this.database.executeSql('UPDATE usuario SET contrasena = ? WHERE correo_usuario = ?', [contrasena, correo_usuario]).then(res => {
-      this.presentAlert("Modificar", "Usuario Modificado");
+      this.presentToast('bottom',"Modificar" + "Usuario Modificado");
       this.listarUsuario();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
@@ -635,7 +634,7 @@ export class ServicebdService {
 
   elimarCategoria(id: number) {
     return this.database.executeSql('DELETE FROM categoria_publicacion WHERE id_categoria = ?', [id]).then(res => {
-      this.presentAlert("Eliminar", "Categoria Eliminada");
+      this.presentToast('bottom',"Eliminar" + "Categoria Eliminada");
       this.listarCategorias();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
@@ -644,7 +643,7 @@ export class ServicebdService {
 
   modificarCategoria(id: number, nombre_categoria: string) {
     return this.database.executeSql('UPDATE categoria_publicacion SET nombre_categoria = ? WHERE id_categoria = ?', [nombre_categoria, id]).then(res => {
-      this.presentAlert("Modificar", "Categoria Modificada");
+      this.presentToast('bottom',"Modificar" + "Categoria Modificada");
       this.listarCategorias();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
@@ -653,7 +652,7 @@ export class ServicebdService {
 
   insertarCategoria(nombre_categoria: string) {
     return this.database.executeSql('INSERT INTO categoria_publicacion(nombre_categoria) VALUES (?)', [nombre_categoria]).then(res => {
-      this.presentAlert("Insertar", "Categoria Insertada");
+      this.presentToast('bottom',"Insertar" + "Categoria Insertada");
       this.listarCategorias();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
@@ -704,7 +703,7 @@ export class ServicebdService {
 
   eliminarComentario(id: number) {
     return this.database.executeSql('DELETE FROM comentario  WHERE id_comentario = ?', [id]).then(res => {
-      this.presentAlert("Eliminar", "Comentario Eliminado");
+      this.presentToast('bottom',"Eliminar" + "Comentario Eliminado");
       this.listarComentarios();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
@@ -713,7 +712,7 @@ export class ServicebdService {
 
   modificarComentario(id: number, nombre_usuario_comentario: string, comentario_publicacion: string) {
     return this.database.executeSql('UPDATE comentario SET nombre_usuario_comentario = ?, comentario_publicacion = ? WHERE id_comentario = ?', [nombre_usuario_comentario, comentario_publicacion, id]).then(res => {
-      this.presentAlert("Modificar", "Comentario Modificado");
+      this.presentToast('bottom',"Modificar" + "Comentario Modificado");
       this.listarComentarios();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
@@ -722,7 +721,7 @@ export class ServicebdService {
 
   insertarComentario(nombre_usuario_comentario: string, comentario_publicacion: string, publicacion_id_publicacion: number) {
     return this.database.executeSql('INSERT INTO comentario(nombre_usuario_comentario,comentario_publicacion,publicacion_id_publicacion) VALUES (?,?,?)', [nombre_usuario_comentario, comentario_publicacion, publicacion_id_publicacion]).then(res => {
-      this.presentAlert("Insertar", "Comentario Insertado");
+      this.presentToast('bottom',"Insertar" + "Comentario Insertado");
       this.listarComentarios();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
@@ -755,7 +754,7 @@ export class ServicebdService {
     });
   }
   listarSeguimientos(id:number) {
-    return this.database.executeSql('SELECT * FROM seguimiento_usuario WHERE seguimiento_id_seguimiento = ?', [id]).then(res => {
+    return this.database.executeSql('SELECT * FROM seguimiento_usuario WHERE usuario_id_usuario  = ?', [id]).then(res => {
       let items: Seguimiento[] = [];
       if (res.rows.length > 0) {
         for (var i = 0; i < res.rows.length; i++) {
@@ -819,7 +818,7 @@ export class ServicebdService {
   }
   eliminarSeguidor(id: number) {
     return this.database.executeSql('DELETE FROM seguimiento_usuario  WHERE id_comentario = ?', [id]).then(res => {
-      this.presentAlert("Eliminar", "Seguidores Eliminado");
+      this.presentToast('bottom',"Eliminar" + "Seguidores Eliminado");
       this.listarSeguimiento();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
@@ -828,7 +827,7 @@ export class ServicebdService {
 
   modificarSeguidor(usuario_id_usuario: number, seguimiento_id_seguimiento: number) {
     return this.database.executeSql('UPDATE seguimiento_usuario SET usuario_id_usuario = ?, seguimiento_id_seguimiento = ? WHERE usuario_id_usuario = ?', [usuario_id_usuario, seguimiento_id_seguimiento, usuario_id_usuario]).then(res => {
-      this.presentAlert("Modificar", "Seguidores Modificado");
+      this.presentToast('bottom',"Modificar" + "Seguidores Modificado");
       this.listarSeguimiento();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
@@ -837,7 +836,7 @@ export class ServicebdService {
 
   insertarSeguidores(usuario_id_usuario: number, seguimiento_id_seguimiento: number) {
     return this.database.executeSql('INSERT INTO seguimiento_usuario(usuario_id_usuario,seguimiento_id_seguimiento) VALUES (?,?)', [usuario_id_usuario, seguimiento_id_seguimiento]).then(res => {
-      this.presentAlert("Insertar", "Seguidores Insertado");
+      this.presentToast('bottom',"Insertar" + "Seguidores Insertado");
       this.listarSeguimiento();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
@@ -880,7 +879,7 @@ export class ServicebdService {
   }
   eliminarGuardado(id: number) {
     return this.database.executeSql('DELETE FROM guardado_publicacion  WHERE publicacion_id_publicacion = ?', [id]).then(res => {
-      this.presentAlert("Eliminar", "La Publicacion Guardada Se Elimino");
+      this.presentToast('bottom',"Eliminar" + "La Publicacion Guardada Se Elimino");
       this.listarSeguimiento();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
@@ -889,7 +888,7 @@ export class ServicebdService {
 
   modificarGuardado(publicacion_id_publicacion: number, usuario_id_usuario: number) {
     return this.database.executeSql('UPDATE guardado_publicacion SET publicacion_id_publicacion = ?, usuario_id_usuario = ? WHERE usuario_id_usuario = ?', [publicacion_id_publicacion, usuario_id_usuario, usuario_id_usuario]).then(res => {
-      this.presentAlert("Modificar", "La Publicacion Guardada se Modifico");
+      this.presentToast('bottom',"Modificar" + "La Publicacion Guardada se Modifico");
       this.listarSeguimiento();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
@@ -898,7 +897,7 @@ export class ServicebdService {
 
   insertarGuardado(publicacion_id_publicacion: number, usuario_id_usuario: number) {
     return this.database.executeSql('INSERT INTO guardado_publicacion(publicacion_id_publicacion,usuario_id_usuario) VALUES (?,?)', [publicacion_id_publicacion, usuario_id_usuario]).then(res => {
-      this.presentAlert("Insertar", "La Publicacion Se Guardo Correctamente.");
+      this.presentToast('bottom',"Insertar" + "La Publicacion Se Guardo Correctamente.");
       this.listarSeguimiento();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
@@ -943,7 +942,7 @@ export class ServicebdService {
   }
   eliminarPreguntas(id: number) {
     return this.database.executeSql('DELETE FROM preguntas  WHERE id_pregunta = ?', [id]).then(res => {
-      this.presentAlert("Eliminar", "La Pregunta se elimino");
+      this.presentToast('bottom',"Eliminar" + "La Pregunta se elimino");
       this.listarPreguntas();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
@@ -952,7 +951,7 @@ export class ServicebdService {
 
   modificarPreguntas(id_pregunta: number, pregunta: string) {
     return this.database.executeSql('UPDATE preguntas SET  pregunta = ? WHERE id_pregunta = ?', [pregunta, id_pregunta]).then(res => {
-      this.presentAlert("Modificar", "La Pregunta se Modifico");
+      this.presentToast('bottom',"Modificar" + "La Pregunta se Modifico");
       this.listarPreguntas();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
@@ -961,7 +960,7 @@ export class ServicebdService {
 
   insertarPreguntas(pregunta: string) {
     return this.database.executeSql('INSERT INTO preguntas(pregunta) VALUES (?)', [pregunta]).then(res => {
-      this.presentAlert("Insertar", "La Pregunta Se Inserto Correctamente.");
+      this.presentToast('bottom',"Insertar" + "La Pregunta Se Inserto Correctamente.");
       this.listarPreguntas();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
@@ -1006,8 +1005,8 @@ export class ServicebdService {
   }
   eliminarCarrera(id: number) {
     return this.database.executeSql('DELETE FROM carrera  WHERE id_carrera = ?', [id]).then(res => {
-      this.presentAlert("Eliminar", "La Carrera se elimino");
-      this.listarPreguntas();
+      this.presentToast('bottom',"Eliminar" + "La Carrera se elimino");
+      this.listarCarreras();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
     })
@@ -1015,8 +1014,8 @@ export class ServicebdService {
 
   modificarCarrera(id_carrera: number, nombre_carrera: string) {
     return this.database.executeSql('UPDATE carrera SET  nombre_carrera = ? WHERE id_carrera = ?', [nombre_carrera, id_carrera]).then(res => {
-      this.presentAlert("Modificar", "La Carrera se Modifico");
-      this.listarPreguntas();
+      this.presentToast('bottom',"Modificar" + "La Carrera se Modifico");
+      this.listarCarreras();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
     })
@@ -1024,8 +1023,8 @@ export class ServicebdService {
 
   insertarCarrera(nombre_carrera: string) {
     return this.database.executeSql('INSERT INTO carrera(nombre_carrera) VALUES (?)', [nombre_carrera]).then(res => {
-      this.presentAlert("Insertar", "La Carrera Se Inserto Correctamente.");
-      this.listarPreguntas();
+      this.presentToast('bottom',"Insertar" + "La Carrera Se Inserto Correctamente.");
+      this.listarCarreras();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })
@@ -1071,8 +1070,8 @@ export class ServicebdService {
   }
   eliminarContacto(id: number) {
     return this.database.executeSql('DELETE FROM contacto  WHERE id_contacto = ?', [id]).then(res => {
-      this.presentAlert("Eliminar", "La Contacto se elimino");
-      this.listarPreguntas();
+      this.presentToast('bottom',"Eliminar" + "La Contacto se elimino");
+      this.listarContactos();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
     })
@@ -1080,8 +1079,8 @@ export class ServicebdService {
 
   modificarContacto(id_contacto: number, correo_usuario_contacto: string, mensaje_contacto: string) {
     return this.database.executeSql('UPDATE contacto SET  correo_usuario_contacto = ?, mensaje_contacto = ? WHERE id_contacto = ?', [correo_usuario_contacto, mensaje_contacto, id_contacto]).then(res => {
-      this.presentAlert("Modificar", "La Contacto se Modifico");
-      this.listarPreguntas();
+      this.presentToast('bottom',"Modificar" + "La Contacto se Modifico");
+      this.listarContactos();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
     })
@@ -1089,7 +1088,8 @@ export class ServicebdService {
 
   insertarContacto(correo_usuario_contacto: string, mensaje_contacto: string) {
     return this.database.executeSql('INSERT INTO contacto(correo_usuario_contacto,mensaje_contacto) VALUES (?,?)', [correo_usuario_contacto, mensaje_contacto]).then(res => {
-      this.listarPreguntas();
+      this.presentToast('bottom'," Insertar" + "El Contacto Se Inserto Correctamente.");
+      this.listarContactos();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })

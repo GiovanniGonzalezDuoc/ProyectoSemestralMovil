@@ -23,7 +23,8 @@ export class NoticiasPage implements OnInit {
   ) {
     this.api.getPosts().subscribe(
       (res) => {
-        this.arregloNoticias = res; // Guardamos las noticias obtenidas de la API
+        // Ordenamos las noticias por id_publicacion en orden descendente
+        this.arregloNoticias = res.sort((a: any, b: any) => b.id_publicacion - a.id_publicacion);
       },
       (err: string) => {
         this.bd.presentAlert('Información', 'Error: ' + err);

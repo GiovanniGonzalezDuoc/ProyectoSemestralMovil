@@ -37,7 +37,7 @@ export class PreguntasPage implements OnInit {
     this.router.navigate(['/crud/modificar-preguntas'],navigationsExtras);
   }
   eliminar(x:any){
-    this.bd.eliminarRol(x.id_pregunta);
+    this.bd.eliminarPreguntas(x.id_pregunta);
   }
 
   agregar(){

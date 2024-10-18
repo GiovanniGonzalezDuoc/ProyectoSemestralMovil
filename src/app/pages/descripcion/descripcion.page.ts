@@ -84,7 +84,7 @@ export class DescripcionPage implements OnInit {
         // Eliminar post
         if (idUsuarioSeguir === this.id_usuario) {
           this.bd.presentToast('bottom', 'El Post Se Eliminó Correctamente.');
-          this.bd.eliminarPublicacionID(this.id_usuario);
+          this.bd.eliminarPublicacion(this.arregloPublicacion.id_publicacion);
           this.volverAlInicio();
         } else {
           this.bd.presentToast('bottom', 'El Post No Se Eliminó Correctamente Debido a que no te pertenece.');

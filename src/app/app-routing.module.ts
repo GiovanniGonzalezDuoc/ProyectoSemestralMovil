@@ -167,16 +167,14 @@ const routes: Routes = [
     path: 'perfil-seguidor',
     loadChildren: () => import('./pages/perfil-seguidor/perfil-seguidor.module').then( m => m.PerfilSeguidorPageModule)
   },
-
-
-
-
-
-
-
-
-
-
+  {
+    path: 'publicaciones-guardadas',
+    loadChildren: () => import('./pages/publicaciones-guardadas/publicaciones-guardadas.module').then( m => m.PublicacionesGuardadasPageModule)
+  },
+  {
+    path: '**',
+    loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
+  },
   
 ];
 
@@ -188,7 +186,3 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-  // {
-  //   path: '**',
-  //   loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
-  // },

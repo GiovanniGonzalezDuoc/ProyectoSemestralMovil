@@ -4,19 +4,19 @@ import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
-  selector: 'app-perfil',
-  templateUrl: './perfil.page.html',
-  styleUrls: ['./perfil.page.scss'],
+  selector: 'app-publicaciones-guardadas',
+  templateUrl: './publicaciones-guardadas.page.html',
+  styleUrls: ['./publicaciones-guardadas.page.scss'],
 })
-export class PerfilPage implements OnInit {
+export class PublicacionesGuardadasPage implements OnInit {
   id_usuario!: number;
   nombre_usuario: any;
   apellido_usuario: any;
   rol_id_rol!: number;
   fotoPredeterminada: string = "assets/icon/logo.png";
-  
-  seguidores: number = 0; // Variable para el número de seguidores
-  siguiendo: number = 0; // Variable para el número de seguidos
+
+  seguidores: number = 0;
+  siguiendo: number = 0;
 
   arregloPublicacion: any = [
     {
@@ -28,30 +28,43 @@ export class PerfilPage implements OnInit {
       fecha_publicacion: '',
       usuario_id_usuario: '',
       categoria_publicacion_id_categoria: '',
-    }
+    },
   ];
 
-  constructor(private router: Router, private storage: NativeStorage, private bd: ServicebdService) {
+  constructor(
+    private router: Router,
+    private storage: NativeStorage,
+    private bd: ServicebdService
+  ) {
     this.bd.dbState().subscribe(data => {
       if (data) {
-        // Obtener el ID del usuario antes de listar las publicaciones y seguidores
         this.storage.getItem('id_usuario').then(id => {
           this.id_usuario = id;
 
-          // Llamar a la función listarPublicacionesID para cargar las publicaciones del usuario
-          this.bd.listarPublicacionesID(this.id_usuario).then(() => {
-            this.bd.fetchPublicacion().subscribe(publicaciones => {
-              // Filtrar las publicaciones por el usuario actual
-              this.arregloPublicacion = publicaciones.filter(p => p.usuario_id_usuario === this.id_usuario);
+          // Obtener las publicaciones guardadas para el usuario actual
+          this.bd.listarGuardado().then(guardados => {
+            const publicacionIds = guardados
+              .filter(g => g.usuario_id_usuario === this.id_usuario)
+              .map(g => g.publicacion_id_publicacion);
+
+            // Listar todas las publicaciones y filtrar las guardadas
+            this.bd.listarPublicaciones().then(() => {
+              this.bd.fetchPublicacion().subscribe(publicaciones => {
+                this.arregloPublicacion = publicaciones.filter(
+                  p => publicacionIds.includes(p.id_publicacion)
+                );
+              });
+            }).catch(err => {
+              console.error('Error listando publicaciones:', err);
             });
           }).catch(err => {
-            console.error('Error listando publicaciones:', err);
+            console.error('Error listando publicaciones guardadas:', err);
           });
 
           // Obtener número de seguidores
           this.bd.obtenerSeguidores(this.id_usuario).then(seguidores => {
             this.seguidores = seguidores;
-            console.log('Número de seguidores:', seguidores); // Depuración
+            console.log('Número de seguidores:', seguidores);
           }).catch(err => {
             console.error('Error obteniendo número de seguidores:', err);
           });
@@ -59,7 +72,7 @@ export class PerfilPage implements OnInit {
           // Obtener número de seguidos
           this.bd.obtenerSeguidos(this.id_usuario).then(seguidos => {
             this.siguiendo = seguidos;
-            console.log('Número de seguidos:', seguidos); // Depuración
+            console.log('Número de seguidos:', seguidos);
           }).catch(err => {
             console.error('Error obteniendo número de seguidos:', err);
           });
@@ -68,7 +81,7 @@ export class PerfilPage implements OnInit {
         });
       }
     });
-    
+
     this.storage.getItem('rol_id_rol').then(id => {
       this.rol_id_rol = id;
     }).catch(err => {
@@ -97,15 +110,14 @@ export class PerfilPage implements OnInit {
   openContact() {
     this.router.navigate(['/contacto']);
   }
+
   descripcion(x: any) {
     let navigationExtras: NavigationExtras = {
-      state: {
-        publicacion: x 
-      }
+      state: { publicacion: x }
     };
     this.router.navigate(['/descripcion'], navigationExtras);
   }
-
+  
   naviageToPerfil() {
     this.router.navigate(['/perfil']);
   }
@@ -113,4 +125,5 @@ export class PerfilPage implements OnInit {
   navigateToGuardados() {
     this.router.navigate(['/publicaciones-guardadas']);
   }
+
 }

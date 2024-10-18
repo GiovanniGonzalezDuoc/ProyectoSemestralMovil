@@ -26,7 +26,7 @@ export class BusquedaPage implements OnInit {
   categorias: any = {};
   // Variable que contendrá la foto predeterminada
   fotoPredeterminada: string = "assets/icon/logo.png";
-  categoriaId!: number; 
+  categoriaId!: number;
 
   constructor(private router: Router, private bd: ServicebdService, private storage: NativeStorage, private activedrouter: ActivatedRoute) {
     // Escuchar los parámetros del router y obtener el id_categoria
@@ -37,23 +37,24 @@ export class BusquedaPage implements OnInit {
         this.loadPublicaciones();  // Llamar aquí, cuando tenemos el ID disponible
       }
     });
-  
+
     // Verificar si la base de datos está lista antes de cargar las categorías
     this.bd.dbState().subscribe(data => {
       if (data) {
         this.loadCategoriaNames();  // Cargar los nombres de las categorías
       }
     });
-  
+
     // Obtener el rol del usuario
     this.storage.getItem('rol_id_rol').then(id => {
       this.rol_id_rol = id;
     }).catch(err => {
       console.error('Error obteniendo rol_id_rol:', err);
     });
+    this.loadAllPublicaciones()
   }
-  ngOnInit(){
-      
+  ngOnInit() {
+
   }
   // Cargar las publicaciones de la categoría seleccionada
   loadPublicaciones() {
@@ -68,9 +69,16 @@ export class BusquedaPage implements OnInit {
         this.bd.presentAlert('Error al listar publicaciones:', err);
       });
     } else {
-      this.bd.presentAlert('No se seleccionó ninguna categoría.','');
+      this.bd.presentAlert('No se seleccionó ninguna categoría.', '');
     }
   }
+  // Cargar las publicaciones de la categoría seleccionada
+  loadAllPublicaciones() {
+    this.bd.fetchPublicacion().subscribe(res => {
+      this.arregloPublicacion = res;
+    });
+  }
+
   loadCategoriaNames() {
     this.bd.fetchCategorias().subscribe(categorias => {
       categorias.forEach(categoria => {

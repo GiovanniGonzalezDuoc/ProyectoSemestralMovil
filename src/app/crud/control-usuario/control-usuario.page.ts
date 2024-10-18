@@ -52,7 +52,7 @@ export class ControlUsuarioPage implements OnInit {
   }
 
   eliminar(x: Control) {
-    this.bd.eliminarRol(x.id_veto); // Cambia esto según el ID correcto a eliminar
+    this.bd.eliminarControl(x.id_veto); // Cambia esto según el ID correcto a eliminar
   }
 
   agregar() {

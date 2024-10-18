@@ -44,12 +44,10 @@
     </ion-buttons>
   </ion-toolbar>
 
-
   <ion-card-header>
-    <h1 class="publicaciones-header">Mis Publicaciones</h1>
+    <h1 class="publicaciones-header">Publicaciones Guardadas</h1>
   </ion-card-header>
-
-
+  
   <ion-card-content>
     <ion-list>
       <ion-card *ngFor="let x of arregloPublicacion" class="publicacion-card" (click)="descripcion(x)">
@@ -62,7 +60,7 @@
             <p class="hora-publicacion">hace {{ x.fecha_publicacion }} horas</p>
           </ion-label>
         </ion-item>
-
+  
         <ion-item lines="none" class="publicacion-content-blanco">
           <ion-label>
             <h3 class="titulo-publicacion">{{ x.titulo_publicacion }}</h3>
@@ -72,4 +70,5 @@
       </ion-card>
     </ion-list>
   </ion-card-content>
+  
 </ion-content>

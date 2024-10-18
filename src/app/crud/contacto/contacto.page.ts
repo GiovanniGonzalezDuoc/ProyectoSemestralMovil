@@ -39,7 +39,7 @@ export class ContactoPage implements OnInit {
     this.router.navigate(['/crud/modificar-contacto'],navigationsExtras);
   }
   eliminar(x:any){
-    this.bd.eliminarRol(x.id_contacto);
+    this.bd.eliminarContacto(x.id_contacto);
   }
 
   agregar(){

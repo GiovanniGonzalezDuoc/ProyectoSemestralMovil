@@ -1,14 +1,20 @@
 ion-content {
-  --background: white;
+  --background: #F0F0F0;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  padding: 10px;
 }
 
 .ajustes-card {
-  margin: 20px; 
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
   border-radius: 12px; 
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
-  border: 1px solid #dddddd; 
+  border: 1px solid #dddddd;
+  background-color: #FFFFFF; /* Fondo blanco para la tarjeta */
 }
-
 
 .ajustes-card ion-card-header {
   background-color: #00796b; 
@@ -18,107 +24,104 @@ ion-content {
   border-bottom: 1px solid #dddddd; 
 }
 
-
 .ajustes-card ion-card-title {
   font-size: 1.2em;
   font-weight: bold;
 }
 
-
 .ajustes-card ion-card-content {
   padding: 20px; 
   background-color: #ffffff; 
   border-bottom-left-radius: 12px; 
-  border-bottom-right-radius: 12px; 
+  border-bottom-right-radius: 12px;
+  box-shadow: 0 10px 30px rgba(24, 136, 193, 0.12); /* Sombra más definida */
 }
-
-
-ion-input {
-  --padding-start: 0; 
-  --padding-end: 0; 
-  margin-bottom: 15px; 
-}
-
-
-ion-button {
-  margin-top: 15px; 
-}
-
-
-ion-button[color="danger"] {
-  background-color: #d32f2f; 
-  color: #ffffff; 
-}
-
-ion-button[color="danger"]:hover {
-  background-color: #b71c1c; 
-}
-
-
-ion-item {
-  --border-width: 0; 
-  --border-style: none; 
-  --background: transparent; 
-  --inner-border-width: 0; 
-  box-shadow: none; 
-}
-
 
 ion-input {
   --padding-start: 16px; 
   --padding-end: 16px; 
   --inner-padding-top: 12px; 
   --inner-padding-bottom: 12px; 
-  --border-radius: 8px; 
+  --border-radius: 20px; /* Bordes redondeados */
   --background: #ffffff; 
   --placeholder-color: #999999; 
   --color: #333333; 
-  --box-shadow: none; 
-  border: 1px solid #dddddd; 
+  border: 1px solid #dddddd;
   margin-bottom: 15px; 
-  outline: none; 
+  outline: none;
+  box-shadow: 0 10px 30px rgba(24, 136, 193, 0.12); /* Sombra ligera */
 }
-
-
-.item-inner {
-  border: none !important; 
-  box-shadow: none !important; 
-  background: transparent !important; 
-  outline: none !important; 
-}
-
 
 ion-input:focus,
 ion-input.ion-focused {
-  outline: none; 
   border-color: #00796b; 
-  box-shadow: none !important; 
+  box-shadow: 0 0 8px rgba(0, 121, 107, 0.5); /* Efecto de enfoque */
 }
-
-
-ion-card {
-  box-shadow: none !important; 
-}
-
-
-ion-item {
-  --padding-start: 0; 
-  --padding-end: 0; 
-  --inner-border-width: 0px !important; 
-}
-
-
-ion-input.ion-focused {
-  border-color: #00796b; 
-  box-shadow: 0 0 4px rgba(0, 121, 107, 0.5); 
-}
-
 
 ion-input::placeholder {
   color: #999999; 
 }
 
+ion-button {
+  margin-top: 15px;
+  --background: #00796b;
+  --border-radius: 20px;
+  font-weight: bold;
+  color: white;
+  min-width: 160px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+}
 
-ion-input.ion-focused .input-placeholder {
-  color: #00796b; 
+ion-button[color="danger"] {
+  background-color: #d32f2f;
+}
+
+ion-button[color="danger"]:hover {
+  background-color: #b71c1c; 
+}
+
+ion-item {
+  --background: transparent; 
+  --border-width: 0; 
+  box-shadow: none; 
+}
+
+.texto-label {
+  display: inline-block;
+  padding: 8px 12px;
+  background-color: #00796b;
+  color: white;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  font-weight: bold;
+  width: 100%;
+  line-height: 1.2;
+  outline: none;
+  height: 35px;
+}
+
+.bordes-texto {
+  background-color: white;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  margin-bottom: 26px;
+  box-shadow: 0 10px 30px rgba(24, 136, 193, 0.12); /* Sombra sutil */
+  padding-left: 10px;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.container-boton {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+ion-button {
+  margin-top: 15px;
 }
