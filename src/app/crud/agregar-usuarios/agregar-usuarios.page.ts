@@ -17,9 +17,9 @@ export class AgregarUsuariosPage implements OnInit {
   id_pregunta!: number;
   respuesta: string = "";
   preguntasSeguridad: any[] = []; // Almacenar las preguntas de seguridad desde la BD
-  preguntaSeleccionada: number[] = []; // Pregunta seleccionada
+  preguntaSeleccionada!: number; // Pregunta seleccionada
   carreras: any[] = []; // Almacenar las carreras desde la BD
-  carreraSeleccionada: number[] = []; // Carrera seleccionada
+  carreraSeleccionada!: number; // Carrera seleccionada
   roles: any[] = []; // Aquí se almacenarán las categorías desde la BD
   rolSeleccionado: number[] = []; // Para las categorías seleccionadas
   
@@ -49,9 +49,7 @@ export class AgregarUsuariosPage implements OnInit {
   }
 
   insertar() {
-    const preguntaSelecion = this.preguntaSeleccionada[0];
-    const carrera_usuario = this.carreraSeleccionada[0];
     const rol_usuario = this.roles[0];
-    this.bd.insertarUsuario(this.nombre_usuario, this.apellido_usuario, carrera_usuario, this.telefono, this.correo_usuario, this.contrasena, rol_usuario, preguntaSelecion, this.respuesta);
+    this.bd.insertarUsuario(this.nombre_usuario, this.apellido_usuario, this.carreraSeleccionada , this.telefono, this.correo_usuario, this.contrasena, rol_usuario, this.preguntaSeleccionada, this.respuesta);
   }
 }
