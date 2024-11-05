@@ -41,7 +41,7 @@ export class ServicebdService {
   registroPreguntas: string = "INSERT or IGNORE INTO preguntas(id_pregunta,pregunta) VALUES (1,'Color Favorito?'), (2,'Animal Favorito?');";
   registroCategorias: string = "INSERT or IGNORE INTO categoria_publicacion(id_categoria,nombre_categoria) VALUES (1,'Ingenieria En Informatica'), (2,'Administracion De Empresas'),(3,'Redes');";
   registroAdmin: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,id_carrera,telefono,correo_usuario,contrasena,rol_id_rol,id_pregunta,respuesta) Values (1,'admin','admin',1,'37742574','admin','admin',2,1,'Si');";
-  registroPublicacion: string = "INSERT or IGNORE INTO publicacion(id_publicacion,nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,fecha_publicacion,usuario_id_usuario,categoria_publicacion_id_categoria) Values (1,'Admin','Bienvenido A Nuestra Aplicacion','Te Damos La Bienvenida A Nuestra Aplicacion','20/10/2024',1,1);";
+  registroPublicacion: string = "INSERT or IGNORE INTO publicacion(id_publicacion,nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,fecha_publicacion,usuario_id_usuario,categoria_publicacion_id_categoria) Values (1,'Admin Admin','Bienvenido A Nuestra Aplicacion','Te Damos La Bienvenida A Nuestra Aplicacion','20/10/2024',1,1);";
 
   //variables para guardar los datos de las consultas en las tablas
   listadoRol = new BehaviorSubject([]);
