@@ -74,9 +74,15 @@
           <h3>{{ comentario.nombre_usuario_comentario }}</h3>
           <p>{{ comentario.comentario_publicacion }}</p>
         </ion-label>
+
+        <!-- Botón de opciones en el comentario -->
+        <div class="card-menu">
+          <ion-button fill="clear" (click)="openPopover($event)" (click)="selectComentario(comentario)">
+            <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+          </ion-button>
+        </div>
       </ion-item>
     </ion-list>
-    
   </ion-card-content>
 
 
@@ -99,6 +105,15 @@
         <ion-item lines="none" *ngIf="rol_id_rol === 2;">
           <ion-item (click)="handleOption('option3', idUsuarioSeguir)">Banear Usuario</ion-item>
         </ion-item>
+        <ion-item lines="none" *ngIf="rol_id_rol === 2;">
+          <ion-item (click)="handleOption('banearPublicacion', arregloPublicacion.id_publicacion)">Banear
+            Publicación</ion-item>
+        </ion-item>
+        <ion-item *ngIf="comentarioSeleccionado" (click)="handleOption('eliminarComentario', comentarioSeleccionado)">
+          Eliminar Comentario
+        </ion-item>
+        <ion-item *ngIf="rol_id_rol === 2" (click)="handleOption('banearComentario', idUsuarioSeguir)">Banear
+          Comentario</ion-item>
       </ion-list>
     </ng-template>
   </ion-popover>

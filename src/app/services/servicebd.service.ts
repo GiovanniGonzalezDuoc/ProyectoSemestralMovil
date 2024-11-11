@@ -13,6 +13,8 @@ import { Guardado } from '../models/guardado';
 import { Pregunta } from '../models/pregunta';
 import { Carreras } from '../models/carreras';
 import { Contacto } from '../models/contacto';
+import { ControlPublicacion } from '../models/control-publicacion';
+import { ControlComentario } from '../models/control-comentario';
 
 
 @Injectable({
@@ -31,6 +33,8 @@ export class ServicebdService {
   tablaPublicacion: string = "CREATE TABLE IF NOT EXISTS publicacion (id_publicacion INTEGER PRIMARY KEY NOT NULL, nombre_usuario_publicacion TEXT NOT NULL, titulo_publicacion TEXT NOT NULL, descripcion_publicacion TEXT NOT NULL, like_publicacion INTEGER, fecha_publicacion TEXT NOT NULL, usuario_id_usuario INTEGER, categoria_publicacion_id_categoria INTEGER, foto BLOB, FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario), FOREIGN KEY (categoria_publicacion_id_categoria) REFERENCES categoria_publicacion(id_categoria));";
   tablaControl_Usuario: string = "CREATE TABLE IF NOT EXISTS control_usuario (id_veto INTEGER PRIMARY KEY NOT NULL, tiempo_veto INTEGER NOT NULL, fecha_veto TEXT NOT NULL, motivo_veto TEXT NOT NULL, usuario_id_usuario INTEGER NOT NULL, FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario));";
   tablaComentario: string = "CREATE TABLE IF NOT EXISTS comentario (id_comentario INTEGER PRIMARY KEY NOT NULL, nombre_usuario_comentario TEXT NOT NULL, comentario_publicacion TEXT NOT NULL, publicacion_id_publicacion INTEGER NOT NULL, FOREIGN KEY (publicacion_id_publicacion) REFERENCES publicacion(id_publicacion));";
+  tablaControl_Publicaciones: string = "CREATE TABLE IF NOT EXISTS control_publicaciones (id_veto_publicacion INTEGER PRIMARY KEY NOT NULL, tiempo_veto_publicacion INTEGER NOT NULL, fecha_veto_publicacion TEXT NOT NULL, motivo_veto_publicacion TEXT NOT NULL, publicacion_id_publicacion INTEGER NOT NULL, FOREIGN KEY (publicacion_id_publicacion) REFERENCES publicacion(id_publicacion));";
+  tablaControl_Comentarios: string = "CREATE TABLE IF NOT EXISTS control_comentarios (id_veto_comentario INTEGER PRIMARY KEY NOT NULL, tiempo_veto_comentario INTEGER NOT NULL, fecha_veto_comentario TEXT NOT NULL, motivo_veto_comentario TEXT NOT NULL, comentario_id_comentario INTEGER NOT NULL, FOREIGN KEY (comentario_id_comentario) REFERENCES comentario(id_comentario));";
   tablaCategoria_Publicacion: string = "CREATE TABLE IF NOT EXISTS categoria_publicacion (id_categoria INTEGER PRIMARY KEY NOT NULL, nombre_categoria TEXT NOT NULL);";
   tablaGuardado_Publicacion: string = "CREATE TABLE IF NOT EXISTS guardado_publicacion (publicacion_id_publicacion INTEGER NOT NULL, usuario_id_usuario INTEGER NOT NULL, PRIMARY KEY (publicacion_id_publicacion, usuario_id_usuario), FOREIGN KEY (publicacion_id_publicacion) REFERENCES publicacion(id_publicacion), FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario));";
   tablaSeguimiento_Usuario: string = "CREATE TABLE IF NOT EXISTS seguimiento_usuario (usuario_id_usuario INTEGER NOT NULL, seguimiento_id_seguimiento INTEGER NOT NULL,PRIMARY KEY (usuario_id_usuario, seguimiento_id_seguimiento),FOREIGN KEY (usuario_id_usuario) REFERENCES usuario(id_usuario),FOREIGN KEY (seguimiento_id_seguimiento) REFERENCES usuario(id_usuario))";
@@ -41,6 +45,7 @@ export class ServicebdService {
   registroPreguntas: string = "INSERT or IGNORE INTO preguntas(id_pregunta,pregunta) VALUES (1,'Color Favorito?'), (2,'Animal Favorito?');";
   registroCategorias: string = "INSERT or IGNORE INTO categoria_publicacion(id_categoria,nombre_categoria) VALUES (1,'Ingenieria En Informatica'), (2,'Administracion De Empresas'),(3,'Redes');";
   registroAdmin: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,id_carrera,telefono,correo_usuario,contrasena,rol_id_rol,id_pregunta,respuesta) Values (1,'admin','admin',1,'37742574','admin','admin',2,1,'Si');";
+  registroAdmin2: string = "INSERT or IGNORE INTO usuario(id_usuario,nombre_usuario,apellido_usuario,id_carrera,telefono,correo_usuario,contrasena,rol_id_rol,id_pregunta,respuesta) Values (100,'admin','admin',1,'37742574','admin','admin',2,1,'Si');";
   registroPublicacion: string = "INSERT or IGNORE INTO publicacion(id_publicacion,nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,fecha_publicacion,usuario_id_usuario,categoria_publicacion_id_categoria) Values (1,'Admin Admin','Bienvenido A Nuestra Aplicacion','Te Damos La Bienvenida A Nuestra Aplicacion','20/10/2024',1,1);";
 
   //variables para guardar los datos de las consultas en las tablas
@@ -55,6 +60,8 @@ export class ServicebdService {
   listadoPreguntas = new BehaviorSubject([]);
   listadoCarreras = new BehaviorSubject([]);
   listadoContactos = new BehaviorSubject([]);
+  listadoControlPublicaciones = new BehaviorSubject([]);
+  listadoControlComentarios = new BehaviorSubject([]);
 
   private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
@@ -127,6 +134,8 @@ export class ServicebdService {
       await this.database.executeSql(this.tablaCategoria_Publicacion, []);
       await this.database.executeSql(this.tablaPublicacion, []);
       await this.database.executeSql(this.tablaComentario, []);
+      await this.database.executeSql(this.tablaControl_Publicaciones, []);
+      await this.database.executeSql(this.tablaControl_Comentarios, []);
       await this.database.executeSql(this.tablaGuardado_Publicacion, []);
       await this.database.executeSql(this.tablaSeguimiento_Usuario, []);
       await this.database.executeSql(this.tablaPreguntas, []);
@@ -138,6 +147,7 @@ export class ServicebdService {
       await this.database.executeSql(this.registroCategorias, []);
       await this.database.executeSql(this.registroPreguntas, []);
       await this.database.executeSql(this.registroAdmin, []);
+      await this.database.executeSql(this.registroAdmin2, []);
       await this.database.executeSql(this.registroPublicacion, []);
 
       //modifica el estado de la Base De Datos
@@ -709,9 +719,9 @@ export class ServicebdService {
     })
   }
 
-  eliminarComentario(id: number) {
-    return this.database.executeSql('DELETE FROM comentario  WHERE id_comentario = ?', [id]).then(res => {
-      this.presentToast('bottom',"Eliminar" + "Comentario Eliminado");
+  eliminarComentario(id_comentario: string) {
+    return this.database.executeSql('DELETE FROM comentario  WHERE id_comentario = ?', [id_comentario]).then(res => {
+      this.presentToast('bottom',"Eliminar " + "Comentario Eliminado");
       this.listarComentarios();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
@@ -1098,6 +1108,160 @@ export class ServicebdService {
     return this.database.executeSql('INSERT INTO contacto(correo_usuario_contacto,mensaje_contacto) VALUES (?,?)', [correo_usuario_contacto, mensaje_contacto]).then(res => {
       this.presentToast('bottom'," Insertar" + "El Contacto Se Inserto Correctamente.");
       this.listarContactos();
+    }).catch(e => {
+      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
+    })
+  }
+  //APARTADO DE Control De Publicaciones
+  fetchControlPublicaciones(): Observable<ControlPublicacion[]> {
+    return this.listadoControlPublicaciones.asObservable();
+  }
+  listarControlPublicacion() {
+    return this.database.executeSql('SELECT * FROM control_publicaciones', []).then(res => {
+      //variable para almacenar el rsultado de la consulta
+      let items: ControlPublicacion[] = [];
+      //valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        //recorro mi resultado
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
+            id_veto_publicacion: res.rows.item(i).id_veto_publicacion,
+            tiempo_veto_publicacion: res.rows.item(i).tiempo_veto_publicacion,
+            fecha_veto_publicacion: res.rows.item(i).fecha_veto_publicacion,
+            motivo_veto_publicacion: res.rows.item(i).motivo_veto_publicacion,
+            publicacion_id_publicacion: res.rows.item(i).publicacion_id_publicacion,
+          })
+      }
+      this.listadoControlPublicaciones.next(items as any);
+    })
+  }
+  verificarBaneoPublicacion(id: number): Promise<{ tiempoRestante: number; motivo: string } | null> {
+    return this.database.executeSql('SELECT * FROM control_publicaciones WHERE publicacion_id_publicacion = ?', [id]).then(res => {
+      // Valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        const ban = res.rows.item(0); // Obtener el primer registro
+        const tiempoVeto = ban.tiempo_veto_publicacion; // Suponiendo que este es el tiempo de baneo en horas
+        const motivoVeto = ban.motivo_veto_publicacion; // Motivo del baneo
+  
+        // Calcular el tiempo restante (esto puede requerir que manejes el tiempo de baneo)
+        const fechaVeto = new Date(ban.fecha_veto_publicacion); // Asegúrate de que la fecha se almacene correctamente en la base de datos
+        const tiempoBaneo = tiempoVeto * 60 * 60 * 1000; // Convertir a milisegundos
+        const tiempoRestante = Math.max(0, (fechaVeto.getTime() + tiempoBaneo - Date.now()) / (1000 * 60 * 60)); // Calcular el tiempo restante en horas
+  
+        // Si el tiempo restante es menor o igual a 0, significa que el baneo ha expirado
+        if (tiempoRestante <= 0) {
+          return null; // El baneo ha expirado
+        }
+  
+        return {
+          tiempoRestante: Math.ceil(tiempoRestante), // Redondear hacia arriba
+          motivo: motivoVeto,
+        };
+      }
+      return null; // Si no hay baneos, retornar null
+    });
+  }  
+
+  eliminarControlPublicacion(id: number) {
+    return this.database.executeSql('DELETE FROM control_publicaciones WHERE id_veto_publicacion = ?', [id]).then(res => {
+      this.presentToast('bottom',"Eliminar" + "Control Veto Eliminado");
+      this.listarControl();
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  modificarControlPublicacion(id_veto: number, tiempo_veto: number, motivo_veto: number, id_publicacion: number) {
+    return this.database.executeSql('UPDATE control_publicaciones SET tiempo_veto_publicacion = ?, motivo_veto_publicacion = ?, publicacion_id_publicacion = ? WHERE id_veto_publicacion = ?', [tiempo_veto, motivo_veto, id_publicacion, id_veto]).then(res => {
+      this.presentToast('bottom',"Modificar" + "Control Veto Modificado");
+      this.listarControl();
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  insertarControlPublicacion(tiempo_veto: number, motivo_veto: string, id_publicacion: number) {
+    return this.database.executeSql('INSERT INTO control_publicaciones(tiempo_veto_publicacion,fecha_veto_publicacion,motivo_veto_publicacion,publicacion_id_publicacion) VALUES (?,CURRENT_TIMESTAMP,?,?)', [tiempo_veto, motivo_veto, id_publicacion]).then(res => {
+      this.presentToast('bottom',"Insertar" + "Control Veto Insertado");
+      this.listarControl();
+    }).catch(e => {
+      this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
+    })
+  }
+  //APARTADO DE Control De Comentarios
+  fetchControlComentarios(): Observable<ControlComentario[]> {
+    return this.listadoControlComentarios.asObservable();
+  }
+  listarControlComentarios() {
+    return this.database.executeSql('SELECT * FROM control_comentarios', []).then(res => {
+      //variable para almacenar el rsultado de la consulta
+      let items: ControlComentario[] = [];
+      //valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        //recorro mi resultado
+        for (var i = 0; i < res.rows.length; i++)
+          //agrego los registros a mi lista
+          items.push({
+            id_veto_comentario: res.rows.item(i).id_veto_comentario,
+            tiempo_veto_comentario: res.rows.item(i).tiempo_veto_comentario,
+            fecha_veto_comentario: res.rows.item(i).fecha_veto_comentario,
+            motivo_veto_comentario: res.rows.item(i).motivo_veto_comentario,
+            id_comentario: res.rows.item(i).id_comentario,
+          })
+      }
+      this.listadoControlComentarios.next(items as any);
+    })
+  }
+  verificarBaneoComentarios(id: number): Promise<{ tiempoRestante: number; motivo: string } | null> {
+    return this.database.executeSql('SELECT * FROM control_comentarios WHERE id_comentario = ?', [id]).then(res => {
+      // Valido si trae al menos un registro
+      if (res.rows.length > 0) {
+        const ban = res.rows.item(0); // Obtener el primer registro
+        const tiempoVeto = ban.tiempo_veto_comentario; // Suponiendo que este es el tiempo de baneo en horas
+        const motivoVeto = ban.motivo_veto_comentario; // Motivo del baneo
+  
+        // Calcular el tiempo restante (esto puede requerir que manejes el tiempo de baneo)
+        const fechaVeto = new Date(ban.fecha_veto_comentario); // Asegúrate de que la fecha se almacene correctamente en la base de datos
+        const tiempoBaneo = tiempoVeto * 60 * 60 * 1000; // Convertir a milisegundos
+        const tiempoRestante = Math.max(0, (fechaVeto.getTime() + tiempoBaneo - Date.now()) / (1000 * 60 * 60)); // Calcular el tiempo restante en horas
+  
+        // Si el tiempo restante es menor o igual a 0, significa que el baneo ha expirado
+        if (tiempoRestante <= 0) {
+          return null; // El baneo ha expirado
+        }
+  
+        return {
+          tiempoRestante: Math.ceil(tiempoRestante), // Redondear hacia arriba
+          motivo: motivoVeto,
+        };
+      }
+      return null; // Si no hay baneos, retornar null
+    });
+  }  
+
+  eliminarControlComentarios(id: number) {
+    return this.database.executeSql('DELETE FROM control_comentarios WHERE id_veto_comentario = ?', [id]).then(res => {
+      this.presentToast('bottom',"Eliminar" + "Control Veto Eliminado");
+      this.listarControl();
+    }).catch(e => {
+      this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  modificarControlComentarios(id_veto: number, tiempo_veto: number, motivo_veto: number, id_comentario: number) {
+    return this.database.executeSql('UPDATE control_comentarios SET tiempo_veto_comentario = ?, motivo_veto_comentario = ?, id_comentario = ? WHERE id_veto_comentario = ?', [tiempo_veto, motivo_veto, id_comentario, id_veto]).then(res => {
+      this.presentToast('bottom',"Modificar" + "Control Veto Modificado");
+      this.listarControl();
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+    })
+  }
+
+  insertarControlComentarios(tiempo_veto: number, motivo_veto: string, id_comentario: number) {
+    return this.database.executeSql('INSERT INTO control_comentarios(tiempo_veto_comentario,fecha_veto_comentario,motivo_veto_comentario,id_comentario) VALUES (?,CURRENT_TIMESTAMP,?,?)', [tiempo_veto, motivo_veto, id_comentario]).then(res => {
+      this.presentToast('bottom',"Insertar" + "Control Veto Insertado");
+      this.listarControl();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })

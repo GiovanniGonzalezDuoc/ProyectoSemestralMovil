@@ -15,16 +15,22 @@ export class DescripcionPage implements OnInit {
   likes: number = 25;
   nuevoComentario: string = '';
   isPopoverOpen = false;
+  isCommentPopoverOpen = false;
   selectedOption!: string;
   fotoPredeterminada: string = "assets/icon/logo.png";
   categorias: any = {}; // Para almacenar los nombres de las categorías
   nombre_usuario: any;
   apellido_usuario: any;
-  comentarios: any[] = []; // Arreglo propio para los comentarios
+  comentarios: any; // Arreglo propio para los comentarios
+  comentarios2: any[] = []; // Arreglo propio para los comentarios
   rol_id_rol!: number;
   idUsuarioSeguir!: number;
+  selectedComentarioId!: number;
   id_usuario!: number;
   fotoUrl!: string; // Nueva propiedad para almacenar la URL de la imagen
+  UsuarioID!: number;
+  comentario_nombre_usuario: string = "";
+  comentarioSeleccionado: any;
 
 
   constructor(private router: Router, private activedrouter: ActivatedRoute, private bd: ServicebdService, private storage: NativeStorage, private alertController: AlertController) {
@@ -76,11 +82,15 @@ export class DescripcionPage implements OnInit {
     this.isPopoverOpen = false;
   }
 
-  handleOption(option: string, idUsuarioSeguir: number) {
-    idUsuarioSeguir = this.arregloPublicacion.usuario_id_usuario;
+  selectComentario(comentario: any) {
+    this.comentarioSeleccionado = comentario; // Almacena el comentario que se seleccionó
+  }
+
+  handleOption(option: string, idUsuarioSeguir: number, comentario_nombre_usuario?: string) {
     this.closePopover();
     setTimeout(() => {
       if (option === 'option1') {
+        idUsuarioSeguir = this.arregloPublicacion.usuario_id_usuario;
         // Eliminar post
         if (idUsuarioSeguir === this.id_usuario) {
           this.bd.presentToast('bottom', 'El Post Se Eliminó Correctamente.');
@@ -91,9 +101,11 @@ export class DescripcionPage implements OnInit {
           this.volverAlInicio();
         }
       } else if (option === 'option3') {
+        idUsuarioSeguir = this.arregloPublicacion.usuario_id_usuario;
         // Opción para banear usuario
         this.solicitarTiempoBaneo(idUsuarioSeguir);
       } else if (option === 'option2') {
+        idUsuarioSeguir = this.arregloPublicacion.usuario_id_usuario;
         // Lógica para seguir a un usuario
         this.storage.getItem('id_usuario').then(idUsuarioActual => {
           // Verificar si el usuario está intentando seguirse a sí mismo
@@ -101,14 +113,14 @@ export class DescripcionPage implements OnInit {
             this.bd.presentToast('bottom', 'No puedes seguirte a ti mismo.');
             return; // Salir de la función si es el mismo usuario
           }
-      
+
           // Verificar si ya lo sigue
           this.bd.verificarSeguimiento(idUsuarioActual, idUsuarioSeguir).then(isFollowing => {
             if (!isFollowing) {
               // Si no lo sigue, agregar a la tabla seguimiento
               this.bd.insertarSeguidores(idUsuarioActual, idUsuarioSeguir).then(async () => {
                 this.bd.presentToast('bottom', 'Se ha seguido correctamente al usuario.');
-      
+
                 // Enviar notificación local
                 await LocalNotifications.schedule({
                   notifications: [
@@ -124,7 +136,7 @@ export class DescripcionPage implements OnInit {
                     },
                   ],
                 });
-      
+
                 this.volverAlInicio();
               }).catch(err => {
                 console.error('Error al seguir al usuario:', err);
@@ -140,9 +152,36 @@ export class DescripcionPage implements OnInit {
         }).catch(err => {
           console.error('Error obteniendo id_usuario:', err);
         });
+      } else if (option === 'banearPublicacion') {
+        // Banear publicación
+        this.solicitarTiempoBaneoPublicacion(this.arregloPublicacion.id_publicacion);
+      }else if (option === 'eliminarComentario' && this.comentarioSeleccionado) {
+        const nombreUsuario = `${this.nombre_usuario || ''} ${this.apellido_usuario || ''}`.trim();
+
+        const idSeguidorUsuario = this.comentarioSeleccionado.id_comentario;
+        
+        // Verificamos si el nombre de usuario del comentario coincide con el nombre del usuario logueado
+        if (nombreUsuario === this.comentarioSeleccionado.nombre_usuario_comentario) {
+          this.bd.presentToast('bottom', 'El Comentario Se Eliminó Correctamente.');
+          
+          // Llamamos a la función para eliminar el comentario, pasando el nombre de usuario
+          this.bd.eliminarComentario(idSeguidorUsuario).then(() => {
+            // Recargar los comentarios
+            this.cargarComentarios(this.arregloPublicacion.id_publicacion);
+          }).catch(err => {
+            this.bd.presentToast('bottom', 'Error al eliminar el comentario.');
+          });
+        } else {
+          this.bd.presentToast('bottom', 'No tienes permiso para eliminar este comentario.');
+        }
+      }else if (option === 'banearComentario') {
+        // Banear comentario
+        idUsuarioSeguir = this.comentarios.id_comentario;
+        this.solicitarTiempoBaneoComentario(idUsuarioSeguir);
       }
     }, 0);
   }
+
 
   // Método para likear el post con límite de un like por usuario
   like(idPublicacion: number) {
@@ -257,6 +296,7 @@ export class DescripcionPage implements OnInit {
     this.bd.listarComentariosID(idPublicacion).then(() => {
       this.bd.fetchComentarios().subscribe(comentarios => {
         this.comentarios = comentarios.filter(c => c.publicacion_id_publicacion === idPublicacion);
+        this.comentarios2 = comentarios.filter(c => c.publicacion_id_publicacion === idPublicacion);
       });
     });
   }
@@ -308,6 +348,103 @@ export class DescripcionPage implements OnInit {
               }).catch(err => {
                 console.error('Error al banear usuario:', err);
                 this.bd.presentToast('bottom', 'Error al banear usuario.');
+              });
+            } else {
+              this.bd.presentToast('bottom', 'Por favor ingresa un tiempo válido.');
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+  // Método para solicitar el tiempo de baneo de una publicación
+  async solicitarTiempoBaneoPublicacion(idPublicacion: number) {
+    const alert = await this.alertController.create({
+      header: 'Baneo de Publicación',
+      inputs: [
+        {
+          name: 'tiempoBaneo',
+          type: 'number',
+          placeholder: 'Tiempo en horas'
+        },
+        {
+          name: 'motivoBaneo',
+          type: 'text',
+          placeholder: 'Motivo del baneo'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+        },
+        {
+          text: 'Aceptar',
+          handler: (data: { tiempoBaneo: any; motivoBaneo: string }) => {
+            const tiempoBaneo = data.tiempoBaneo;
+            const motivo = data.motivoBaneo;
+
+            if (tiempoBaneo && tiempoBaneo > 0) {
+              const mensajeBaneo = motivo ? `${motivo} - Baneado por administrador` : 'Baneado por administrador';
+
+              this.bd.insertarControlPublicacion(tiempoBaneo, mensajeBaneo, idPublicacion).then(() => {
+                this.bd.presentToast('bottom', 'Publicación baneada correctamente.');
+                this.volverAlInicio();
+              }).catch(err => {
+                console.error('Error al banear la publicación:', err);
+                this.bd.presentToast('bottom', 'Error al banear la publicación.');
+              });
+            } else {
+              this.bd.presentToast('bottom', 'Por favor ingresa un tiempo válido.');
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  // Método para solicitar el tiempo de baneo de un comentario
+  async solicitarTiempoBaneoComentario(idComentario: number) {
+    const alert = await this.alertController.create({
+      header: 'Baneo de Comentario',
+      inputs: [
+        {
+          name: 'tiempoBaneo',
+          type: 'number',
+          placeholder: 'Tiempo en horas'
+        },
+        {
+          name: 'motivoBaneo',
+          type: 'text',
+          placeholder: 'Motivo del baneo'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+        },
+        {
+          text: 'Aceptar',
+          handler: (data: { tiempoBaneo: any; motivoBaneo: string }) => {
+            const tiempoBaneo = data.tiempoBaneo;
+            const motivo = data.motivoBaneo;
+
+            if (tiempoBaneo && tiempoBaneo > 0) {
+              const mensajeBaneo = motivo ? `${motivo} - Baneado por administrador` : 'Baneado por administrador';
+
+              this.bd.insertarControlComentarios(tiempoBaneo, mensajeBaneo, idComentario).then(() => {
+                this.bd.presentToast('bottom', 'Comentario baneado correctamente.');
+                this.cargarComentarios(this.arregloPublicacion.id_publicacion);
+              }).catch(err => {
+                console.error('Error al banear el comentario:', err);
+                this.bd.presentToast('bottom', 'Error al banear el comentario.');
               });
             } else {
               this.bd.presentToast('bottom', 'Por favor ingresa un tiempo válido.');
