@@ -17,6 +17,7 @@ export class RegistroPage implements OnInit {
     telefono: '',
     correo_usuario: "",
     contrasena: '',
+    re_contrasena:'',
     rol_id_rol: 1,
     id_pregunta: '', // ID de la pregunta seleccionada
     respuesta: '', // Respuesta de la pregunta de seguridad
@@ -118,6 +119,10 @@ export class RegistroPage implements OnInit {
           formValid = false;
         }
       });
+    }
+    if (this.arregloUsuario.contrasena != this.arregloUsuario.re_contrasena){
+      this.errorContrasena = 'Las Contraseñas No Son Iguales.'
+      formValid = false;
     }
 
     // Validar que la contraseña cumpla con las reglas

@@ -96,13 +96,19 @@ export class DescripcionPage implements OnInit {
       } else if (option === 'option2') {
         // Lógica para seguir a un usuario
         this.storage.getItem('id_usuario').then(idUsuarioActual => {
+          // Verificar si el usuario está intentando seguirse a sí mismo
+          if (idUsuarioActual === idUsuarioSeguir) {
+            this.bd.presentToast('bottom', 'No puedes seguirte a ti mismo.');
+            return; // Salir de la función si es el mismo usuario
+          }
+      
           // Verificar si ya lo sigue
           this.bd.verificarSeguimiento(idUsuarioActual, idUsuarioSeguir).then(isFollowing => {
             if (!isFollowing) {
               // Si no lo sigue, agregar a la tabla seguimiento
               this.bd.insertarSeguidores(idUsuarioActual, idUsuarioSeguir).then(async () => {
-                this.bd.presentToast('bottom', 'Se Ha Seguido Correctamente Al Usuario.');
-
+                this.bd.presentToast('bottom', 'Se ha seguido correctamente al usuario.');
+      
                 // Enviar notificación local
                 await LocalNotifications.schedule({
                   notifications: [
@@ -111,14 +117,14 @@ export class DescripcionPage implements OnInit {
                       body: `${this.nombre_usuario} te ha seguido.`,
                       id: 1,
                       schedule: { at: new Date(Date.now() + 1000 * 5) }, // Notificación después de 5 segundos
-                      sound: undefined, // Omitir este campo
-                      attachments: [], // O puedes dejarlo fuera si no lo usas
+                      sound: undefined,
+                      attachments: [],
                       actionTypeId: '',
                       extra: null,
                     },
                   ],
                 });
-
+      
                 this.volverAlInicio();
               }).catch(err => {
                 console.error('Error al seguir al usuario:', err);

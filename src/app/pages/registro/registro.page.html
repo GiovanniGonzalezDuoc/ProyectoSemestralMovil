@@ -73,6 +73,12 @@
         <div *ngIf="errorContrasena" class="error-message">
           <p>{{ errorContrasena }}</p>
         </div>
+                <!-- Campo Contraseña -->
+        <span class="texto-label">Repita Contraseña</span>
+        <div class="bordes-texto">
+          <ion-input class="input" [(ngModel)]="arregloUsuario.re_contrasena" name="contrasena"
+            placeholder="Ingrese su Contraseña" type="password" required></ion-input>
+        </div>
 
         <!-- Pregunta de Seguridad -->
         <span class="texto-label">Pregunta de Seguridad</span>
