@@ -3,7 +3,7 @@ export class ControlComentario {
     tiempo_veto_comentario!:number;
     fecha_veto_comentario!:Date;
     motivo_veto_comentario!:string;
-    id_comentario!:number;
+    comentario_id_comentario!:number;
     nombre_usuario?: string; // opcional al principio
     apellido_usuario?: string; // opcional al principio
     descripcion_comentario?: string; // opcional al principio

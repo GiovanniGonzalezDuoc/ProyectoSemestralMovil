@@ -32,11 +32,20 @@ export class HomePage {
     this.bd.dbState().subscribe(data => {
       //validar si la bd esta lista
       if (data) {
-        //subscribir al observable de la listaRoles
-        this.bd.fetchPublicacion().subscribe(res => {
-          this.arregloPublicacion = res;
-          this.loadCategoriaNames();
-        })
+        // Primero obtenemos las publicaciones de control_publicaciones
+        this.bd.fetchControlPublicaciones().subscribe(banpubli => {
+          // Luego obtenemos todas las publicaciones
+          this.bd.fetchPublicacion().subscribe(res => {
+            // Filtramos las publicaciones que no están en control_publicaciones
+            // Suponemos que banpubli contiene un array de publicaciones en control_publicaciones
+            this.arregloPublicacion = res.filter(publicacion => 
+              !banpubli.some(ban => ban.publicacion_id_publicacion === publicacion.id_publicacion)
+            );
+            
+            // Cargamos los nombres de las categorías después de filtrar las publicaciones
+            this.loadCategoriaNames();
+          });
+        });
       }
     })
     this.storage.getItem('rol_id_rol').then(id => {

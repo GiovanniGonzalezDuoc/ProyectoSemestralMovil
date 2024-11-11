@@ -155,15 +155,15 @@ export class DescripcionPage implements OnInit {
       } else if (option === 'banearPublicacion') {
         // Banear publicación
         this.solicitarTiempoBaneoPublicacion(this.arregloPublicacion.id_publicacion);
-      }else if (option === 'eliminarComentario' && this.comentarioSeleccionado) {
+      } else if (option === 'eliminarComentario' && this.comentarioSeleccionado) {
         const nombreUsuario = `${this.nombre_usuario || ''} ${this.apellido_usuario || ''}`.trim();
 
         const idSeguidorUsuario = this.comentarioSeleccionado.id_comentario;
-        
+
         // Verificamos si el nombre de usuario del comentario coincide con el nombre del usuario logueado
         if (nombreUsuario === this.comentarioSeleccionado.nombre_usuario_comentario) {
           this.bd.presentToast('bottom', 'El Comentario Se Eliminó Correctamente.');
-          
+
           // Llamamos a la función para eliminar el comentario, pasando el nombre de usuario
           this.bd.eliminarComentario(idSeguidorUsuario).then(() => {
             // Recargar los comentarios
@@ -174,9 +174,9 @@ export class DescripcionPage implements OnInit {
         } else {
           this.bd.presentToast('bottom', 'No tienes permiso para eliminar este comentario.');
         }
-      }else if (option === 'banearComentario') {
+      } else if (option === 'banearComentario') {
         // Banear comentario
-        idUsuarioSeguir = this.comentarios.id_comentario;
+        idUsuarioSeguir = this.comentarioSeleccionado.id_comentario;
         this.solicitarTiempoBaneoComentario(idUsuarioSeguir);
       }
     }, 0);
@@ -294,10 +294,14 @@ export class DescripcionPage implements OnInit {
 
   cargarComentarios(idPublicacion: number) {
     this.bd.listarComentariosID(idPublicacion).then(() => {
-      this.bd.fetchComentarios().subscribe(comentarios => {
-        this.comentarios = comentarios.filter(c => c.publicacion_id_publicacion === idPublicacion);
-        this.comentarios2 = comentarios.filter(c => c.publicacion_id_publicacion === idPublicacion);
-      });
+      this.bd.fetchControlComentarios().subscribe(comban => {
+        this.bd.fetchComentarios().subscribe(com => {
+          this.comentarios = com.filter(c =>
+            !comban.some(ban => ban.comentario_id_comentario === c.id_comentario));
+          this.comentarios2 = com.filter(c =>
+            !comban.some(ban => ban.comentario_id_comentario === c.id_comentario));
+        });
+      })
     });
   }
 
@@ -390,8 +394,27 @@ export class DescripcionPage implements OnInit {
             if (tiempoBaneo && tiempoBaneo > 0) {
               const mensajeBaneo = motivo ? `${motivo} - Baneado por administrador` : 'Baneado por administrador';
 
-              this.bd.insertarControlPublicacion(tiempoBaneo, mensajeBaneo, idPublicacion).then(() => {
+              this.bd.insertarControlPublicacion(tiempoBaneo, mensajeBaneo, idPublicacion).then(async () => {
                 this.bd.presentToast('bottom', 'Publicación baneada correctamente.');
+
+                // Programar y enviar notificación local sobre el baneo
+                const mensajeNotificacion = `La publicación ha sido baneada por ${tiempoBaneo} horas. Motivo: ${motivo || 'No especificado'}.`;
+                await LocalNotifications.schedule({
+                  notifications: [
+                    {
+                      title: 'Publicación Baneada',
+                      body: mensajeNotificacion,
+                      id: 1,
+                      schedule: { at: new Date(Date.now() + 1000 * 5) }, // Notificación después de 5 segundos
+                      sound: undefined,
+                      attachments: [],
+                      actionTypeId: '',
+                      extra: null,
+                    },
+                  ],
+                });
+
+                // Redirigir al inicio o recargar la página según sea necesario
                 this.volverAlInicio();
               }).catch(err => {
                 console.error('Error al banear la publicación:', err);
@@ -407,7 +430,6 @@ export class DescripcionPage implements OnInit {
 
     await alert.present();
   }
-
   // Método para solicitar el tiempo de baneo de un comentario
   async solicitarTiempoBaneoComentario(idComentario: number) {
     const alert = await this.alertController.create({
@@ -439,8 +461,27 @@ export class DescripcionPage implements OnInit {
             if (tiempoBaneo && tiempoBaneo > 0) {
               const mensajeBaneo = motivo ? `${motivo} - Baneado por administrador` : 'Baneado por administrador';
 
-              this.bd.insertarControlComentarios(tiempoBaneo, mensajeBaneo, idComentario).then(() => {
+              this.bd.insertarControlComentarios(tiempoBaneo, mensajeBaneo, idComentario).then(async () => {
                 this.bd.presentToast('bottom', 'Comentario baneado correctamente.');
+
+                // Programar y enviar notificación local sobre el baneo
+                const mensajeNotificacion = `Tu comentario ha sido baneado por ${tiempoBaneo} horas. Motivo: ${motivo || 'No especificado'}.`;
+                await LocalNotifications.schedule({
+                  notifications: [
+                    {
+                      title: 'Comentario Baneado',
+                      body: mensajeNotificacion,
+                      id: 1,
+                      schedule: { at: new Date(Date.now() + 1000 * 5) }, // Notificación después de 5 segundos
+                      sound: undefined,
+                      attachments: [],
+                      actionTypeId: '',
+                      extra: null,
+                    },
+                  ],
+                });
+
+                // Recargar los comentarios después de realizar el baneo
                 this.cargarComentarios(this.arregloPublicacion.id_publicacion);
               }).catch(err => {
                 console.error('Error al banear el comentario:', err);

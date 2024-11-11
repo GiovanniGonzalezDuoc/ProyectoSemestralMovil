@@ -124,6 +124,8 @@ export class ServicebdService {
       this.listarControl();
       this.listarSeguimiento();
       this.listarGuardado();
+      this.listarControlComentarios();
+      this.listarControlPublicacion();
 
       //ejecuto la creación de Tablas
       await this.database.executeSql(this.tablaRol, []);
@@ -1166,7 +1168,7 @@ export class ServicebdService {
   eliminarControlPublicacion(id: number) {
     return this.database.executeSql('DELETE FROM control_publicaciones WHERE id_veto_publicacion = ?', [id]).then(res => {
       this.presentToast('bottom',"Eliminar" + "Control Veto Eliminado");
-      this.listarControl();
+      this.listarControlPublicacion();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
     })
@@ -1175,7 +1177,7 @@ export class ServicebdService {
   modificarControlPublicacion(id_veto: number, tiempo_veto: number, motivo_veto: number, id_publicacion: number) {
     return this.database.executeSql('UPDATE control_publicaciones SET tiempo_veto_publicacion = ?, motivo_veto_publicacion = ?, publicacion_id_publicacion = ? WHERE id_veto_publicacion = ?', [tiempo_veto, motivo_veto, id_publicacion, id_veto]).then(res => {
       this.presentToast('bottom',"Modificar" + "Control Veto Modificado");
-      this.listarControl();
+      this.listarControlPublicacion();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
     })
@@ -1184,7 +1186,7 @@ export class ServicebdService {
   insertarControlPublicacion(tiempo_veto: number, motivo_veto: string, id_publicacion: number) {
     return this.database.executeSql('INSERT INTO control_publicaciones(tiempo_veto_publicacion,fecha_veto_publicacion,motivo_veto_publicacion,publicacion_id_publicacion) VALUES (?,CURRENT_TIMESTAMP,?,?)', [tiempo_veto, motivo_veto, id_publicacion]).then(res => {
       this.presentToast('bottom',"Insertar" + "Control Veto Insertado");
-      this.listarControl();
+      this.listarControlPublicacion();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })
@@ -1207,14 +1209,14 @@ export class ServicebdService {
             tiempo_veto_comentario: res.rows.item(i).tiempo_veto_comentario,
             fecha_veto_comentario: res.rows.item(i).fecha_veto_comentario,
             motivo_veto_comentario: res.rows.item(i).motivo_veto_comentario,
-            id_comentario: res.rows.item(i).id_comentario,
+            comentario_id_comentario: res.rows.item(i).comentario_id_comentario,
           })
       }
       this.listadoControlComentarios.next(items as any);
     })
   }
   verificarBaneoComentarios(id: number): Promise<{ tiempoRestante: number; motivo: string } | null> {
-    return this.database.executeSql('SELECT * FROM control_comentarios WHERE id_comentario = ?', [id]).then(res => {
+    return this.database.executeSql('SELECT * FROM control_comentarios WHERE comentario_id_comentario = ?', [id]).then(res => {
       // Valido si trae al menos un registro
       if (res.rows.length > 0) {
         const ban = res.rows.item(0); // Obtener el primer registro
@@ -1243,25 +1245,25 @@ export class ServicebdService {
   eliminarControlComentarios(id: number) {
     return this.database.executeSql('DELETE FROM control_comentarios WHERE id_veto_comentario = ?', [id]).then(res => {
       this.presentToast('bottom',"Eliminar" + "Control Veto Eliminado");
-      this.listarControl();
+      this.listarControlComentarios();
     }).catch(e => {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
     })
   }
 
   modificarControlComentarios(id_veto: number, tiempo_veto: number, motivo_veto: number, id_comentario: number) {
-    return this.database.executeSql('UPDATE control_comentarios SET tiempo_veto_comentario = ?, motivo_veto_comentario = ?, id_comentario = ? WHERE id_veto_comentario = ?', [tiempo_veto, motivo_veto, id_comentario, id_veto]).then(res => {
+    return this.database.executeSql('UPDATE control_comentarios SET tiempo_veto_comentario = ?, motivo_veto_comentario = ?, comentario_id_comentario = ? WHERE id_veto_comentario = ?', [tiempo_veto, motivo_veto, id_comentario, id_veto]).then(res => {
       this.presentToast('bottom',"Modificar" + "Control Veto Modificado");
-      this.listarControl();
+      this.listarControlComentarios();
     }).catch(e => {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
     })
   }
 
   insertarControlComentarios(tiempo_veto: number, motivo_veto: string, id_comentario: number) {
-    return this.database.executeSql('INSERT INTO control_comentarios(tiempo_veto_comentario,fecha_veto_comentario,motivo_veto_comentario,id_comentario) VALUES (?,CURRENT_TIMESTAMP,?,?)', [tiempo_veto, motivo_veto, id_comentario]).then(res => {
+    return this.database.executeSql('INSERT INTO control_comentarios(tiempo_veto_comentario,fecha_veto_comentario,motivo_veto_comentario,comentario_id_comentario) VALUES (?,CURRENT_TIMESTAMP,?,?)', [tiempo_veto, motivo_veto, id_comentario]).then(res => {
       this.presentToast('bottom',"Insertar" + "Control Veto Insertado");
-      this.listarControl();
+      this.listarControlComentarios();
     }).catch(e => {
       this.presentAlert('Insertar', 'Error:' + JSON.stringify(e));
     })

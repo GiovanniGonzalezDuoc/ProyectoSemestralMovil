@@ -172,9 +172,30 @@ const routes: Routes = [
     loadChildren: () => import('./pages/publicaciones-guardadas/publicaciones-guardadas.module').then( m => m.PublicacionesGuardadasPageModule)
   },
   {
-    path: '**',
-    loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
+    path: 'crud/control-control-publicacion',
+    loadChildren: () => import('./crud/control-control-publicacion/control-control-publicacion.module').then( m => m.ControlControlPublicacionPageModule)
   },
+  {
+    path: 'crud/agregar-control-control-publicacion',
+    loadChildren: () => import('./crud/agregar-control-control-publicacion/agregar-control-control-publicacion.module').then( m => m.AgregarControlControlPublicacionPageModule)
+  },
+  {
+    path: 'crud/modificar-control-control-publicacion',
+    loadChildren: () => import('./crud/modificar-control-control-publicacion/modificar-control-control-publicacion.module').then( m => m.ModificarControlControlPublicacionPageModule)
+  },
+  {
+    path: 'crud/modificar-control-comentarios',
+    loadChildren: () => import('./crud/modificar-control-comentarios/modificar-control-comentarios.module').then( m => m.ModificarControlComentariosPageModule)
+  },
+  {
+    path: 'crud/agregar-control-comentarios',
+    loadChildren: () => import('./crud/agregar-control-comentarios/agregar-control-comentarios.module').then( m => m.AgregarControlComentariosPageModule)
+  },
+  {
+    path: 'crud/control-comentarios',
+    loadChildren: () => import('./crud/control-comentarios/control-comentarios.module').then( m => m.ControlComentariosPageModule)
+  },
+
   
 ];
 
@@ -186,3 +207,8 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+// {
+//   path: '**',
+//   loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
+// },

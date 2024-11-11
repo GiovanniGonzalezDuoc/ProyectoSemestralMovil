@@ -1,0 +1,26 @@
+<ion-header [translucent]="true">
+  <app-header-admin></app-header-admin>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item>
+    <ion-input label="Tiempo Veto" labelPlacement="floating" placeholder="Ingrese El Tiempo En Dias" [(ngModel)]="tiempo_veto_publicacion"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input label="Motivo Veto" labelPlacement="floating" placeholder="Ingrese El Motivo De Baneo" [(ngModel)]="motivo_veto_publicacion"></ion-input>
+  </ion-item>
+  <ion-item class="input-item">
+    <ion-select 
+      [(ngModel)]="publicacionSeleccionado" 
+      label="Usuarios" 
+      labelPlacement="floating" 
+      placeholder="Seleccione Usuario"
+      multiple="false">
+      <ion-select-option *ngFor="let publicaciones of publicacion" [value]="publicaciones.id_publicacion">
+        {{ publicaciones.id_publicacion }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>  
+  <ion-button color="success" (click)="insertar()">Agregar Control publicacion</ion-button>
+  <ion-button color="warning" [routerLink]="['/crud/control-control-publicacion']">Ir a Lista Controles</ion-button>
+</ion-content>
