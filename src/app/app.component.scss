@@ -3,87 +3,122 @@ ion-app {
 }
 
 .menu-header {
-    display: flex;
-    align-items: center;
-    padding: 16px;
-    background: #f4f4f4;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  
-  .menu-header ion-avatar {
-    margin-right: 12px;
-  }
-  
-  .menu-header ion-label h2 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .menu-header ion-label p {
-    margin: 0;
-    color: #666;
-    font-size: 14px;
-  }
-  
-  
-  ion-item {
-    --background: #ffffff;
-    --border-color: #e0e0e0;
-    --color: #333;
-  }
-  
-  ion-item:hover {
-    --background: #e0f7fa;
-  }
-  
-  
-  ion-list-header {
-    background-color: #00796b; 
-    color: #ffffff; 
-    padding: 8px 16px; 
-  }
-  
-  
-  ion-item.activated {
-    --background: #00796b; 
-    --color: #ffffff; 
-  }
-  
-  
-  ion-content {
-    --background: #f4f4f4; 
-  }
-.color-menu{
-    --background: #00796b; 
-}  
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #f4f4f4;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.menu-header ion-avatar {
+  margin-right: 12px;
+}
+
+.menu-header ion-label h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.menu-header ion-label p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+
+ion-item {
+  --background: #ffffff;
+  --border-color: #e0e0e0;
+  --color: #333;
+}
+
+ion-item:hover {
+  --background: #e0f7fa;
+}
+
 
 ion-list-header {
-    background-color: #00796b; 
-    color: #ffffff; 
-    padding: 12px 16px; 
-    font-size: 16px; 
-    font-weight: bold; 
-    border-radius: 8px; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
-    margin: 8px 0; 
-    text-align: center;
-  }
-  
-  
-  ion-list-header:hover {
-    background-color: #004d40; 
-    cursor: pointer; 
-    transition: background-color 0.3s ease; 
-  }
+  background-color: #00796b;
+  color: #ffffff;
+  padding: 8px 16px;
+}
 
-  .logo {
-    width: 40px;               
-    height: 40px;              
-    border-radius: 50%;        
-    object-fit: cover;         
-    border: 2px solid #ffffff; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-    
-    margin-left: 130px;
-  }
+
+ion-item.activated {
+  --background: #00796b;
+  --color: #ffffff;
+}
+
+
+ion-content {
+  --background: #f4f4f4;
+}
+
+.color-menu {
+  --background: #00796b;
+}
+
+ion-list-header {
+  background-color: #00796b;
+  color: #ffffff;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 8px 0;
+  text-align: center;
+}
+
+
+ion-list-header:hover {
+  background-color: #004d40;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  margin-left: 130px;
+}
+
+/* Estilo para el ion-list-header del apartado de categorías */
+ion-list-header.label-estatico {
+  display: flex; /* Para centrar el contenido */
+  justify-content: center; /* Centrar horizontalmente */
+  align-items: center; /* Centrar verticalmente */
+  background-color: #f4f4f4; /* Fondo claro para diferenciar */
+  color: #333; /* Color del texto */
+  padding: 12px; 
+  font-size: 18px; 
+  font-weight: bold;
+  border-top: 5px solid #00796b;
+  border-bottom: 5px solid #00796b; /* Línea inferior para indicar separación */
+  border-radius: 0; /* Quitar borde redondeado */
+  box-shadow: none; /* Sin sombra */
+  cursor: default; /* Cursor estático */
+  margin-top: 8px; /* Espacio superior */
+}
+
+/* Indicador visual para mostrar que es una sección */
+ion-list-header.label-estatico::after {
+  content: "⬤"; /* Punto o símbolo decorativo */
+  color: #00796b; /* Color del punto */
+  font-size: 10px; /* Tamaño del símbolo */
+  margin-left: 8px; /* Espacio entre el texto y el símbolo */
+}
+
+
+.categorias-label {
+  color: #000; /* Puedes ajustar el color para que parezca texto normal */
+  font-weight: bold; /* Puedes darle más estilo si es necesario */
+  text-align: left; /* Alineación a la izquierda */
+  cursor: default; /* Cambia el cursor a uno estático */
+}

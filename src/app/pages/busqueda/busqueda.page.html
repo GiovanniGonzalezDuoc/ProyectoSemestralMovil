@@ -52,7 +52,7 @@
           <ion-icon name="thumbs-up-outline"></ion-icon>
           <p>{{ x.like_publicacion }}</p>
         </ion-button>
-        <ion-button class="icon-dimension" (click)="comentario(x.id_publicacion); $event.stopPropagation();">
+        <ion-button class="icon-dimension" (click)="comentario(x); $event.stopPropagation();">
           <ion-icon name="chatbubble-outline"></ion-icon>
           <p>{{ x.comentarios }}</p>
         </ion-button>

@@ -54,18 +54,70 @@ export class HomePage {
   }
 
   // Método para navegar a la descripción de la publicación
-  comentario(id: number) {
-    this.router.navigate(['/descripcion', id]);
+  comentario(publicacion: any) {
+    let navigationExtras: NavigationExtras = {
+      state: {
+        publicacion: publicacion // Pasamos la publicación completa
+      }
+    };
+    this.router.navigate(['/descripcion'], navigationExtras);
   }
 
-  // Método para likear el post
+  // Método para likear el post con límite de un like por usuario
   like(idPublicacion: number) {
-    // Primero, actualizamos el número de likes en la base de datos
-    this.bd.aumentarLike(idPublicacion).then(() => {
-      this.bd.presentToast('bottom', 'Se Dio Like Correctamente.');
+    // Obtener el id del usuario desde el almacenamiento
+    this.storage.getItem('id_usuario').then(idUsuario => {
+      const key = `likes_usuario_${idUsuario}`;
+
+      // Obtener el listado de likes que el usuario ha dado (si existe)
+      this.storage.getItem(key).then((likes: number[]) => {
+        // Si no existe el arreglo, inicializamos uno vacío
+        if (!likes) {
+          likes = [];
+        }
+
+        // Verificar si el usuario ya dio like a esta publicación
+        if (!likes.includes(idPublicacion)) {
+          // Si no ha dado like, aumentamos el número de likes en la base de datos
+          this.bd.aumentarLike(idPublicacion).then(() => {
+            // Agregamos el ID de la publicación al arreglo de likes
+            likes.push(idPublicacion);
+
+            // Guardamos el arreglo actualizado en el almacenamiento local
+            this.storage.setItem(key, likes).then(() => {
+              this.bd.presentToast('bottom', 'Se dio like correctamente.');
+            }).catch(err => {
+              console.error('Error al actualizar el almacenamiento local:', err);
+              this.bd.presentToast('bottom', 'Error al registrar el like.');
+            });
+          }).catch(err => {
+            console.error('Error al aumentar el número de likes:', err);
+            this.bd.presentToast('bottom', 'Error al dar like.');
+          });
+        } else {
+          this.bd.presentToast('bottom', 'Ya has dado like a este post.');
+        }
+      }).catch(() => {
+        // Si no existe el registro, significa que el usuario aún no ha dado like
+        this.bd.aumentarLike(idPublicacion).then(() => {
+          // Creamos un nuevo arreglo de likes con el ID actual de la publicación
+          const newLikes = [idPublicacion];
+
+          // Guardamos este arreglo en el almacenamiento local
+          this.storage.setItem(key, newLikes).then(() => {
+            this.bd.presentToast('bottom', 'Se dio like correctamente.');
+          }).catch(err => {
+            console.error('Error al guardar el nuevo arreglo de likes:', err);
+            this.bd.presentToast('bottom', 'Error al registrar el like.');
+          });
+        }).catch(err => {
+          console.error('Error al aumentar el número de likes:', err);
+          this.bd.presentToast('bottom', 'Error al dar like.');
+        });
+      });
     }).catch(err => {
-      console.error('Error al dar like:', err);
-      this.bd.presentToast('bottom', 'Error al dar like.');
+      console.error('Error obteniendo id_usuario:', err);
+      this.bd.presentToast('bottom', 'Error al obtener el usuario.');
     });
   }
 
@@ -76,7 +128,7 @@ export class HomePage {
         // Verificar si la publicación ya está guardada
         this.bd.listarGuardado().then(guardados => {
           const yaGuardado = guardados.some(guardado => guardado.publicacion_id_publicacion === publicacionId && guardado.usuario_id_usuario === usuarioId);
-  
+
           if (!yaGuardado) {
             // Insertar la publicación en la tabla guardado
             this.bd.insertarGuardado(publicacionId, usuarioId).then(() => {
@@ -99,8 +151,6 @@ export class HomePage {
       this.bd.presentToast('bottom', 'Error: La publicación no es válida.');
     }
   }
-  
-
 
   descripcion(x: any) {
     let navigationExtras: NavigationExtras = {

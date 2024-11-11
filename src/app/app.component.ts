@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { ServicebdService } from './services/servicebd.service';
 import { NavigationExtras, Router } from '@angular/router';
+import { MenuController } from '@ionic/angular'; // Importar MenuController
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,12 @@ export class AppComponent {
   filteredCategorias: any[] = []; // Lista de categorías filtradas para la búsqueda
   searchTerm: string = ''; // Término de búsqueda
 
-  constructor(private storage: NativeStorage, private bd: ServicebdService, private router: Router) {
+  constructor(
+    private storage: NativeStorage,
+    private bd: ServicebdService,
+    private router: Router,
+    private menuController: MenuController // Inyectar el controlador del menú
+  ) {
     this.storage.getItem('nombre_usuario').then(res => {
       this.nombre_usuario = res;
     }).catch(err => {
@@ -33,6 +39,7 @@ export class AppComponent {
     this.loadCategoriaNames();
   }
 
+  // Método para cargar las categorías
   loadCategoriaNames() {
     this.bd.fetchCategorias().subscribe(categorias => {
       this.categorias = categorias;
@@ -40,13 +47,20 @@ export class AppComponent {
     });
   }
 
+  // Método para ir a la descripción de la categoría y cerrar el menú
   descripcion(id: number) {
     let navigationExtras: NavigationExtras = {
       state: {
         id_categoria: id
       }
     };
+    this.menuController.close(); // Cerrar el menú antes de navegar
     this.router.navigate(['/busqueda'], navigationExtras);
+  }
+  
+  irAGenteQueSigues() {
+    this.menuController.close(); // Cierra el menú
+    this.router.navigate(['/listado-seguidores']); // Navega a la página de "Gente que sigues"
   }
 
   // Método para filtrar categorías basado en el término de búsqueda
@@ -56,5 +70,4 @@ export class AppComponent {
       categoria.nombre_categoria.toLowerCase().includes(term) // Filtra según el nombre
     );
   }
-
 }

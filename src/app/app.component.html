@@ -21,11 +21,11 @@
       </ion-item>
 
       <ion-list-header>
-        <ion-label [routerLink]="['/listado-seguidores']">Gente que sigues</ion-label>
+        <ion-label (click)="irAGenteQueSigues()">Gente que sigues</ion-label>
       </ion-list-header>
 
-      <ion-list-header>
-        <ion-label>Categorías</ion-label>
+      <ion-list-header class="label-estatico">
+        <ion-label class="categorias-label">Categorías</ion-label>
       </ion-list-header>
 
       <!-- Barra de búsqueda -->
