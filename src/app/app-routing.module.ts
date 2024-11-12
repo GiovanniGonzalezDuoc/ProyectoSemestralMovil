@@ -194,7 +194,15 @@ const routes: Routes = [
   {
     path: 'crud/control-comentarios',
     loadChildren: () => import('./crud/control-comentarios/control-comentarios.module').then( m => m.ControlComentariosPageModule)
+  },  {
+    path: 'modificar-publicacion',
+    loadChildren: () => import('./pages/modificar-publicacion/modificar-publicacion.module').then( m => m.ModificarPublicacionPageModule)
   },
+  {
+    path: 'modificar-comentario',
+    loadChildren: () => import('./pages/modificar-comentario/modificar-comentario.module').then( m => m.ModificarComentarioPageModule)
+  },
+
 
   
 ];

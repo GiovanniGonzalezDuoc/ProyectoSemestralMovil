@@ -36,7 +36,7 @@ export class ControlComentariosPage implements OnInit {
         control: x
       }
     };
-    this.router.navigate(['/crud/agregar-modificar-control-comentarios'], navigationsExtras);
+    this.router.navigate(['/crud/modificar-control-comentarios'], navigationsExtras);
   }
 
   eliminar(x: ControlComentario) {

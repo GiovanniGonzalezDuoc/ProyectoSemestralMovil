@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { AlertController } from '@ionic/angular';
@@ -178,7 +178,23 @@ export class DescripcionPage implements OnInit {
         // Banear comentario
         idUsuarioSeguir = this.comentarioSeleccionado.id_comentario;
         this.solicitarTiempoBaneoComentario(idUsuarioSeguir);
-      }
+      }else if (option === 'editarPost'){
+          idUsuarioSeguir = this.arregloPublicacion;
+          let navigationExtras: NavigationExtras = {
+            state: {
+              publicacion: idUsuarioSeguir // Pasamos la publicación completa
+            }
+          };
+          this.router.navigate(['/modificar-publicacion'], navigationExtras);
+      }else if (option === 'editarComentario'){
+        const idSeguidorUsuario = this.comentarioSeleccionado;
+        let navigationExtras: NavigationExtras = {
+          state: {
+            comentario: idSeguidorUsuario // Pasamos la publicación completa
+          }
+        };
+        this.router.navigate(['/modificar-comentario'], navigationExtras);
+    }
     }, 0);
   }
 

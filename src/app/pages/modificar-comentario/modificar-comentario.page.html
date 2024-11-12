@@ -1,0 +1,33 @@
+<ion-header [translucent]="true">
+  <ng-container *ngIf="rol_id_rol === 2; else NormalHeader">
+    <app-header-admin></app-header-admin>
+  </ng-container>
+  <ng-template #NormalHeader>
+    <app-header></app-header>
+  </ng-template>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card class="publicar-card">
+    <ion-card-header>
+      <ion-card-title>Modificar Comentario</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item class="input-item">
+        <ion-input 
+          [(ngModel)]="arregloComentario.comentario_publicacion"
+          label="Mensaje Comentario" 
+          labelPlacement="floating" 
+          placeholder="Escribe el nuevo mensaje que deseas mandar">
+        </ion-input>
+      </ion-item>
+
+      <div class="button-group">
+        <ion-button class="color-button" (click)="modificar()">
+          Modificar Comentario
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

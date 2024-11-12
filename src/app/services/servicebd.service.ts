@@ -357,6 +357,14 @@ export class ServicebdService {
       this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
     })
   }
+  modificarPublicaciones(id: number, titulo_publicacion: string, descripcion_publicacion: string,categoria_publicacion:number,foto:Blob) {
+    return this.database.executeSql('UPDATE publicacion SET titulo_publicacion = ?, descripcion_publicacion = ?, categoria_publicacion_id_categoria = ?, foto = ? WHERE id_publicacion = ?', [titulo_publicacion, descripcion_publicacion,categoria_publicacion,foto, id]).then(res => {
+      this.presentToast('bottom',"Modificar" + "Publicacion Modificado");
+      this.listarPublicaciones();
+    }).catch(e => {
+      this.presentAlert('Modificar', 'Error:' + JSON.stringify(e));
+    })
+  }
 
   insertarPublicacion(nombre_usuario_publicacion: string, titulo_publicacion: string, descripcion_publicacion: string, categoria_publicacion: number, usuario_id_usuario: number, foto: Blob) {
     return this.database.executeSql('INSERT INTO publicacion(nombre_usuario_publicacion,titulo_publicacion,descripcion_publicacion,fecha_publicacion,categoria_publicacion_id_categoria,usuario_id_usuario,foto) VALUES (?,?,?,CURRENT_TIMESTAMP,?,?,?)', [nombre_usuario_publicacion, titulo_publicacion, descripcion_publicacion, categoria_publicacion, usuario_id_usuario, foto]).then(res => {

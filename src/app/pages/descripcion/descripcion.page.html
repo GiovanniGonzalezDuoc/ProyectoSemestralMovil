@@ -100,6 +100,7 @@
   <ion-popover [isOpen]="isPopoverOpen" (didDismiss)="closePopover()">
     <ng-template>
       <ion-list>
+        <ion-item (click)="handleOption('editarPost', idUsuarioSeguir)">Modificar Post</ion-item>
         <ion-item (click)="handleOption('option1', idUsuarioSeguir)">Eliminar Post</ion-item>
         <ion-item (click)="handleOption('option2', idUsuarioSeguir)">Seguir Usuario</ion-item>
         <ion-item lines="none" *ngIf="rol_id_rol === 2;">
@@ -108,6 +109,9 @@
         <ion-item lines="none" *ngIf="rol_id_rol === 2;">
           <ion-item (click)="handleOption('banearPublicacion', arregloPublicacion.id_publicacion)">Banear
             Publicación</ion-item>
+        </ion-item>
+        <ion-item *ngIf="comentarioSeleccionado" (click)="handleOption('editarComentario', comentarioSeleccionado)">
+          Modificar Comentario
         </ion-item>
         <ion-item *ngIf="comentarioSeleccionado" (click)="handleOption('eliminarComentario', comentarioSeleccionado)">
           Eliminar Comentario

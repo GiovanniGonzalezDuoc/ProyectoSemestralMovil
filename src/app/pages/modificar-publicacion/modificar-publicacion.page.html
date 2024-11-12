@@ -1,0 +1,65 @@
+<ion-header [translucent]="true">
+  <ng-container *ngIf="rol_id_rol === 2; else NormalHeader">
+    <app-header-admin></app-header-admin>
+  </ng-container>
+  <ng-template #NormalHeader>
+    <app-header></app-header>
+  </ng-template>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card class="publicar-card">
+    <ion-card-header>
+      <ion-card-title>Modificar Publicación</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item class="input-item">
+        <ion-input 
+          [(ngModel)]="arregloPublicacion.titulo_publicacion"
+          label="Título" 
+          labelPlacement="floating" 
+          placeholder="Escriba un Título para su post">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="input-item">
+        <ion-select 
+          [(ngModel)]="categoriasSeleccionadas" 
+          label="Categoría" 
+          labelPlacement="floating" 
+          placeholder="Seleccione Categorías"
+          multiple="false">
+          <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id_categoria">
+            {{ categoria.nombre_categoria }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>      
+
+      <ion-item class="input-item">
+        <ion-textarea 
+          [(ngModel)]="arregloPublicacion.descripcion_publicacion"
+          label="Contenido" 
+          labelPlacement="floating" 
+          placeholder="Escriba lo que quiere compartir">
+        </ion-textarea>
+      </ion-item>
+
+      <ion-item class="input-item">
+        <ion-label>Adjuntar Archivo</ion-label>
+        <ion-button fill="outline" slot="end" (click)="takePicture()">
+          <ion-icon slot="start" name="attach-outline"></ion-icon>
+          Adjuntar
+        </ion-button>
+      </ion-item>
+      
+      <img *ngIf="arregloPublicacion.foto" [src]="arregloPublicacion.foto" alt="Image preview" />
+
+      <div class="button-group">
+        <ion-button class="color-button" (click)="publicar()">
+          Modificar Publicación
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
