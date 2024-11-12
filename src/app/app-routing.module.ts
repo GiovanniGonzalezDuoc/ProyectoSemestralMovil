@@ -194,7 +194,8 @@ const routes: Routes = [
   {
     path: 'crud/control-comentarios',
     loadChildren: () => import('./crud/control-comentarios/control-comentarios.module').then( m => m.ControlComentariosPageModule)
-  },  {
+  },
+  {
     path: 'modificar-publicacion',
     loadChildren: () => import('./pages/modificar-publicacion/modificar-publicacion.module').then( m => m.ModificarPublicacionPageModule)
   },
@@ -209,9 +210,10 @@ const routes: Routes = [
   {
     path: 'lista-control-comentario',
     loadChildren: () => import('./pages/lista-control-comentario/lista-control-comentario.module').then( m => m.ListaControlComentarioPageModule)
+  },{
+    path: '**',
+    loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
   },
-
-
   
 ];
 
@@ -223,8 +225,3 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-
-// {
-//   path: '**',
-//   loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
-// },
