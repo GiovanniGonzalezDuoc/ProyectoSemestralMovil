@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+  <ng-container *ngIf="rol_id_rol === 2; else NormalHeader">
+    <app-header-admin></app-header-admin>
+  </ng-container>
+  <ng-template #NormalHeader>
+    <app-header></app-header>
+  </ng-template>
+</ion-header>
+
+<ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-button (click)="navigateToPublicacion()">Lista Control Publicacion</ion-button>
+  </ion-buttons>
+  <ion-buttons slot="end">
+    <ion-button (click)="navigateToComentario()">Lista Control Comentario</ion-button>
+  </ion-buttons>
+</ion-toolbar>
+
+<ion-content [fullscreen]="true">
+  <ion-card *ngFor="let x of arregloPublicacion">
+    <ion-card-header>
+      <ion-item lines="none">
+        <div class="avatar-container">
+          <ion-avatar slot="start">
+            <img [src]="fotoPredeterminada" alt="Perfil">
+          </ion-avatar>
+        </div>
+        <div class="info-container">
+          <ion-label>
+            <h2>{{ x.nombre_usuario_publicacion }}</h2>
+            <p>Fecha de desbaneo: {{ publicacionesban[x.id_publicacion]?.fechaDesbaneo || 'N/A' }}</p>
+            <p>{{ categorias[x.categoria_publicacion_id_categoria] }}</p>
+            <p>Motivo Del Ban: {{ publicacionesban[x.id_publicacion]?.motivo || 'N/A' }}</p>
+            <p>Tiempo De Baneo: {{ publicacionesban[x.id_publicacion]?.tiempo || 'N/A' }}</p>
+          </ion-label>
+        </div>
+      </ion-item>
+    </ion-card-header>
+
+    <ion-card-content>
+      <h1>{{ x.titulo_publicacion }}</h1>
+    </ion-card-content>
+
+    <ion-card-content>
+      <p>{{ x.descripcion_publicacion || 'Sin descripción disponible.' }}</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

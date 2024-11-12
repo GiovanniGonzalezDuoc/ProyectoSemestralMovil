@@ -202,6 +202,14 @@ const routes: Routes = [
     path: 'modificar-comentario',
     loadChildren: () => import('./pages/modificar-comentario/modificar-comentario.module').then( m => m.ModificarComentarioPageModule)
   },
+  {
+    path: 'lista-control-publicacion',
+    loadChildren: () => import('./pages/lista-control-publicacion/lista-control-publicacion.module').then( m => m.ListaControlPublicacionPageModule)
+  },
+  {
+    path: 'lista-control-comentario',
+    loadChildren: () => import('./pages/lista-control-comentario/lista-control-comentario.module').then( m => m.ListaControlComentarioPageModule)
+  },
 
 
   

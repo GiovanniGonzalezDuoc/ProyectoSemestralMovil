@@ -93,7 +93,9 @@ export class PerfilPage implements OnInit {
   openSettings() {
     this.router.navigate(['/ajustes']);
   }
-
+  openBanList(){
+    this.router.navigate(['/lista-control-publicacion']);
+  }
   openContact() {
     this.router.navigate(['/contacto']);
   }
