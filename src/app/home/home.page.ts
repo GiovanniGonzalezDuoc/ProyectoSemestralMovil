@@ -3,8 +3,6 @@ import { NavigationExtras, Router } from '@angular/router';
 import { ServicebdService } from '../services/servicebd.service';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 
-
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',

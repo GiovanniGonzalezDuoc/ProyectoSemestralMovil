@@ -32,8 +32,13 @@ export class PublicarPage implements OnInit {
     this.bd.fetchCategorias().subscribe(categorias => {
       this.categorias = categorias;
     });
+  
+    // Cargar los datos del usuario
+    this.loadUserData();
+  }
 
-    // Recuperar datos del usuario almacenados en NativeStorage
+  // Función para recuperar datos del usuario desde NativeStorage
+  private loadUserData() {
     this.storage.getItem('id_usuario').then(id => {
       this.id_usuario = id;
     }).catch(err => {
@@ -51,13 +56,13 @@ export class PublicarPage implements OnInit {
     }).catch(err => {
       console.error('Error obteniendo apellido_usuario:', err);
     });
+
     this.storage.getItem('rol_id_rol').then(id => {
       this.rol_id_rol = id;
     }).catch(err => {
       console.error('Error obteniendo id_usuario:', err);
     });
   }
-
   publicar() {
     if (this.Titulo === "" || this.Contenido === "" || this.categoriasSeleccionadas.length === 0) {
       this.bd.presentAlert("La Publicación está incompleta.", "Favor de rellenar todos los campos de la publicación.");
@@ -99,12 +104,12 @@ export class PublicarPage implements OnInit {
       allowEditing: false,
       resultType: CameraResultType.Uri
     });
-  
+
     // image.webPath will contain a path that can be set as an image src.
     // You can access the original file using image.path, which can be
     // passed to the Filesystem API to read the raw data of the image,
     // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
     this.foto = image.webPath;
-  
+
   };
 }

@@ -23,55 +23,74 @@ export class ContactoPage implements OnInit {
     private bd: ServicebdService
   ) {}
 
-  ngOnInit() {
-    // Recuperar datos almacenados del usuario
-    this.storage.getItem('rol_id_rol').then(id => {
-      this.rol_id_rol = id;
-    }).catch(err => {
-      console.error('Error obteniendo rol_id_rol:', err);
-    });
+  async ngOnInit() {
+    try {
+      // Recuperar datos almacenados del usuario usando async/await
+      const rolId = await this.storage.getItem('rol_id_rol');
+      if (rolId) {
+        this.rol_id_rol = rolId;
+      } else {
+        console.error('Rol no encontrado');
+      }
 
-    this.storage.getItem('correo_usuario').then(correo => {
-      this.emailsolicitado = correo;
-    }).catch(err => {
-      console.error('Error obteniendo correo_usuario:', err);
-    });
+      const correo = await this.storage.getItem('correo_usuario');
+      if (correo) {
+        this.emailsolicitado = correo;
+      } else {
+        console.error('Correo no encontrado');
+      }
 
-    this.storage.getItem('nombre_usuario').then(nombre => {
-      this.nombre = nombre;
-    }).catch(err => {
-      this.bd.presentAlert('Error obteniendo nombre_usuario:', err);
-    });
-    
-    this.storage.getItem('apellido_usuario').then(apellido => {
-      this.apellido = apellido;
-    }).catch(err => {
-      this.bd.presentAlert('Error obteniendo apellido_usuario:', err);
-    });
+      const nombre = await this.storage.getItem('nombre_usuario');
+      if (nombre) {
+        this.nombre = nombre;
+      } else {
+        console.error('Nombre no encontrado');
+      }
 
+      const apellido = await this.storage.getItem('apellido_usuario');
+      if (apellido) {
+        this.apellido = apellido;
+      } else {
+        console.error('Apellido no encontrado');
+      }
+    } catch (err) {
+      console.error('Error al obtener datos de NativeStorage:', err);
+      // En caso de error, podrías mostrar una alerta o un toast
+      this.bd.presentAlert('Error', 'No se pudieron recuperar los datos del usuario');
+    }
   }
 
-  Contacto() {
-    this.bd.insertarContacto(this.emailsolicitado, this.mensaje).then(async () => {
+  async Contacto() {
+    try {
+      await this.bd.insertarContacto(this.emailsolicitado, this.mensaje);
       this.bd.presentToast('bottom', 'Se Ha Enviado Correctamente El Mensaje.');
 
-      // Enviar notificación local
-      await LocalNotifications.schedule({
-        notifications: [
-          {
-            title: '¡Mensaje A Administrador!',
-            body: `${this.nombre} ${this.apellido} te ha mandado un mensaje de contacto.`,
-            id: 1,
-            schedule: { at: new Date(Date.now() + 1000 * 5) }, // Notificación después de 5 segundos
-          },
-        ],
-      });
+      // Asegurarse de que LocalNotifications está disponible
+      if (LocalNotifications.schedule) {
+        try {
+          await LocalNotifications.schedule({
+            notifications: [
+              {
+                title: '¡Mensaje A Administrador!',
+                body: `${this.nombre} ${this.apellido} te ha mandado un mensaje de contacto.`,
+                id: 1,
+                schedule: { at: new Date(Date.now() + 1000 * 5) }, // Notificación después de 5 segundos
+              },
+            ],
+          });
+        } catch (err) {
+          console.error('Error al programar la notificación local:', err);
+          this.bd.presentToast('bottom', 'Error al enviar la notificación.');
+        }
+      } else {
+        console.warn('LocalNotifications no está disponible');
+      }
 
       this.volverAlInicio();
-    }).catch(err => {
+    } catch (err) {
       console.error('Error al enviar el mensaje:', err);
       this.bd.presentToast('bottom', 'Error al enviar el mensaje.');
-    });
+    }
   }
 
   volverAlInicio() {

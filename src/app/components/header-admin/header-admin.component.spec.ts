@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
-
 import { HeaderAdminComponent } from './header-admin.component';
 
 describe('HeaderAdminComponent', () => {
@@ -9,8 +8,8 @@ describe('HeaderAdminComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ HeaderAdminComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [HeaderAdminComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderAdminComponent);

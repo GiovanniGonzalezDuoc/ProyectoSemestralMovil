@@ -9,22 +9,29 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
 })
 export class ModificarPublicacionPage implements OnInit {
 
-  publicacion: any;
+  publicacion: any = {};  // Inicializar como objeto vacío
 
-  constructor(private router:Router,private activedrouter:ActivatedRoute, private bd:ServicebdService) {
-    this.activedrouter.queryParams.subscribe(res=>{
-      if (this.router.getCurrentNavigation()?.extras.state){
-        this.publicacion = this.router.getCurrentNavigation()?.extras?.state?.['publicacion'];
+  constructor(private router: Router, private activedrouter: ActivatedRoute, private bd: ServicebdService) {
+    this.activedrouter.queryParams.subscribe(res => {
+      if (this.router.getCurrentNavigation()?.extras.state) {
+        // Asegúrate de que 'publicacion' no sea undefined ni null
+        this.publicacion = this.router.getCurrentNavigation()?.extras?.state?.['publicacion'] || {};  // Valor por defecto
       }
-    })
+    });
   }
 
   ngOnInit() {
+    // Verifica si 'publicacion' tiene la propiedad 'id_publicacion'
+    if (!this.publicacion || !this.publicacion.id_publicacion) {
+      console.error('No se encontró la publicación o ID de publicación.');
+    }
   }
   
-  modificar(){
-    //this.bd.presentAlert("Mod","ID: " + this.noticia.idnoticia)
-    this.bd.modificarPublicacion(this.publicacion.id_publicacion,this.publicacion.titulo_publicacion,this.publicacion.descripcion_publicacion);
+  modificar() {
+    if (this.publicacion && this.publicacion.id_publicacion) {
+      this.bd.modificarPublicacion(this.publicacion.id_publicacion, this.publicacion.titulo_publicacion, this.publicacion.descripcion_publicacion);
+    } else {
+      console.error('No se puede modificar, faltan datos de la publicación.');
+    }
   }
-
 }

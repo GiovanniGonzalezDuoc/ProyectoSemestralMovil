@@ -9,22 +9,29 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
 })
 export class ModificarRolPage implements OnInit {
 
-  rol: any;
+  rol: any = {};  // Inicializar como objeto vacío
 
-  constructor(private router:Router,private activedrouter:ActivatedRoute, private bd:ServicebdService) {
-    this.activedrouter.queryParams.subscribe(res=>{
-      if (this.router.getCurrentNavigation()?.extras.state){
-        this.rol = this.router.getCurrentNavigation()?.extras?.state?.['rol'];
+  constructor(private router: Router, private activedrouter: ActivatedRoute, private bd: ServicebdService) {
+    this.activedrouter.queryParams.subscribe(res => {
+      if (this.router.getCurrentNavigation()?.extras.state) {
+        // Asegúrate de que 'rol' no sea undefined ni null
+        this.rol = this.router.getCurrentNavigation()?.extras?.state?.['rol'] || {};  // Valor por defecto
       }
-    })
+    });
   }
 
   ngOnInit() {
-  }
-  
-  modificar(){
-    //this.bd.presentAlert("Mod","ID: " + this.noticia.idnoticia)
-    this.bd.modificarRol(this.rol.id_rol,this.rol.nombre_rol);
+    // Verifica si 'rol' tiene la propiedad 'id_rol'
+    if (!this.rol || !this.rol.id_rol) {
+      console.error('No se encontró el rol o ID del rol.');
+    }
   }
 
+  modificar() {
+    if (this.rol && this.rol.id_rol) {
+      this.bd.modificarRol(this.rol.id_rol, this.rol.nombre_rol);
+    } else {
+      console.error('No se puede modificar, faltan datos del rol.');
+    }
+  }
 }

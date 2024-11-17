@@ -33,8 +33,8 @@ export class BusquedaPage implements OnInit {
     this.activedrouter.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation()?.extras.state) {
         this.categoriaId = this.router.getCurrentNavigation()?.extras?.state?.['id_categoria'];
-        // Una vez que tenemos el categoriaId, cargamos las publicaciones
-        this.loadPublicaciones();  // Llamar aquí, cuando tenemos el ID disponible
+        // Llamar a loadPublicaciones después de que tengamos la categoría
+        this.loadPublicaciones();
       }
     });
 
@@ -72,11 +72,17 @@ export class BusquedaPage implements OnInit {
       this.bd.presentAlert('No se seleccionó ninguna categoría.', '');
     }
   }
-  // Cargar las publicaciones de la categoría seleccionada
   loadAllPublicaciones() {
-    this.bd.fetchPublicacion().subscribe(res => {
-      this.arregloPublicacion = res;
-    });
+    const publicacionesObservable = this.bd.fetchPublicacion();
+    if (publicacionesObservable) {
+      publicacionesObservable.subscribe(res => {
+        this.arregloPublicacion = res;
+      }, err => {
+        console.error('Error al obtener publicaciones:', err);
+      });
+    } else {
+      console.error('fetchPublicacion() retornó undefined o null');
+    }
   }
 
   loadCategoriaNames() {
