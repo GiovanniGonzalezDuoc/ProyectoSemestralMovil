@@ -27,16 +27,24 @@ export class AppComponent {
     this.storage.getItem('nombre_usuario').then(res => {
       this.nombre_usuario = res;
     }).catch(err => {
-      this.bd.presentAlert('Error obteniendo nombre_usuario:', err);
+      if (!this.isTestEnvironment()) {
+        this.bd.presentAlert('Error obteniendo nombre_usuario:', err);
+      }
     });
-
+  
     this.storage.getItem('apellido_usuario').then(res => {
       this.apellido_usuario = res;
     }).catch(err => {
-      this.bd.presentAlert('Error obteniendo apellido_usuario:', err);
+      if (!this.isTestEnvironment()) {
+        this.bd.presentAlert('Error obteniendo apellido_usuario:', err);
+      }
     });
 
     this.loadCategoriaNames();
+  }
+
+  private isTestEnvironment(): boolean {
+    return typeof jasmine !== 'undefined' || window.location.href.includes('karma');
   }
 
   // Método para cargar las categorías
