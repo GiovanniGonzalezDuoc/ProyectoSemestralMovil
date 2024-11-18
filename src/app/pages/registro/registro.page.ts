@@ -17,7 +17,7 @@ export class RegistroPage implements OnInit {
     telefono: '',
     correo_usuario: "",
     contrasena: '',
-    re_contrasena:'',
+    re_contrasena: '',
     rol_id_rol: 1,
     id_pregunta: '', // ID de la pregunta seleccionada
     respuesta: '', // Respuesta de la pregunta de seguridad
@@ -75,10 +75,22 @@ export class RegistroPage implements OnInit {
 
     let formValid = true;
 
-    // Validar que no hayan campos vacíos
-    if (!this.arregloUsuario.nombre_usuario || !this.arregloUsuario.apellido_usuario || !this.arregloUsuario.telefono || 
-        !this.arregloUsuario.correo_usuario || !this.arregloUsuario.contrasena || !this.arregloUsuario.respuesta) {
-      this.errorMessage = 'Por favor, rellene todos los campos.';
+    // Validar que no hayan campos vacíos o que contengan solo espacios
+    if (
+      !this.arregloUsuario.nombre_usuario ||
+      !this.arregloUsuario.nombre_usuario.trim() ||
+      !this.arregloUsuario.apellido_usuario ||
+      !this.arregloUsuario.apellido_usuario.trim() ||
+      !this.arregloUsuario.telefono ||
+      !this.arregloUsuario.telefono.trim() ||
+      !this.arregloUsuario.correo_usuario ||
+      !this.arregloUsuario.correo_usuario.trim() ||
+      !this.arregloUsuario.contrasena ||
+      !this.arregloUsuario.contrasena.trim() ||
+      !this.arregloUsuario.respuesta ||
+      !this.arregloUsuario.respuesta.trim()
+    ) {
+      this.errorMessage = 'Por favor, rellene todos los campos correctamente.';
       formValid = false;
     }
 
@@ -87,10 +99,20 @@ export class RegistroPage implements OnInit {
       this.errorNombre = 'El nombre no puede contener números.';
       formValid = false;
     }
+    // Validar que el nombre no este vacio
+    if (this.arregloUsuario.nombre_usuario.trim()) {
+      this.errorNombre = 'El nombre no puede quedar vacio.';
+      formValid = false;
+    }
 
     // Validar que el apellido no contenga números
     if (/\d/.test(this.arregloUsuario.apellido_usuario)) {
       this.errorApellido = 'El apellido no puede contener números.';
+      formValid = false;
+    }
+    // Validar que el nombre no contenga números
+    if (this.arregloUsuario.apellido_usuario.trim()) {
+      this.errorNombre = 'El apellido no puede quedar vacio.';
       formValid = false;
     }
 
@@ -120,7 +142,7 @@ export class RegistroPage implements OnInit {
         }
       });
     }
-    if (this.arregloUsuario.contrasena != this.arregloUsuario.re_contrasena){
+    if (this.arregloUsuario.contrasena != this.arregloUsuario.re_contrasena) {
       this.errorContrasena = 'Las Contraseñas No Son Iguales.'
       formValid = false;
     }
