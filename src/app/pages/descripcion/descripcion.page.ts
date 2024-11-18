@@ -74,9 +74,9 @@ export class DescripcionPage implements OnInit {
     }
   }
 
-  tipoSeleccionado!:string;
+  tipoSeleccionado!: string;
 
-  openPopover(ev: any,tipo:'comentario'|'publicacion') {
+  openPopover(ev: any, tipo: 'comentario' | 'publicacion') {
     this.tipoSeleccionado = tipo;
     this.isPopoverOpen = true;
   }
@@ -109,11 +109,12 @@ export class DescripcionPage implements OnInit {
         // Opción para banear usuario
         this.solicitarTiempoBaneo(idUsuarioSeguir);
       } else if (option === 'option2') {
+        const nombreUsuario = `${this.nombre_usuario || ''} ${this.apellido_usuario || ''}`.trim();
         idUsuarioSeguir = this.arregloPublicacion.usuario_id_usuario;
         // Lógica para seguir a un usuario
         this.storage.getItem('id_usuario').then(idUsuarioActual => {
           // Verificar si el usuario está intentando seguirse a sí mismo
-          if (idUsuarioActual === idUsuarioSeguir) {
+          if (idUsuarioActual === idUsuarioSeguir || nombreUsuario === this.comentarioSeleccionado.nombre_usuario_comentario) {
             this.bd.presentToast('bottom', 'No puedes seguirte a ti mismo.');
             return; // Salir de la función si es el mismo usuario
           }
@@ -213,7 +214,7 @@ export class DescripcionPage implements OnInit {
   }
 
 
-  // Método para likear el post con límite de un like por usuario
+  // Método para likear o quitar like de una publicación con límite de un like por usuario
   like(idPublicacion: number) {
     // Obtener el id del usuario desde el almacenamiento
     this.storage.getItem('id_usuario').then(idUsuario => {
@@ -227,8 +228,11 @@ export class DescripcionPage implements OnInit {
         }
 
         // Verificar si el usuario ya dio like a esta publicación
-        if (!likes.includes(idPublicacion)) {
-          // Si no ha dado like, aumentamos el número de likes en la base de datos
+        const index = likes.indexOf(idPublicacion);
+
+        if (index === -1) {
+          // **Caso 1: No ha dado like**
+          // Aumentamos el número de likes en la base de datos
           this.bd.aumentarLike(idPublicacion).then(() => {
             // Agregamos el ID de la publicación al arreglo de likes
             likes.push(idPublicacion);
@@ -245,7 +249,23 @@ export class DescripcionPage implements OnInit {
             this.bd.presentToast('bottom', 'Error al dar like.');
           });
         } else {
-          this.bd.presentToast('bottom', 'Ya has dado like a este post.');
+          // **Caso 2: Ya ha dado like, por lo que quitamos el like**
+          // Reducimos el número de likes en la base de datos
+          this.bd.disminuirLike(idPublicacion).then(() => {
+            // Removemos el ID de la publicación del arreglo de likes
+            likes.splice(index, 1);
+
+            // Guardamos el arreglo actualizado en el almacenamiento local
+            this.storage.setItem(key, likes).then(() => {
+              this.bd.presentToast('bottom', 'Se quitó el like correctamente.');
+            }).catch(err => {
+              console.error('Error al actualizar el almacenamiento local:', err);
+              this.bd.presentToast('bottom', 'Error al quitar el like.');
+            });
+          }).catch(err => {
+            console.error('Error al disminuir el número de likes:', err);
+            this.bd.presentToast('bottom', 'Error al quitar el like.');
+          });
         }
       }).catch(() => {
         // Si no existe el registro, significa que el usuario aún no ha dado like
@@ -270,6 +290,7 @@ export class DescripcionPage implements OnInit {
       this.bd.presentToast('bottom', 'Error al obtener el usuario.');
     });
   }
+
 
   guardar() {
     // Asumiendo que tienes acceso al ID de la publicación actual

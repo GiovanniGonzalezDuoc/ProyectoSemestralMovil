@@ -36,10 +36,10 @@ export class HomePage {
           this.bd.fetchPublicacion().subscribe(res => {
             // Filtramos las publicaciones que no están en control_publicaciones
             // Suponemos que banpubli contiene un array de publicaciones en control_publicaciones
-            this.arregloPublicacion = res.filter(publicacion => 
+            this.arregloPublicacion = res.filter(publicacion =>
               !banpubli.some(ban => ban.publicacion_id_publicacion === publicacion.id_publicacion)
             );
-            
+
             // Cargamos los nombres de las categorías después de filtrar las publicaciones
             this.loadCategoriaNames();
           });
@@ -70,7 +70,7 @@ export class HomePage {
     this.router.navigate(['/descripcion'], navigationExtras);
   }
 
-  // Método para likear el post con límite de un like por usuario
+  // Método para likear o quitar like de una publicación con límite de un like por usuario
   like(idPublicacion: number) {
     // Obtener el id del usuario desde el almacenamiento
     this.storage.getItem('id_usuario').then(idUsuario => {
@@ -84,8 +84,11 @@ export class HomePage {
         }
 
         // Verificar si el usuario ya dio like a esta publicación
-        if (!likes.includes(idPublicacion)) {
-          // Si no ha dado like, aumentamos el número de likes en la base de datos
+        const index = likes.indexOf(idPublicacion);
+
+        if (index === -1) {
+          // **Caso 1: No ha dado like**
+          // Aumentamos el número de likes en la base de datos
           this.bd.aumentarLike(idPublicacion).then(() => {
             // Agregamos el ID de la publicación al arreglo de likes
             likes.push(idPublicacion);
@@ -102,7 +105,23 @@ export class HomePage {
             this.bd.presentToast('bottom', 'Error al dar like.');
           });
         } else {
-          this.bd.presentToast('bottom', 'Ya has dado like a este post.');
+          // **Caso 2: Ya ha dado like, por lo que quitamos el like**
+          // Reducimos el número de likes en la base de datos
+          this.bd.disminuirLike(idPublicacion).then(() => {
+            // Removemos el ID de la publicación del arreglo de likes
+            likes.splice(index, 1);
+
+            // Guardamos el arreglo actualizado en el almacenamiento local
+            this.storage.setItem(key, likes).then(() => {
+              this.bd.presentToast('bottom', 'Se quitó el like correctamente.');
+            }).catch(err => {
+              console.error('Error al actualizar el almacenamiento local:', err);
+              this.bd.presentToast('bottom', 'Error al quitar el like.');
+            });
+          }).catch(err => {
+            console.error('Error al disminuir el número de likes:', err);
+            this.bd.presentToast('bottom', 'Error al quitar el like.');
+          });
         }
       }).catch(() => {
         // Si no existe el registro, significa que el usuario aún no ha dado like

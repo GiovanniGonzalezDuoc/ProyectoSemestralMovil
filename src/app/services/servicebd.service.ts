@@ -329,6 +329,16 @@ export class ServicebdService {
       this.presentAlert('Eliminar', 'Error:' + JSON.stringify(e));
     })
   }
+  disminuirLike(idPublicacion: number) {
+    return this.database.executeSql(
+      'UPDATE publicacion SET like_publicacion = COALESCE(like_publicacion, 0) - 1 WHERE id_publicacion = ? AND like_publicacion > 0', 
+      [idPublicacion]
+    ).then(res => {
+      this.listarPublicaciones();
+    }).catch(e => {
+      this.presentAlert('Error', 'Error al disminuir like: ' + JSON.stringify(e));
+    });
+  }
   eliminarPublicacion(id: number) {
     return this.database.executeSql('DELETE FROM publicacion WHERE id_publicacion = ?', [id]).then(res => {
       this.presentToast('bottom',"Eliminar" + "Publicacion Eliminado");
