@@ -48,6 +48,8 @@ export class LoginPage implements OnInit {
               // Redirigir al usuario a la página de inicio
               this.router.navigate(['/home']);
               this.bd.presentToast('bottom', 'El Usuario Se Ingresó Correctamente');
+              this.emailsolicitado="";
+              this.contrasenasolicitada="";
             }
           }).catch(err => {
             // Manejo de errores de la consulta de baneo

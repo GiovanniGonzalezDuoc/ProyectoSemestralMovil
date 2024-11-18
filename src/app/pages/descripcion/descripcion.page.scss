@@ -220,3 +220,8 @@ ion-list {
   color: #555; /* Color del texto */
   margin: 4px 0 0; /* Espaciado superior */
 }
+.popover-list ion-item {
+  --padding-start: 16px;
+  --inner-padding-end: 16px;
+  font-size: 16px;
+}

@@ -74,11 +74,15 @@ export class DescripcionPage implements OnInit {
     }
   }
 
-  openPopover(ev: any) {
+  tipoSeleccionado!:string;
+
+  openPopover(ev: any,tipo:'comentario'|'publicacion') {
+    this.tipoSeleccionado = tipo;
     this.isPopoverOpen = true;
   }
 
   closePopover() {
+    this.tipoSeleccionado = "";
     this.isPopoverOpen = false;
   }
 
@@ -178,7 +182,9 @@ export class DescripcionPage implements OnInit {
         // Banear comentario
         idUsuarioSeguir = this.comentarioSeleccionado.id_comentario;
         this.solicitarTiempoBaneoComentario(idUsuarioSeguir);
-      }else if (option === 'editarPost'){
+      } else if (option === 'editarPost') {
+        const IdUsuario = this.id_usuario;
+        if (IdUsuario === this.arregloPublicacion.usuario_id_usuario) {
           idUsuarioSeguir = this.arregloPublicacion;
           let navigationExtras: NavigationExtras = {
             state: {
@@ -186,15 +192,23 @@ export class DescripcionPage implements OnInit {
             }
           };
           this.router.navigate(['/modificar-publicacion'], navigationExtras);
-      }else if (option === 'editarComentario'){
-        const idSeguidorUsuario = this.comentarioSeleccionado;
-        let navigationExtras: NavigationExtras = {
-          state: {
-            comentario: idSeguidorUsuario // Pasamos la publicación completa
-          }
-        };
-        this.router.navigate(['/modificar-comentario'], navigationExtras);
-    }
+        } else {
+          this.bd.presentToast("bottom", "Esta Publicacion No Te Pertenece.")
+        }
+      } else if (option === 'editarComentario') {
+        const nombreUsuario = `${this.nombre_usuario || ''} ${this.apellido_usuario || ''}`.trim();
+        if (nombreUsuario === this.comentarioSeleccionado.nombre_usuario_comentario) {
+          const idSeguidorUsuario = this.comentarioSeleccionado;
+          let navigationExtras: NavigationExtras = {
+            state: {
+              comentario: idSeguidorUsuario // Pasamos la publicación completa
+            }
+          };
+          this.router.navigate(['/modificar-comentario'], navigationExtras);
+        } else {
+          this.bd.presentToast("bottom", "Este Comentario No Te Pertenece.")
+        }
+      }
     }, 0);
   }
 
