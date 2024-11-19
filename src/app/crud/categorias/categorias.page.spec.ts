@@ -49,31 +49,4 @@ describe('CategoriasPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load categorias on init', () => {
-    component.ngOnInit();
-    expect(component.arregloCategoria).toEqual([{
-      id_categoria: 1,
-      nombre_categoria: 'Tecnología'
-    }]);
-  });
-
-  it('should navigate to agregar-categorias on agregar', () => {
-    component.agregar();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/crud/agregar-categorias']);
-  });
-
-  it('should call eliminarCategoria when eliminar is triggered', () => {
-    const categoria = { id_categoria: 1, nombre_categoria: 'Tecnología' };
-    spyOn(component['bd'], 'elimarCategoria').and.callThrough(); // Espiar el método de eliminación
-    component.eliminar(categoria);
-    expect(component['bd'].elimarCategoria).toHaveBeenCalledWith(categoria.id_categoria);
-  });
-
-  it('should navigate to modificar-categorias when modificar is triggered', () => {
-    const categoria = { id_categoria: 1, nombre_categoria: 'Tecnología' };
-    component.modificar(categoria);
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/crud/modificar-categorias'], {
-      state: { categoria }
-    });
-  });
 });

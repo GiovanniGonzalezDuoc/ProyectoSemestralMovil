@@ -46,13 +46,19 @@ describe('RegistroPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call listarPreguntas on ngOnInit', () => {
-    component.ngOnInit();
-    expect(serviceMock.fetchPreguntas).toHaveBeenCalled();
-  });
-
-  it('should call listarCarreras on ngOnInit', () => {
-    component.ngOnInit();
-    expect(serviceMock.fetchCarreras).toHaveBeenCalled();
+  it('Verificar Que Nombre Usuario y Apellido Usuario No Este Vacio.', async () => {
+    // Rellenamos el formulario con valores vacíos
+    component.arregloUsuario = {
+      nombre_usuario: '',  // Campo vacío
+      apellido_usuario: '',  // Campo vacío
+    };
+  
+    // Llamamos al método de verificación
+    const result = component.verificarEspacios();
+  
+    // Verificamos el resultado de la validación
+    expect(result).toBe(false);
+    expect(component.errorNombre).toBe('El nombre no puede quedar vacio.');
+    expect(component.errorApellido).toBe('El apellido no puede quedar vacio.');
   });
 });

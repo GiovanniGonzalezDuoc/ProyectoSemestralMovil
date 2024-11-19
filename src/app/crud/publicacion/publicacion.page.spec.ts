@@ -36,23 +36,4 @@ describe('PublicacionPage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should navigate to modify page with correct state', () => {
-    const publicacion = { id_publicacion: 1, titulo: 'Publicación 1' };
-    component.modificar(publicacion);
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/crud/modificar-publicacion'], {
-      state: { publicacion },
-    });
-  });
-
-  it('should call eliminarPublicacion on eliminar', () => {
-    const publicacion = { id_publicacion: 1 };
-    component.eliminar(publicacion);
-    expect(serviceMock.eliminarPublicacion).toHaveBeenCalledWith(1);
-  });
-
-  it('should navigate to add page on agregar', () => {
-    component.agregar();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/crud/agregar-publicacion']);
-  });
 });

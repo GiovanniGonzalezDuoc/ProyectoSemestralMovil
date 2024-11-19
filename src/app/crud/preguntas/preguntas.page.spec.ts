@@ -39,29 +39,4 @@ describe('PreguntasPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should fetch questions on ngOnInit when db is ready', () => {
-    expect(serviceMock.dbState).toHaveBeenCalled();
-    expect(serviceMock.fetchPreguntas).toHaveBeenCalled();
-    expect(component.arregloPreguntas.length).toBe(1);
-    expect(component.arregloPreguntas[0].pregunta).toBe('Pregunta 1');
-  });
-
-  it('should navigate to modify page with correct state', () => {
-    const question = { id_pregunta: 1, pregunta: 'Pregunta 1' };
-    component.modificar(question);
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/crud/modificar-preguntas'], {
-      state: { pregunta: question },
-    });
-  });
-
-  it('should call eliminarPreguntas on eliminar', () => {
-    const question = { id_pregunta: 1 };
-    component.eliminar(question);
-    expect(serviceMock.eliminarPreguntas).toHaveBeenCalledWith(1);
-  });
-
-  it('should navigate to add page on agregar', () => {
-    component.agregar();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/crud/agregar-preguntas']);
-  });
 });

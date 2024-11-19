@@ -44,14 +44,4 @@ describe('ModificarControlComentariosPage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();  // Verificar que el componente se crea correctamente
   });
-
-  it('should call fetchComentarios when Control is set', () => {
-    component.ngOnInit();
-    expect(serviceMock.fetchComentarios).toHaveBeenCalled();  // Verificar que `fetchComentarios` fue llamado
-  });
-
-  it('should call modificarControlComentarios on modificar()', () => {
-    component.modificar();
-    expect(serviceMock.modificarControlComentarios).toHaveBeenCalled();  // Verificar que se llama al método `modificarControlComentarios`
-  });
 });

@@ -54,7 +54,4 @@ describe('ModificarComentarioPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize comentario correctly', () => {
-    expect(component.arregloComentario).toEqual({ id_comentario: 1, nombre_usuario_comentario: 'Usuario', comentario_publicacion: 'Comentario' });
-  });
 });

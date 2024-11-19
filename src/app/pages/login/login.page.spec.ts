@@ -45,4 +45,20 @@ describe('LoginPage', () => {
     expect(component).toBeTruthy();
   });
 
+  it('Alerta de correo invalido', () => {
+    component.emailsolicitado = 'correoIncorrecto';
+    component.contrasenasolicitada = 'ContrasenaValida1!';
+    component.validarDatos();
+    
+    expect(servicebdServiceMock.presentAlert).toHaveBeenCalledWith('Correo Inválido', 'Por favor ingrese un correo electrónico válido.');
+  });
+
+  it('Alerta de contraseña invalida', () => {
+    component.emailsolicitado = 'correo@dominio.com';
+    component.contrasenasolicitada = 'pass';
+    component.validarDatos();
+    
+    expect(servicebdServiceMock.presentAlert).toHaveBeenCalledWith('Contraseña Inválida', 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un carácter especial.');
+  });
+
 });

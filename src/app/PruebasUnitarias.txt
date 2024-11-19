@@ -1,0 +1,7 @@
+Pruebas Unitarias Realizadas
+Verificar Que Nombre Usuario y Apellido Usuario No Este Vacio. - registro.
+Verificar Si El Correo y contraseña son correctos. -login.
+Verifica Si las contraseñas no son iguales. - Nueva-contrasena.
+Carga si la carrera no esta vacia y si tiene algun valor. -carreras.
+Muestra alerta en caso de que las publicaciones se creen vacias. -publicar.
+Prueba que inserta una carrera. -Agregar-carreras.

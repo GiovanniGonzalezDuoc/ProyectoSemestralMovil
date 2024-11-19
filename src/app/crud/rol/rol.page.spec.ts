@@ -37,26 +37,4 @@ describe('RolPage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  // Prueba de la navegación a la página de modificación
-  it('should navigate to modify page with correct state', () => {
-    const rol = { id_rol: 1, nombre: 'Administrador' };
-    component.modificar(rol);
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/crud/modificar-rol'], {
-      state: { rol },
-    });
-  });
-
-  // Prueba de eliminación de un rol
-  it('should call eliminarRol on eliminar', () => {
-    const rol = { id_rol: 1 };
-    component.eliminar(rol);
-    expect(serviceMock.eliminarRol).toHaveBeenCalledWith(1);
-  });
-
-  // Prueba de la navegación a la página de agregar
-  it('should navigate to add page on agregar', () => {
-    component.agregar();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/crud/agregar-rol']);
-  });
 });

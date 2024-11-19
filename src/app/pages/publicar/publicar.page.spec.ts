@@ -48,18 +48,19 @@ describe('PublicarPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show alert if the form is incomplete', () => {
-    // Mocking incomplete form
+  it('Muestra alerta en caso de que las publicaciones se creen vacias', () => {
+    // Configurar el estado de los campos para que estén vacíos
     component.Titulo = '';
     component.Contenido = '';
     component.categoriasSeleccionadas = [];
 
-    servicebdServiceMock.presentAlert.and.returnValue(Promise.resolve());
-
-    // Trigger the method
+    // Ejecutar la función publicar
     component.publicar();
 
-    // Check if the alert was shown
-    expect(servicebdServiceMock.presentAlert).toHaveBeenCalledWith('La Publicación está incompleta.', 'Favor de rellenar todos los campos de la publicación.');
+    // Verificar que el método presentAlert haya sido llamado con los mensajes correctos
+    expect(servicebdServiceMock.presentAlert).toHaveBeenCalledWith(
+      'La Publicación está incompleta.',
+      'Favor de rellenar todos los campos de la publicación.'
+    );
   });
 });

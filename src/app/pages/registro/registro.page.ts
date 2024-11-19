@@ -99,20 +99,10 @@ export class RegistroPage implements OnInit {
       this.errorNombre = 'El nombre no puede contener números.';
       formValid = false;
     }
-    // Validar que el nombre no este vacio
-    if (this.arregloUsuario.nombre_usuario.trim()) {
-      this.errorNombre = 'El nombre no puede quedar vacio.';
-      formValid = false;
-    }
 
     // Validar que el apellido no contenga números
     if (/\d/.test(this.arregloUsuario.apellido_usuario)) {
       this.errorApellido = 'El apellido no puede contener números.';
-      formValid = false;
-    }
-    // Validar que el nombre no contenga números
-    if (this.arregloUsuario.apellido_usuario.trim()) {
-      this.errorNombre = 'El apellido no puede quedar vacio.';
       formValid = false;
     }
 
@@ -185,4 +175,24 @@ export class RegistroPage implements OnInit {
       this.router.navigate(['/login']);
     }
   }
+
+  verificarEspacios() {
+    let valid = true;
+  
+    // Validar que el nombre no esté vacío
+    if (!this.arregloUsuario.nombre_usuario.trim()) {
+      this.errorNombre = 'El nombre no puede quedar vacio.';
+      valid = false;
+    }
+  
+    // Validar que el apellido no esté vacío
+    if (!this.arregloUsuario.apellido_usuario.trim()) {
+      this.errorApellido = 'El apellido no puede quedar vacio.';
+      valid = false;
+    }
+  
+    return valid;
+  }
+
+
 }

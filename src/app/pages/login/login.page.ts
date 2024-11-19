@@ -66,4 +66,26 @@ export class LoginPage implements OnInit {
       this.bd.presentAlert('Campos Vacíos', 'Por favor complete todos los campos.');
     }
   }
+  
+  validarDatos() {
+    const email = this.emailsolicitado.trim();
+    const contrasena = this.contrasenasolicitada.trim();
+  
+    // Validación de correo electrónico
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!emailRegex.test(email)) {
+      this.bd.presentAlert('Correo Inválido', 'Por favor ingrese un correo electrónico válido.');
+      return false;
+    }
+  
+    // Validación de contraseña
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    if (!passwordRegex.test(contrasena)) {
+      this.bd.presentAlert('Contraseña Inválida', 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un carácter especial.');
+      return false;
+    }
+  
+    return true;
+  }
+  
 }

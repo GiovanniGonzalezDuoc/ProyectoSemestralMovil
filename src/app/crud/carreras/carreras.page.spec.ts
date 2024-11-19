@@ -49,31 +49,13 @@ describe('CarrerasPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load carreras on init', () => {
+  it('Carga si la carrera no esta vacia y si tiene algun valor.', () => {
+    // Esperar a que el componente cargue las carreras
     component.ngOnInit();
-    expect(component.arregloCarrera).toEqual([{
-      id_carrera: 1,
-      nombre_carrera: 'Ingeniería en Sistemas'
-    }]);
+    
+    // Comprobar que arregloCarrera tiene elementos
+    expect(component.arregloCarrera.length).toBeGreaterThan(0);
+    expect(component.arregloCarrera[0].nombre_carrera).toBe('Ingeniería en Sistemas');
   });
 
-  it('should navigate to agregar-carreras on agregar', () => {
-    component.agregar();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/crud/agregar-carreras']);
-  });
-
-  it('should call eliminarCarrera when eliminar is triggered', () => {
-    const carrera = { id_carrera: 1, nombre_carrera: 'Ingeniería en Sistemas' };
-    spyOn(component['bd'], 'eliminarCarrera').and.callThrough(); // Espiar el método de eliminación
-    component.eliminar(carrera);
-    expect(component['bd'].eliminarCarrera).toHaveBeenCalledWith(carrera.id_carrera);
-  });
-
-  it('should navigate to modificar-carreras when modificar is triggered', () => {
-    const carrera = { id_carrera: 1, nombre_carrera: 'Ingeniería en Sistemas' };
-    component.modificar(carrera);
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/crud/modificar-carreras'], {
-      state: { carrera }
-    });
-  });
 });

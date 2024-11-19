@@ -1,51 +1,51 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NuevaContrasenaPage } from './nueva-contrasena.page';
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ServicebdService } from 'src/app/services/servicebd.service';
+import { of } from 'rxjs';
 
-@Component({
-  selector: 'app-nueva-contrasena',
-  templateUrl: './nueva-contrasena.page.html',
-  styleUrls: ['./nueva-contrasena.page.scss'],
+describe('NuevaContrasenaPage', () => {
+  let component: NuevaContrasenaPage;
+  let fixture: ComponentFixture<NuevaContrasenaPage>;
+  let mockServicebd: jasmine.SpyObj<ServicebdService>;
+  let mockRouter: jasmine.SpyObj<Router>;
+
+  beforeEach(() => {
+    // Crear espías para las dependencias
+    mockServicebd = jasmine.createSpyObj('ServicebdService', ['presentAlert', 'presentToast', 'modificarContrasena']);
+    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+
+    TestBed.configureTestingModule({
+      declarations: [NuevaContrasenaPage],
+      providers: [
+        { provide: ServicebdService, useValue: mockServicebd },
+        { provide: Router, useValue: mockRouter },
+        { provide: ActivatedRoute, useValue: { queryParams: of({ email: 'test@example.com' }) } }
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(NuevaContrasenaPage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('Verifica Si las contraseñas no son iguales', () => {
+    // Simulamos que las contraseñas no coinciden
+    component.contrasenasolicitado = 'Password1!';
+    component.recontrasenasolicitada = 'Password2!';
+
+    // Llamamos al método para cambiar la contraseña
+    component.Contrasena();
+
+    // Verificamos que se haya llamado al método presentAlert con el mensaje correspondiente
+    expect(mockServicebd.presentAlert).toHaveBeenCalledWith(
+      'Error En Las Contraseñas',
+      'Las contraseñas ingresadas no son iguales.'
+    );
+  });
 })
-export class NuevaContrasenaPage implements OnInit {
-
-  contrasenasolicitado: string = "";
-  recontrasenasolicitada: string = "";
-  emailsolicitado: string = "";
-
-  constructor(private router: Router, private bd: ServicebdService, private activedrouter: ActivatedRoute) {
-    this.activedrouter.queryParams.subscribe(res => {
-      if (this.router.getCurrentNavigation()?.extras.state) {
-        this.emailsolicitado = this.router.getCurrentNavigation()?.extras?.state?.['email'];
-      }
-    });
-  }
-
-  ngOnInit() { }
-
-  async Contrasena() {
-    const contrasena = this.contrasenasolicitado.trim();
-    const recontrasena = this.recontrasenasolicitada.trim();
-
-    // Validaciones de la contraseña
-    if (!/(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/.test(contrasena)) {
-      this.bd.presentAlert('La Contraseña No Cumple Con Las Reglas', 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un carácter especial.');
-      return;
-    }
-
-    if (contrasena !== recontrasena) {
-      this.bd.presentAlert('Error En Las Contraseñas', 'Las contraseñas ingresadas no son iguales.');
-      return;
-    }
-
-    try {
-      // Modificar la contraseña en la base de datos
-      await this.bd.modificarContrasena(this.emailsolicitado, contrasena); // Cambié el orden de los parámetros
-      this.bd.presentToast('bottom', 'Se ha cambiado correctamente la contraseña del usuario');
-      this.router.navigate(['/login']);
-    } catch (error) {
-      console.error('Error al modificar la contraseña:', error);
-      this.bd.presentAlert('Error', 'No se pudo cambiar la contraseña.');
-    }
-  }
-}

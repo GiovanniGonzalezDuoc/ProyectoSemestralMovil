@@ -29,7 +29,7 @@ describe('AgregarCarrerasPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call insertarCarrera when insertar method is called', () => {
+  it('Prueba que inserta una carrera.', () => {
     // Establecer un valor para nombre_carrera
     component.nombre_carrera = 'Ingeniería';
 
