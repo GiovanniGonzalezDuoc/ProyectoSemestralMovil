@@ -109,16 +109,14 @@ export class DescripcionPage implements OnInit {
         // Opción para banear usuario
         this.solicitarTiempoBaneo(idUsuarioSeguir);
       } else if (option === 'option2') {
-        const nombreUsuario = `${this.nombre_usuario || ''} ${this.apellido_usuario || ''}`.trim();
         idUsuarioSeguir = this.arregloPublicacion.usuario_id_usuario;
         // Lógica para seguir a un usuario
         this.storage.getItem('id_usuario').then(idUsuarioActual => {
           // Verificar si el usuario está intentando seguirse a sí mismo
-          if (idUsuarioActual === idUsuarioSeguir || nombreUsuario === this.comentarioSeleccionado.nombre_usuario_comentario) {
+          if (idUsuarioActual === idUsuarioSeguir) {
             this.bd.presentToast('bottom', 'No puedes seguirte a ti mismo.');
             return; // Salir de la función si es el mismo usuario
           }
-
           // Verificar si ya lo sigue
           this.bd.verificarSeguimiento(idUsuarioActual, idUsuarioSeguir).then(isFollowing => {
             if (!isFollowing) {
@@ -157,6 +155,54 @@ export class DescripcionPage implements OnInit {
         }).catch(err => {
           console.error('Error obteniendo id_usuario:', err);
         });
+      }else if (option === 'option4') {
+          const nombreUsuario = `${this.nombre_usuario || ''} ${this.apellido_usuario || ''}`.trim();
+          idUsuarioSeguir = this.arregloPublicacion.usuario_id_usuario;
+          // Lógica para seguir a un usuario
+          this.storage.getItem('id_usuario').then(idUsuarioActual => {
+            // Verificar si el usuario está intentando seguirse a sí mismo
+            if (idUsuarioActual === idUsuarioSeguir || nombreUsuario === this.comentarioSeleccionado.nombre_usuario_comentario){
+              this.bd.presentToast('bottom', 'No puedes seguirte a ti mismo.');
+              return; // Salir de la función si es el mismo usuario
+            }
+            // Verificar si ya lo sigue
+            this.bd.verificarSeguimiento(idUsuarioActual, idUsuarioSeguir).then(isFollowing => {
+              if (!isFollowing) {
+                // Si no lo sigue, agregar a la tabla seguimiento
+                this.bd.insertarSeguidores(idUsuarioActual, idUsuarioSeguir).then(async () => {
+                  this.bd.presentToast('bottom', 'Se ha seguido correctamente al usuario.');
+  
+                  // Enviar notificación local
+                  await LocalNotifications.schedule({
+                    notifications: [
+                      {
+                        title: '¡Nuevo Seguidor!',
+                        body: `${this.nombre_usuario} te ha seguido.`,
+                        id: 1,
+                        schedule: { at: new Date(Date.now() + 1000 * 5) }, // Notificación después de 5 segundos
+                        sound: undefined,
+                        attachments: [],
+                        actionTypeId: '',
+                        extra: null,
+                      },
+                    ],
+                  });
+  
+                  this.volverAlInicio();
+                }).catch(err => {
+                  console.error('Error al seguir al usuario:', err);
+                  this.bd.presentToast('bottom', 'Error al seguir al usuario.');
+                });
+              } else {
+                // Ya lo sigue
+                this.bd.presentToast('bottom', 'Ya estás siguiendo a este usuario.');
+              }
+            }).catch(err => {
+              console.error('Error al verificar seguimiento:', err);
+            });
+          }).catch(err => {
+            console.error('Error obteniendo id_usuario:', err);
+          });
       } else if (option === 'banearPublicacion') {
         // Banear publicación
         this.solicitarTiempoBaneoPublicacion(this.arregloPublicacion.id_publicacion);

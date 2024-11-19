@@ -20,7 +20,7 @@
           <p>{{ categorias[arregloPublicacion.categoria_publicacion_id_categoria] }}</p>
         </ion-label>
         <div class="card-menu">
-          <ion-button fill="clear" (click)="openPopover($event,'publicacion')">
+          <ion-button fill="clear" (click)="openPopover($event, 'publicacion')">
             <ion-icon name="ellipsis-vertical-outline"></ion-icon>
           </ion-button>
         </div>
@@ -31,9 +31,7 @@
     </ion-card-content>
 
     <ion-card-content>
-      <p>
-        {{ arregloPublicacion.descripcion_publicacion }}
-      </p>
+      <p>{{ arregloPublicacion.descripcion_publicacion }}</p>
       <img *ngIf="arregloPublicacion.foto" [src]="arregloPublicacion.foto" alt="Image preview" />
     </ion-card-content>
 
@@ -57,8 +55,7 @@
   <!-- Sección para agregar comentarios -->
   <ion-card-content class="comment-section">
     <ion-item>
-      <ion-textarea class="comment-textarea" [(ngModel)]="nuevoComentario"
-        placeholder="Escribe un comentario..."></ion-textarea>
+      <ion-textarea class="comment-textarea" [(ngModel)]="nuevoComentario" placeholder="Escribe un comentario..."></ion-textarea>
       <ion-button class="comment-button" (click)="agregarComentario()">Comentar</ion-button>
     </ion-item>
 
@@ -77,14 +74,13 @@
 
         <!-- Botón de opciones en el comentario -->
         <div class="card-menu">
-          <ion-button fill="clear" (click)="openPopover($event,'comentario')" (click)="selectComentario(comentario)">
+          <ion-button fill="clear" (click)="openPopover($event, 'comentario'); selectComentario(comentario)">
             <ion-icon name="ellipsis-vertical-outline"></ion-icon>
           </ion-button>
         </div>
       </ion-item>
     </ion-list>
   </ion-card-content>
-
 
   <ng-template #noData>
     <ion-card>
@@ -101,20 +97,19 @@
     <ng-template>
       <ion-list class="popover-list">
         <!-- Apartado Usuario -->
-        <ion-item button (click)="handleOption('option2', idUsuarioSeguir)">
-          <ion-label>Seguir Usuario</ion-label>
-        </ion-item>
         <ion-item button lines="none" *ngIf="rol_id_rol === 2">
           <ion-label (click)="handleOption('option3', idUsuarioSeguir)">Banear Usuario</ion-label>
         </ion-item>
-  
-  
+
         <!-- Apartado Publicación -->
         <ng-container *ngIf="tipoSeleccionado === 'publicacion'">
-          <ion-item button (click)="handleOption('editarPost', idUsuarioSeguir)">
+          <ion-item button (click)="handleOption('option2', idUsuarioSeguir)">
+            <ion-label>Seguir Usuario</ion-label>
+          </ion-item>
+          <ion-item button (click)="handleOption('editarPost', arregloPublicacion.id_publicacion)">
             <ion-label>Modificar Publicación</ion-label>
           </ion-item>
-          <ion-item button (click)="handleOption('option1', idUsuarioSeguir)">
+          <ion-item button (click)="handleOption('option1', arregloPublicacion.id_publicacion)">
             <ion-label>Eliminar Publicación</ion-label>
           </ion-item>
           <ion-item button lines="none" *ngIf="rol_id_rol === 2">
@@ -123,10 +118,12 @@
             </ion-label>
           </ion-item>
         </ng-container>
-  
-  
+
         <!-- Apartado Comentario -->
         <ng-container *ngIf="tipoSeleccionado === 'comentario'">
+          <ion-item button (click)="handleOption('option4', idUsuarioSeguir)">
+            <ion-label>Seguir Usuario</ion-label>
+          </ion-item>
           <ion-item button (click)="handleOption('editarComentario', comentarioSeleccionado)">
             <ion-label>Modificar Comentario</ion-label>
           </ion-item>
